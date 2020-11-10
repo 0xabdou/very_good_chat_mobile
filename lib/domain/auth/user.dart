@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:very_good_chat/custom_json_annotations.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -6,10 +7,10 @@ part 'user.g.dart';
 @freezed
 abstract class User with _$User {
   const factory User({
-    @JsonKey(disallowNullValue: true, required: true) @required String id,
-    @JsonKey(disallowNullValue: true, required: true) @required String username,
-    @JsonKey(includeIfNull: false) String name,
-    @JsonKey(includeIfNull: false) String photoUrl,
+    @requiredNonNull @required String id,
+    @requiredNonNull @required String username,
+    @doNotIncludeIfNull String name,
+    @doNotIncludeIfNull String photoUrl,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
