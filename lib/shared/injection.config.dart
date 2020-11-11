@@ -10,13 +10,13 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'application/auth/auth_cubit.dart';
-import 'data/auth/auth_repository.dart';
-import 'data/auth/google_sign_in_injectable.dart';
-import 'data/auth/auth_local_data_source.dart';
-import 'data/auth/auth_remote_data_source.dart';
-import 'domain/auth/i_auth_repository.dart';
-import 'shared/third_party_injectable.dart';
+import '../application/auth/auth_cubit.dart';
+import '../data/auth/auth_repository.dart';
+import '../data/auth/google_sign_in_injectable.dart';
+import '../data/auth/auth_local_data_source.dart';
+import '../data/auth/auth_remote_data_source.dart';
+import '../domain/auth/i_auth_repository.dart';
+import 'third_party_injectable.dart';
 
 /// adds generated dependencies
 /// to the provided [GetIt] instance

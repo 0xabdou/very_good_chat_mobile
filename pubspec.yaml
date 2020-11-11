@@ -29,6 +29,8 @@ dependencies:
   bloc: ^6.1.0
   # Cubit widgets
   flutter_bloc: ^6.1.0
+  # Navigation made simple
+  auto_route: ^0.6.9
   # Annotations for freezed package
   freezed_annotation: ^0.12.0
   # Annotations for json_serializable package
@@ -44,6 +46,8 @@ dev_dependencies:
   lint: ^1.3.0
   # Code gen for injectable
   injectable_generator: ^1.0.6
+  # Code gen for auto route
+  auto_route_generator: ^0.6.10
   # Runs code generation builds
   build_runner: ^1.10.4
   # Awesome code generator

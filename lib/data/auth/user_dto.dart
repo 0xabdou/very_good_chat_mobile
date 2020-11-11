@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:very_good_chat/custom_json_annotations.dart';
+import 'package:very_good_chat/shared/custom_json_annotations.dart';
 
 part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';

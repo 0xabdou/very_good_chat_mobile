@@ -1,8 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
-import 'package:very_good_chat/injection.dart';
-import 'package:very_good_chat/presentation/auth/auth_screen.dart';
+import 'package:very_good_chat/shared/injection.dart';
+import 'package:very_good_chat/shared/router.gr.dart';
 
 class AppWidget extends StatelessWidget {
   @override
@@ -15,7 +16,17 @@ class AppWidget extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Very Good Chat',
-        home: AuthScreen(),
+        builder: ExtendedNavigator.builder(
+          router: AppRouter(),
+          builder: (context, extendedNav) {
+            return Theme(
+              data: ThemeData(
+                brightness: Brightness.dark,
+              ),
+              child: extendedNav,
+            );
+          },
+        ),
       ),
     );
   }
