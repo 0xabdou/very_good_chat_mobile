@@ -9,7 +9,8 @@ abstract class ThirdPartyInjectable {
   @lazySingleton
   Dio get dio => Dio();
 
-  @lazySingleton
+  @preResolve
+  @LazySingleton()
   Future<sqflite.Database> get database async {
     final db = await sqflite.openDatabase(
       'very_good_database',

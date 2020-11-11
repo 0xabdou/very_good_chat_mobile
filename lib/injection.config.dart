@@ -21,15 +21,16 @@ import 'shared/third_party_injectable.dart';
 /// adds generated dependencies
 /// to the provided [GetIt] instance
 
-GetIt $initGetIt(
+Future<GetIt> $initGetIt(
   GetIt get, {
   String environment,
   EnvironmentFilter environmentFilter,
-}) {
+}) async {
   final gh = GetItHelper(get, environment, environmentFilter);
   final thirdPartyInjectable = _$ThirdPartyInjectable();
   final googleSignInInjectable = _$GoogleSignInInjectable();
-  gh.lazySingletonAsync<Database>(() => thirdPartyInjectable.database);
+  final database = await thirdPartyInjectable.database;
+  gh.lazySingleton<Database>(() => database);
   gh.lazySingleton<Dio>(() => thirdPartyInjectable.dio);
   gh.lazySingleton<GoogleSignIn>(() => googleSignInInjectable.googleSignIn);
   gh.lazySingleton<IAuthLocalDataSource>(
