@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
@@ -8,6 +9,7 @@ import 'package:very_good_chat/domain/auth/user.dart';
 part 'auth_cubit.freezed.dart';
 part 'auth_state.dart';
 
+@Injectable()
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit({
     @required IAuthRepository authRepository,

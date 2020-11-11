@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/data/auth/user_dto.dart';
 
 abstract class IAuthRemoteDataSource {
@@ -9,6 +10,7 @@ abstract class IAuthRemoteDataSource {
   Future<UserDtoReceived> registerWithGoogle(UserDtoToSend user);
 }
 
+@LazySingleton(as: IAuthRemoteDataSource)
 class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
   @override
   Future<UserDtoReceived> registerWithGoogle(

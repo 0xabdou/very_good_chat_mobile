@@ -1,10 +1,11 @@
-import 'package:sqflite/sqflite.dart' as sqflite;
-import 'package:very_good_chat/data/auth/auth_local_data_source.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 
+import 'injection.config.dart';
+
+final getIt = GetIt.instance;
+
+@injectableInit
 Future<void> configureInjection(String env) async {
-  final db = await sqflite.openDatabase(
-    'very_good_database',
-    version: 1,
-    onCreate: AuthLocalDataSource.createDatabase,
-  );
+  $initGetIt(getIt, environment: env);
 }

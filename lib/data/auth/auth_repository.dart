@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:injectable/injectable.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:very_good_chat/data/auth/auth_local_data_source.dart';
 import 'package:very_good_chat/data/auth/auth_remote_data_source.dart';
@@ -12,6 +13,7 @@ import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/logger.dart';
 
+@LazySingleton(as: IAuthRepository)
 class AuthRepository implements IAuthRepository {
   AuthRepository({
     @required IAuthRemoteDataSource authRemoteDataSource,
