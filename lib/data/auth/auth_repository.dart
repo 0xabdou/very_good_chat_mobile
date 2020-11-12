@@ -9,6 +9,7 @@ import 'package:very_good_chat/data/auth/auth_local_data_source.dart';
 import 'package:very_good_chat/data/auth/auth_remote_data_source.dart';
 import 'package:very_good_chat/data/auth/user_dto.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
+import 'package:very_good_chat/domain/auth/auth_provide_info.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/shared/logger.dart';
@@ -33,6 +34,28 @@ class AuthRepository implements IAuthRepository {
       final user = await _localDataSource.getPersistedUser();
       return right(user);
     } on DatabaseException catch (e) {
+      logger.d(e);
+      return left(const AuthFailure.local());
+    }
+  }
+
+  @override
+  Future<Either<AuthFailure, Option<AuthProviderInfo>>>
+      getAuthProviderInfo() async {
+    try {
+      final user = _googleSignIn.currentUser;
+      if (user == null) return right(none());
+      final auth = await user.authentication;
+      return right(
+        some(
+          AuthProviderInfo(
+            accessToken: auth.accessToken,
+            name: user.displayName,
+            photoUrl: user.photoUrl,
+          ),
+        ),
+      );
+    } on PlatformException catch (e) {
       logger.d(e);
       return left(const AuthFailure.local());
     }

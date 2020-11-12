@@ -77,6 +77,43 @@ void main() {
     });
   });
 
+  group('getAuthProviderInfo()', () {
+    setUp(() {
+      when(mockGoogleSI.currentUser).thenReturn(mockGoogleSIAcc);
+      when(mockGoogleSIAcc.photoUrl).thenReturn(authProviderInfo.photoUrl);
+      when(mockGoogleSIAcc.displayName).thenReturn(authProviderInfo.name);
+      when(mockGoogleSIAcc.authentication)
+          .thenAnswer((_) async => mockGoogleSIAuth);
+      when(mockGoogleSIAuth.accessToken)
+          .thenAnswer((_) => authProviderInfo.accessToken);
+    });
+
+    test('should return auth provider info if all goes right', () async {
+      // act
+      final result = await authRepository.getAuthProviderInfo();
+      // assert
+      expect(result, right(some(authProviderInfo)));
+    });
+
+    test('should return none if no user is signed in', () async {
+      // arrange
+      when(mockGoogleSI.currentUser).thenReturn(null);
+      // act
+      final result = await authRepository.getAuthProviderInfo();
+      // assert
+      expect(result, right(none()));
+    });
+
+    test('should return failure if google sign in throws', () async {
+      // arrange
+      when(mockGoogleSIAcc.authentication).thenThrow(platformException);
+      // act
+      final result = await authRepository.getAuthProviderInfo();
+      // assert
+      expect(result, left(const AuthFailure.local()));
+    });
+  });
+
   group('logout()', () {
     setUp(() {
       when(mockLocalDS.logout()).thenAnswer((_) async => unit);
