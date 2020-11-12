@@ -11,13 +11,16 @@ import 'package:flutter/material.dart';
 
 import '../presentation/auth/auth_screen.dart';
 import '../presentation/auth/login_screen.dart';
+import '../presentation/auth/register_screen.dart';
 
 class Routes {
   static const String authScreen = '/';
   static const String loginScreen = '/login-screen';
+  static const String registerScreen = '/register-screen';
   static const all = <String>{
     authScreen,
     loginScreen,
+    registerScreen,
   };
 }
 
@@ -27,6 +30,7 @@ class AppRouter extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.authScreen, page: AuthScreen),
     RouteDef(Routes.loginScreen, page: LoginScreen),
+    RouteDef(Routes.registerScreen, page: RegisterScreen),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -40,6 +44,12 @@ class AppRouter extends RouterBase {
     LoginScreen: (data) {
       return MaterialPageRoute<dynamic>(
         builder: (context) => LoginScreen(),
+        settings: data,
+      );
+    },
+    RegisterScreen: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => RegisterScreen(),
         settings: data,
       );
     },

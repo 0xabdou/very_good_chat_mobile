@@ -74,6 +74,73 @@ void main() {
     );
   });
 
+  group('loginWithGoogle()', () {
+    setUp(() {
+      when(mockRepository.signInWithGoogle())
+          .thenAnswer((_) async => right(unit));
+      when(mockRepository.getSignedInUser())
+          .thenAnswer((_) async => right(some(user)));
+    });
+
+    blocTest<AuthCubit, AuthState>(
+      'Should emit loggedIn if everything goes right',
+      build: () => authCubit,
+      act: (c) => c.loginWithGoogle(),
+      expect: const [AuthState.loggedIn(user)],
+      verify: (_) {
+        verify(mockRepository.signInWithGoogle()).called(1);
+        verify(mockRepository.getSignedInUser()).called(1);
+        verifyNoMoreInteractions(mockRepository);
+      },
+    );
+
+    blocTest<AuthCubit, AuthState>(
+      'Should emit registering if the user is not registered',
+      build: () {
+        when(mockRepository.signInWithGoogle())
+            .thenAnswer((_) async => left(const AuthFailure.notRegistered()));
+        return authCubit;
+      },
+      act: (c) => c.loginWithGoogle(),
+      expect: const [AuthState.registering()],
+      verify: (_) {
+        verify(mockRepository.signInWithGoogle()).called(1);
+        verifyNoMoreInteractions(mockRepository);
+      },
+    );
+
+    blocTest<AuthCubit, AuthState>(
+      'Should emit error if the google sign in fails',
+      build: () {
+        when(mockRepository.signInWithGoogle())
+            .thenAnswer((_) async => left(const AuthFailure.local()));
+        return authCubit;
+      },
+      act: (c) => c.loginWithGoogle(),
+      expect: const [AuthState.error(AuthFailure.local())],
+      verify: (_) {
+        verify(mockRepository.signInWithGoogle()).called(1);
+        verifyNoMoreInteractions(mockRepository);
+      },
+    );
+
+    blocTest<AuthCubit, AuthState>(
+      'Should emit error if the getting persisted user fails',
+      build: () {
+        when(mockRepository.getSignedInUser())
+            .thenAnswer((_) async => left(const AuthFailure.local()));
+        return authCubit;
+      },
+      act: (c) => c.loginWithGoogle(),
+      expect: const [AuthState.error(AuthFailure.local())],
+      verify: (_) {
+        verify(mockRepository.signInWithGoogle()).called(1);
+        verify(mockRepository.getSignedInUser()).called(1);
+        verifyNoMoreInteractions(mockRepository);
+      },
+    );
+  });
+
   group('logout()', () {
     blocTest<AuthCubit, AuthState>(
       'should logout and emit logged out state',

@@ -4,5 +4,7 @@ import 'package:injectable/injectable.dart';
 @module
 abstract class GoogleSignInInjectable {
   @lazySingleton
-  GoogleSignIn get googleSignIn => GoogleSignIn(scopes: ['email']);
+  GoogleSignIn get googleSignIn => GoogleSignIn(
+        scopes: ['email', 'profile', 'openid'],
+      );
 }

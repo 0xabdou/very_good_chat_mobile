@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           onPressed: () {
-            final cubit = context.read<AuthCubit>();
+            final cubit = context.read<AuthCubit>().loginWithGoogle();
           },
           child: Text('Google login'),
         ),

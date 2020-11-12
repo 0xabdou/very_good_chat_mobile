@@ -5,11 +5,12 @@ import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
+import 'package:very_good_chat/shared/logger.dart';
 
 part 'auth_cubit.freezed.dart';
 part 'auth_state.dart';
 
-@Injectable()
+@injectable
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit({
     @required IAuthRepository authRepository,
@@ -34,6 +35,35 @@ class AuthCubit extends Cubit<AuthState> {
           },
         );
       },
+    );
+  }
+
+  Future<void> loginWithGoogle() async {
+    final signInResult = await _repository.signInWithGoogle();
+    final signInFailure = signInResult.fold(
+      (f) => f,
+      (_) => null,
+    );
+
+    if (signInFailure != null) {
+      signInFailure.maybeWhen(
+        notRegistered: () => emit(const AuthState.registering()),
+        orElse: () => emit(AuthState.error(signInFailure)),
+      );
+      return;
+    }
+
+    final userResult = await _repository.getSignedInUser();
+    userResult.fold(
+      (f) => emit(AuthState.error(f)),
+      (userOption) {
+        if (userOption.isNone()) {
+          logger.w("Signed in successfully but no user is persisted");
+        } else {
+          final user = userOption.getOrElse(() => null);
+          emit(AuthState.loggedIn(user));
+        }
+      }
     );
   }
 
