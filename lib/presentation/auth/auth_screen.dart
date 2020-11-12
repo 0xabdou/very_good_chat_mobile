@@ -15,7 +15,7 @@ class AuthScreen extends StatelessWidget {
           loggedOut: () {
             context.navigator.push(Routes.loginScreen);
           },
-          registering: () {
+          registering: (_) {
             context.navigator.push(Routes.registerScreen);
           },
           error: (f) => f.toString(),

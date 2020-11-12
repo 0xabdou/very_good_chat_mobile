@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
+import 'package:very_good_chat/domain/auth/auth_provide_info.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/shared/logger.dart';
@@ -47,24 +48,34 @@ class AuthCubit extends Cubit<AuthState> {
 
     if (signInFailure != null) {
       signInFailure.maybeWhen(
-        notRegistered: () => emit(const AuthState.registering()),
+        notRegistered: () async {
+          final authInfoResult = await _repository.getAuthProviderInfo();
+          authInfoResult.fold(
+            (f) => emit(AuthState.error(f)),
+            (infoOption) {
+              if (infoOption.isNone()) {
+                logger.w("Signed in successfully but couldn't get auth info");
+              } else {
+                final info = infoOption.getOrElse(() => null);
+                emit(AuthState.registering(info));
+              }
+            },
+          );
+        },
         orElse: () => emit(AuthState.error(signInFailure)),
       );
       return;
     }
 
     final userResult = await _repository.getSignedInUser();
-    userResult.fold(
-      (f) => emit(AuthState.error(f)),
-      (userOption) {
-        if (userOption.isNone()) {
-          logger.w("Signed in successfully but no user is persisted");
-        } else {
-          final user = userOption.getOrElse(() => null);
-          emit(AuthState.loggedIn(user));
-        }
+    userResult.fold((f) => emit(AuthState.error(f)), (userOption) {
+      if (userOption.isNone()) {
+        logger.w("Signed in successfully but no user is persisted");
+      } else {
+        final user = userOption.getOrElse(() => null);
+        emit(AuthState.loggedIn(user));
       }
-    );
+    });
   }
 
   Future<void> logout() async {

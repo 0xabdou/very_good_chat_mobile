@@ -95,21 +95,6 @@ void main() {
     );
 
     blocTest<AuthCubit, AuthState>(
-      'Should emit registering if the user is not registered',
-      build: () {
-        when(mockRepository.signInWithGoogle())
-            .thenAnswer((_) async => left(const AuthFailure.notRegistered()));
-        return authCubit;
-      },
-      act: (c) => c.loginWithGoogle(),
-      expect: const [AuthState.registering()],
-      verify: (_) {
-        verify(mockRepository.signInWithGoogle()).called(1);
-        verifyNoMoreInteractions(mockRepository);
-      },
-    );
-
-    blocTest<AuthCubit, AuthState>(
       'Should emit error if the google sign in fails',
       build: () {
         when(mockRepository.signInWithGoogle())
@@ -139,6 +124,43 @@ void main() {
         verifyNoMoreInteractions(mockRepository);
       },
     );
+
+    group('if the user is not registered', () {
+      setUp(() {
+        when(mockRepository.signInWithGoogle())
+            .thenAnswer((_) async => left(const AuthFailure.notRegistered()));
+        when(mockRepository.getAuthProviderInfo())
+            .thenAnswer((_) async => right(some(authProviderInfo)));
+      });
+
+      blocTest<AuthCubit, AuthState>(
+        'Should emit registering if all goes well',
+        build: () => authCubit,
+        act: (c) => c.loginWithGoogle(),
+        expect: const [AuthState.registering(authProviderInfo)],
+        verify: (_) {
+          verify(mockRepository.signInWithGoogle()).called(1);
+          verify(mockRepository.getAuthProviderInfo()).called(1);
+          verifyNoMoreInteractions(mockRepository);
+        },
+      );
+
+      blocTest<AuthCubit, AuthState>(
+        'Should emit error if something is wrong',
+        build: () {
+          when(mockRepository.getAuthProviderInfo())
+              .thenAnswer((_) async => left(const AuthFailure.local()));
+          return authCubit;
+        },
+        act: (c) => c.loginWithGoogle(),
+        expect: const [AuthState.error(AuthFailure.local())],
+        verify: (_) {
+          verify(mockRepository.signInWithGoogle()).called(1);
+          verify(mockRepository.getAuthProviderInfo()).called(1);
+          verifyNoMoreInteractions(mockRepository);
+        },
+      );
+    });
   });
 
   group('logout()', () {
