@@ -5,7 +5,7 @@
 // **************************************************************************
 
 // ignore_for_file: public_member_api_docs
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +68,8 @@ class AppRouter extends RouterBase {
       return MaterialPageRoute<dynamic>(
         builder: (context) => ImageCropper(
           key: args.key,
-          image: args.image,
+          imageBytes: args.imageBytes,
+          cropRatio: args.cropRatio,
         ),
         settings: data,
       );
@@ -90,6 +91,7 @@ class RegistrationScreenArguments {
 /// ImageCropper arguments holder class
 class ImageCropperArguments {
   final Key key;
-  final File image;
-  ImageCropperArguments({this.key, @required this.image});
+  final Uint8List imageBytes;
+  final double cropRatio;
+  ImageCropperArguments({this.key, @required this.imageBytes, this.cropRatio});
 }
