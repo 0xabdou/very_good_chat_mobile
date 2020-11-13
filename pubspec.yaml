@@ -37,6 +37,14 @@ dependencies:
   json_annotation: ^3.1.0
   # Better than the print function
   logger: ^0.9.4
+  # Picking photos
+  photo: ^0.4.8
+  # Editing photos
+  extended_image: ^1.3.0
+  # Encoding photos
+  image_editor: ^0.7.3
+  # Platform paths
+  path_provider: ^1.6.24
 
 
 dev_dependencies:

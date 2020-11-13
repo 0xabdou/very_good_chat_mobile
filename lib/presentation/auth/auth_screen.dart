@@ -17,8 +17,9 @@ class AuthScreen extends StatelessWidget {
           },
           registering: (authInfo) {
             context.navigator.push(
-              Routes.registerScreen,
-              arguments: RegisterScreenArguments(authProviderInfo: authInfo),
+              Routes.registrationScreen,
+              arguments:
+                  RegistrationScreenArguments(authProviderInfo: authInfo),
             );
           },
           error: (f) => f.toString(),
