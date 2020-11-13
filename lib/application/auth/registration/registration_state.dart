@@ -7,6 +7,7 @@ abstract class RegistrationState with _$RegistrationState {
     @required String name,
     @required bool callingApi,
     File photo,
+    String photoUrl,
     AuthFailure apiFailure,
     String usernameError,
   }) = _RegistrationState;

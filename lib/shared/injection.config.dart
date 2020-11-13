@@ -1,20 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:injectable/injectable.dart';
 // **************************************************************************
 // InjectableConfigGenerator
 // **************************************************************************
 
 import 'package:sqflite/sqflite.dart';
-import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
-import 'package:injectable/injectable.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:very_good_chat/application/auth/registration/registration_validators.dart';
 
 import '../application/auth/auth_cubit.dart';
-import '../data/auth/auth_repository.dart';
-import '../data/auth/google_sign_in_injectable.dart';
+import '../application/auth/registration/registration_cubit.dart';
 import '../data/auth/auth_local_data_source.dart';
 import '../data/auth/auth_remote_data_source.dart';
+import '../data/auth/auth_repository.dart';
+import '../data/auth/google_sign_in_injectable.dart';
 import '../domain/auth/i_auth_repository.dart';
 import 'third_party_injectable.dart';
 
@@ -41,7 +43,11 @@ Future<GetIt> $initGetIt(
         authLocalDataSource: get<IAuthLocalDataSource>(),
         googleSignIn: get<GoogleSignIn>(),
       ));
-  gh.factory<AuthCubit>(
+  gh.lazySingleton<RegistrationValidators>(() => RegistrationValidators());
+  gh.factory<RegistrationCubit>(() => RegistrationCubit(
+      authRepository: get<IAuthRepository>(),
+      registrationValidators: get<RegistrationValidators>()));
+  gh.lazySingleton<AuthCubit>(
       () => AuthCubit(authRepository: get<IAuthRepository>()));
   return get;
 }

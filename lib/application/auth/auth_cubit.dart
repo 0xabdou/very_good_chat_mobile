@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
-import 'package:very_good_chat/domain/auth/auth_provide_info.dart';
+import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/shared/logger.dart';
@@ -11,7 +11,7 @@ import 'package:very_good_chat/shared/logger.dart';
 part 'auth_cubit.freezed.dart';
 part 'auth_state.dart';
 
-@injectable
+@lazySingleton
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit({
     @required IAuthRepository authRepository,
@@ -81,5 +81,11 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> logout() async {
     _repository.logout();
     emit(const AuthState.loggedOut());
+  }
+
+  @override
+  void onChange(Change<AuthState> change) {
+    logger.d("From ${change.currentState}\nTO ${change.nextState}");
+    super.onChange(change);
   }
 }

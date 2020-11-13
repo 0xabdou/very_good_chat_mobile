@@ -7,7 +7,9 @@ import 'package:very_good_chat/presentation/auth/register_screen.dart';
   routes: <AutoRoute>[
     MaterialRoute(page: AuthScreen, initial: true),
     MaterialRoute(page: LoginScreen),
-    MaterialRoute(page: RegisterScreen),
+    MaterialRoute(
+      page: RegisterScreen,
+    ),
   ],
 )
 class $AppRouter {}
