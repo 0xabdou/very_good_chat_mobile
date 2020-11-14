@@ -1,9 +1,10 @@
-# very_good_chat
+# Very Good Chat
+<p align="center">
+  <img width="256" src="https://raw.githubusercontent.com/aouahib/very_good_chat/master/assets/images/logo/vgc.png">
+</p>
 
 A very good chat app :)
 
-![logo](https://raw.githubusercontent.com/aouahib/very_good_chat/master/assets/images/logo/vgc.png =250x250)
-
 I wanted to show Very Good Ventures how good of a coder I am.
 
-Project started at: November 10th 2020 1:56PM GMT+1
+Project started at: November 10th 2020 1:56 PM GMT+1
