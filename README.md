@@ -2,7 +2,7 @@
 
 A very good chat app :)
 
-<div style="text-align:center"><img src="https://raw.githubusercontent.com/aouahib/very_good_chat/master/assets/images/logo/vgc.png" /></div>
+![logo](https://raw.githubusercontent.com/aouahib/very_good_chat/master/assets/images/logo/vgc.png | width=100)
 
 I wanted to show Very Good Ventures how good of a coder I am.
 
