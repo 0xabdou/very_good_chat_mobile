@@ -14,14 +14,17 @@ import '../domain/auth/auth_provider_info.dart';
 import '../presentation/auth/logged_in_screen.dart';
 import '../presentation/auth/login_screen.dart';
 import '../presentation/auth/registration_screen.dart';
+import '../presentation/auth/splash_screen.dart';
 import '../presentation/core/image_cropper.dart';
 
 class Routes {
-  static const String loginScreen = '/';
+  static const String splashScreen = '/';
+  static const String loginScreen = '/login-screen';
   static const String registrationScreen = '/registration-screen';
   static const String loggedInScreen = '/logged-in-screen';
   static const String imageCropper = '/image-cropper';
   static const all = <String>{
+    splashScreen,
     loginScreen,
     registrationScreen,
     loggedInScreen,
@@ -33,6 +36,7 @@ class AppRouter extends RouterBase {
   @override
   List<RouteDef> get routes => _routes;
   final _routes = <RouteDef>[
+    RouteDef(Routes.splashScreen, page: SplashScreen),
     RouteDef(Routes.loginScreen, page: LoginScreen),
     RouteDef(Routes.registrationScreen, page: RegistrationScreen),
     RouteDef(Routes.loggedInScreen, page: LoggedInScreen),
@@ -41,6 +45,12 @@ class AppRouter extends RouterBase {
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
   final _pagesMap = <Type, AutoRouteFactory>{
+    SplashScreen: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => SplashScreen(),
+        settings: data,
+      );
+    },
     LoginScreen: (data) {
       return MaterialPageRoute<dynamic>(
         builder: (context) => LoginScreen(),

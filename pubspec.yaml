@@ -45,6 +45,8 @@ dependencies:
   image_editor: ^0.7.3
   # Platform paths
   path_provider: ^1.6.24
+  # More icons
+  font_awesome_flutter: ^8.10.0
 
 
 dev_dependencies:
@@ -66,8 +68,16 @@ dev_dependencies:
   mockito: ^4.1.3
   # Cubit testing
   bloc_test: ^7.1.0
+  # For generating launcher icons
+  flutter_launcher_icons: ^0.8.1
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo/vgc.png"
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/logo/
 
