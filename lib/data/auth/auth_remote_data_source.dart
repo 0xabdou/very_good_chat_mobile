@@ -18,10 +18,12 @@ class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
   ) async {
     await Future.delayed(const Duration(seconds: 1));
     return const UserDtoReceived(
-      accessToken: 'access token',
-      id: 'user ud',
-      username: 'username',
-    );
+        accessToken: 'accessToken',
+        id: 'userId',
+        username: 'abdou.ouahib',
+        name: 'Abdou Ouahib',
+        photoUrl:
+            'https://lh3.googleusercontent.com/a-/AOh14GjvbCTgNFpciLth-oQ79p4f6USBEsKnhyVID7TiTw');
   }
 
   @override

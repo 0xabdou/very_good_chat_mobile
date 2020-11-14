@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_chat/shared/custom_json_annotations.dart';
 
@@ -10,11 +12,8 @@ abstract class UserDtoToSend with _$UserDtoToSend {
     @required String authProviderAccessToken,
     @required String username,
     @doNotIncludeIfNull String name,
-    @doNotIncludeIfNull String photoUrl,
+    @doNotIncludeIfNull Uint8List photo,
   }) = _UserDtoToSend;
-
-  factory UserDtoToSend.fromJson(Map<String, dynamic> json) =>
-      _$UserDtoToSendFromJson(json);
 }
 
 @freezed

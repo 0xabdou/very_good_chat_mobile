@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/application/auth/registration/registration_validators.dart';
+import 'package:very_good_chat/data/auth/user_dto.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
@@ -40,11 +41,11 @@ class RegistrationCubit extends Cubit<RegistrationState> {
 
   void usernameChanged(String username) {
     final error = _validators.validateUsername(username);
-    emit(state.copyWith(username: username, usernameError: error));
+    emit(_state.copyWith(username: username, usernameError: error));
   }
 
   void nameChanged(String name) {
-    emit(state.copyWith(name: name));
+    emit(_state.copyWith(name: name));
   }
 
   Future<void> pickPhoto(BuildContext context) async {
@@ -57,17 +58,40 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         cropRatio: 1,
       );
       if (editedBytes == null) return;
-      emit(state.copyWith(photoBytes: editedBytes));
+      emit(_state.copyWith(photoBytes: editedBytes));
     } on PlatformException catch (e) {
       logger.d(e);
     }
   }
 
+  Future<void> submit() async {
+    emit(_state.copyWith(callingApi: true));
+    final result = await _repository.registerWithGoogle(
+      UserDtoToSend(
+        authProviderAccessToken: state.authProviderAccessToken,
+        username: state.username,
+        name: state.name,
+        photo: state.photoBytes,
+      ),
+    );
+    result.fold(
+      (failure) {
+        emit(_state.copyWith(apiFailure: failure, callingApi: false));
+      },
+      (r) {
+        emit(_state.copyWith(done: true, callingApi: false));
+      },
+    );
+  }
+
+  // Cleaned state
+  RegistrationState get _state => state.copyWith(apiFailure: null);
+
   @override
   void onChange(Change<RegistrationState> change) {
+    super.onChange(change);
     logger.d("From ${stateToString(change.currentState)}\n"
         "TO ${stateToString(change.nextState)}");
-    super.onChange(change);
   }
 
   String stateToString(RegistrationState state) {

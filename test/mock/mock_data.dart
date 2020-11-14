@@ -17,6 +17,7 @@ const userDtoReceived = UserDtoReceived(
 const userDtoToSend = UserDtoToSend(
   authProviderAccessToken: 'accessToken',
   username: 'username',
+  name: 'name',
 );
 const authProviderInfo = AuthProviderInfo(
   accessToken: 'access_token',

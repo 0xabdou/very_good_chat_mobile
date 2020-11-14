@@ -24,19 +24,6 @@ void main() {
     photoUrl: jsonReceived['photoUrl'] as String,
   );
 
-  const userDtoToSend = UserDtoToSend(
-    authProviderAccessToken: 'access token',
-    username: 'username',
-    name: 'name',
-    photoUrl: 'photoUrl',
-  );
-  final jsonToSend = <String, dynamic>{
-    'authProviderAccessToken': userDtoToSend.authProviderAccessToken,
-    'username': userDtoToSend.username,
-    'name': userDtoToSend.name,
-    'photoUrl': userDtoToSend.photoUrl,
-  };
-
   group('UserDtoReceived.fromJson', () {
     test('should throw an exception if a required key is missing', () async {
       // act and assert
@@ -59,15 +46,6 @@ void main() {
       final user = UserDtoReceived.fromJson(jsonReceived);
       // assert
       expect(user, userDtoReceived);
-    });
-  });
-
-  group('UserDtoToSend.toJson', () {
-    test('should encode user to send dto', () async {
-      // act
-      final json = userDtoToSend.toJson();
-      // assert
-      expect(json, jsonToSend);
     });
   });
 }

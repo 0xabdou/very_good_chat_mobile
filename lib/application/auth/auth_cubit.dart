@@ -85,7 +85,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   @override
   void onChange(Change<AuthState> change) {
-    logger.d("From ${change.currentState}\nTO ${change.nextState}");
     super.onChange(change);
+    logger.d("From ${change.currentState}\nTO ${change.nextState}");
   }
 }

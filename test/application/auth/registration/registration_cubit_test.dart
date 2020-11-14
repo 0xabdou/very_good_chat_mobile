@@ -1,8 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/registration/registration_cubit.dart';
 import 'package:very_good_chat/application/auth/registration/registration_validators.dart';
+import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 
 import '../../../mock/mock_data.dart';
@@ -97,6 +99,56 @@ void main() {
       build: () => cubit,
       act: (c) => c.nameChanged(name),
       expect: [RegistrationState.initial().copyWith(name: name)],
+    );
+  });
+
+  group('submit()', () {
+    final seedState = RegistrationState(
+      authProviderAccessToken: userDtoToSend.authProviderAccessToken,
+      username: userDtoToSend.username,
+      name: userDtoToSend.name,
+      photoBytes: userDtoToSend.photo,
+      callingApi: false,
+      done: false,
+    );
+
+    blocTest<RegistrationCubit, RegistrationState>(
+      'should emit the right states if all goes right',
+      build: () {
+        when(mockRepository.registerWithGoogle(userDtoToSend))
+            .thenAnswer((_) async => right(unit));
+        return cubit;
+      },
+      seed: seedState,
+      act: (c) => c.submit(),
+      expect: [
+        seedState.copyWith(callingApi: true),
+        seedState.copyWith(done: true),
+      ],
+    );
+
+    blocTest<RegistrationCubit, RegistrationState>(
+      'should emit the right states if something goes left',
+      build: () {
+        when(mockRepository.registerWithGoogle(userDtoToSend))
+            .thenAnswer((_) async => left(const AuthFailure.server()));
+        return cubit;
+      },
+      seed: seedState,
+      act: (c) => c.submit(),
+      expect: [
+        seedState.copyWith(callingApi: true),
+        seedState.copyWith(apiFailure: const AuthFailure.server()),
+      ],
+    );
+
+    blocTest<RegistrationCubit, RegistrationState>(
+      'If no api error happened during the current event, '
+      'the next state should not have apiFailure set',
+      build: () => cubit,
+      seed: seedState.copyWith(apiFailure: const AuthFailure.server()),
+      act: (c) => c.nameChanged(''),
+      expect: [seedState.copyWith(name: '')],
     );
   });
 }
