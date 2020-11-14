@@ -59,14 +59,14 @@ void main() {
     );
 
     blocTest<AuthCubit, AuthState>(
-      'should emit error if some failure happened',
+      'should emit logged out with error if some failure happened',
       build: () {
         when(mockRepository.getSignedInUser())
             .thenAnswer((_) async => left(const AuthFailure.network()));
         return authCubit;
       },
       act: (cubit) => cubit.checkAuthStatus(),
-      expect: const [AuthState.error(AuthFailure.network())],
+      expect: const [AuthState.loggedOut(failure: AuthFailure.network())],
       verify: (_) {
         verify(mockRepository.getSignedInUser()).called(1);
         verifyNoMoreInteractions(mockRepository);
@@ -86,7 +86,10 @@ void main() {
       'Should emit loggedIn if everything goes right',
       build: () => authCubit,
       act: (c) => c.loginWithGoogle(),
-      expect: const [AuthState.loggedIn(user)],
+      expect: const [
+        AuthState.loggedOut(loggingIn: true),
+        AuthState.loggedIn(user),
+      ],
       verify: (_) {
         verify(mockRepository.signInWithGoogle()).called(1);
         verify(mockRepository.getSignedInUser()).called(1);
@@ -95,14 +98,17 @@ void main() {
     );
 
     blocTest<AuthCubit, AuthState>(
-      'Should emit error if the google sign in fails',
+      'Should emit logged out with error if the google sign in fails',
       build: () {
         when(mockRepository.signInWithGoogle())
             .thenAnswer((_) async => left(const AuthFailure.local()));
         return authCubit;
       },
       act: (c) => c.loginWithGoogle(),
-      expect: const [AuthState.error(AuthFailure.local())],
+      expect: const [
+        AuthState.loggedOut(loggingIn: true),
+        AuthState.loggedOut(failure: AuthFailure.local()),
+      ],
       verify: (_) {
         verify(mockRepository.signInWithGoogle()).called(1);
         verifyNoMoreInteractions(mockRepository);
@@ -110,14 +116,17 @@ void main() {
     );
 
     blocTest<AuthCubit, AuthState>(
-      'Should emit error if the getting persisted user fails',
+      'Should emit logged out with error if the getting persisted user fails',
       build: () {
         when(mockRepository.getSignedInUser())
             .thenAnswer((_) async => left(const AuthFailure.local()));
         return authCubit;
       },
       act: (c) => c.loginWithGoogle(),
-      expect: const [AuthState.error(AuthFailure.local())],
+      expect: const [
+        AuthState.loggedOut(loggingIn: true),
+        AuthState.loggedOut(failure: AuthFailure.local()),
+      ],
       verify: (_) {
         verify(mockRepository.signInWithGoogle()).called(1);
         verify(mockRepository.getSignedInUser()).called(1);
@@ -137,7 +146,10 @@ void main() {
         'Should emit registering if all goes well',
         build: () => authCubit,
         act: (c) => c.loginWithGoogle(),
-        expect: const [AuthState.registering(authProviderInfo)],
+        expect: const [
+          AuthState.loggedOut(loggingIn: true),
+          AuthState.registering(authProviderInfo),
+        ],
         verify: (_) {
           verify(mockRepository.signInWithGoogle()).called(1);
           verify(mockRepository.getAuthProviderInfo()).called(1);
@@ -146,14 +158,17 @@ void main() {
       );
 
       blocTest<AuthCubit, AuthState>(
-        'Should emit error if something is wrong',
+        'Should emit error if something went wrong',
         build: () {
           when(mockRepository.getAuthProviderInfo())
               .thenAnswer((_) async => left(const AuthFailure.local()));
           return authCubit;
         },
         act: (c) => c.loginWithGoogle(),
-        expect: const [AuthState.error(AuthFailure.local())],
+        expect: const [
+          AuthState.loggedOut(loggingIn: true),
+          AuthState.loggedOut(failure: AuthFailure.local()),
+        ],
         verify: (_) {
           verify(mockRepository.signInWithGoogle()).called(1);
           verify(mockRepository.getAuthProviderInfo()).called(1);

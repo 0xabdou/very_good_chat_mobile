@@ -47,6 +47,10 @@ dependencies:
   path_provider: ^1.6.24
   # More icons
   font_awesome_flutter: ^8.10.0
+  # More progress indicators
+  flutter_spinkit: ^4.1.2+1
+  # A better snack bar
+  flushbar: ^1.10.4
 
 
 dev_dependencies:

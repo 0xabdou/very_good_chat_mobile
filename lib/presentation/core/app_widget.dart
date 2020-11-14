@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,60 +12,67 @@ class AppWidget extends StatefulWidget {
 
 class _AppWidgetState extends State<AppWidget> {
   AuthCubit authCubit;
-  StreamSubscription sub;
 
   @override
   void initState() {
     authCubit = getIt.get<AuthCubit>()..checkAuthStatus();
-    sub = authCubit.listen((state) {
-      state.when(
-        initial: () {},
-        loggedIn: (u) {
-          ExtendedNavigator.root.popUntil((r) => r.isFirst);
-          ExtendedNavigator.root.replace(Routes.loggedInScreen);
-        },
-        loggedOut: () {
-          ExtendedNavigator.root.popUntil((r) => r.isFirst);
-          ExtendedNavigator.root.replace(Routes.loginScreen);
-        },
-        registering: (authInfo) {
-          ExtendedNavigator.root.replace(
-            Routes.registrationScreen,
-            arguments: RegistrationScreenArguments(authProviderInfo: authInfo),
-          );
-        },
-        error: (f) => f.toString(),
-      );
-    });
     super.initState();
   }
 
   @override
-  void dispose() {
-    sub.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthCubit>(
-          create: (_) => authCubit,
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Very Good Chat',
-        builder: ExtendedNavigator.builder(
-          router: AppRouter(),
-          builder: (context, extendedNav) {
-            return Theme(
-              data: ThemeData(
-                brightness: Brightness.dark,
-              ),
-              child: extendedNav,
+    return BlocListener<AuthCubit, AuthState>(
+      cubit: authCubit,
+      listenWhen: (prev, cur) {
+        return prev.maybeMap(
+          loggedOut: (_) {
+            return cur.maybeMap(
+              loggedOut: (_) => false,
+              orElse: () => true,
             );
           },
+          orElse: () => true,
+        );
+      },
+      listener: (context, state) {
+        state.map(
+          initial: (_) {},
+          loggedIn: (_) {
+            ExtendedNavigator.root.popUntil((r) => r.isFirst);
+            ExtendedNavigator.root.replace(Routes.loggedInScreen);
+          },
+          loggedOut: (_) {
+            ExtendedNavigator.root.popUntil((r) => r.isFirst);
+            ExtendedNavigator.root.replace(Routes.loginScreen);
+          },
+          registering: (r) {
+            ExtendedNavigator.root.replace(
+              Routes.registrationScreen,
+              arguments:
+                  RegistrationScreenArguments(authProviderInfo: r.authInfo),
+            );
+          },
+        );
+      },
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthCubit>(
+            create: (_) => authCubit,
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Very Good Chat',
+          builder: ExtendedNavigator.builder(
+            router: AppRouter(),
+            builder: (context, extendedNav) {
+              return Theme(
+                data: ThemeData(
+                  brightness: Brightness.dark,
+                ),
+                child: extendedNav,
+              );
+            },
+          ),
         ),
       ),
     );

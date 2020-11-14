@@ -24,7 +24,7 @@ class AuthCubit extends Cubit<AuthState> {
     final either = await _repository.getSignedInUser();
     either.fold(
       (failure) {
-        emit(AuthState.error(failure));
+        emit(AuthState.loggedOut(failure: failure));
       },
       (userOption) {
         userOption.fold(
@@ -40,6 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> loginWithGoogle() async {
+    emit(const AuthState.loggedOut(loggingIn: true));
     final signInResult = await _repository.signInWithGoogle();
     final signInFailure = signInResult.fold(
       (f) => f,
@@ -51,10 +52,13 @@ class AuthCubit extends Cubit<AuthState> {
         notRegistered: () async {
           final authInfoResult = await _repository.getAuthProviderInfo();
           authInfoResult.fold(
-            (f) => emit(AuthState.error(f)),
+            (f) {
+              emit(AuthState.loggedOut(failure: f));
+            },
             (infoOption) {
               if (infoOption.isNone()) {
                 logger.w("Signed in successfully but couldn't get auth info");
+                emit(const AuthState.loggedOut(failure: AuthFailure.local()));
               } else {
                 final info = infoOption.getOrElse(() => null);
                 emit(AuthState.registering(info));
@@ -62,20 +66,28 @@ class AuthCubit extends Cubit<AuthState> {
             },
           );
         },
-        orElse: () => emit(AuthState.error(signInFailure)),
+        orElse: () {
+          emit(AuthState.loggedOut(failure: signInFailure));
+        },
       );
       return;
     }
 
     final userResult = await _repository.getSignedInUser();
-    userResult.fold((f) => emit(AuthState.error(f)), (userOption) {
-      if (userOption.isNone()) {
-        logger.w("Signed in successfully but no user is persisted");
-      } else {
-        final user = userOption.getOrElse(() => null);
-        emit(AuthState.loggedIn(user));
-      }
-    });
+    userResult.fold(
+      (f) {
+        emit(AuthState.loggedOut(failure: f));
+      },
+      (userOption) {
+        if (userOption.isNone()) {
+          logger.w("Signed in successfully but no user is persisted");
+          emit(const AuthState.loggedOut(failure: AuthFailure.local()));
+        } else {
+          final user = userOption.getOrElse(() => null);
+          emit(AuthState.loggedIn(user));
+        }
+      },
+    );
   }
 
   Future<void> logout() async {
