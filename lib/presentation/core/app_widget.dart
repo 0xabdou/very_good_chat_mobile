@@ -47,9 +47,8 @@ class _AppWidgetState extends State<AppWidget> {
           },
           registering: (r) {
             ExtendedNavigator.root.replace(
-              Routes.registrationScreen,
-              arguments:
-                  RegistrationScreenArguments(authProviderInfo: r.authInfo),
+              Routes.updatingScreen,
+              arguments: UpdatingScreenArguments(authProviderInfo: r.authInfo),
             );
           },
         );

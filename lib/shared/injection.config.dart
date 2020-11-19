@@ -16,9 +16,9 @@ import '../data/auth/google_sign_in_injectable.dart';
 import '../data/auth/auth_local_data_source.dart';
 import '../data/auth/auth_remote_data_source.dart';
 import '../domain/auth/i_auth_repository.dart';
-import '../application/auth/registration/registration_cubit.dart';
-import '../application/auth/registration/registration_validators.dart';
 import 'third_party_injectable.dart';
+import '../application/auth/updating/updating_cubit.dart';
+import '../application/auth/user_validators.dart';
 
 /// adds generated dependencies
 /// to the provided [GetIt] instance
@@ -43,12 +43,12 @@ Future<GetIt> $initGetIt(
         authLocalDataSource: get<IAuthLocalDataSource>(),
         googleSignIn: get<GoogleSignIn>(),
       ));
-  gh.lazySingleton<RegistrationValidators>(() => RegistrationValidators());
+  gh.lazySingleton<UserValidators>(() => UserValidators());
   gh.lazySingleton<AuthCubit>(
       () => AuthCubit(authRepository: get<IAuthRepository>()));
-  gh.factory<RegistrationCubit>(() => RegistrationCubit(
+  gh.factory<UpdatingCubit>(() => UpdatingCubit(
       authRepository: get<IAuthRepository>(),
-      registrationValidators: get<RegistrationValidators>()));
+      validators: get<UserValidators>()));
   return get;
 }
 

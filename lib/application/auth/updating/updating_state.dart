@@ -1,8 +1,8 @@
-part of 'registration_cubit.dart';
+part of 'updating_cubit.dart';
 
 @freezed
-abstract class RegistrationState with _$RegistrationState {
-  const factory RegistrationState({
+abstract class UpdatingState with _$UpdatingState {
+  const factory UpdatingState({
     @required String authProviderAccessToken,
     @required String username,
     @required String name,
@@ -12,9 +12,9 @@ abstract class RegistrationState with _$RegistrationState {
     String photoUrl,
     AuthFailure apiFailure,
     String usernameError,
-  }) = _RegistrationState;
+  }) = _UpdatingState;
 
-  factory RegistrationState.initial() => const RegistrationState(
+  factory UpdatingState.initial() => const UpdatingState(
         authProviderAccessToken: '',
         username: '',
         name: '',

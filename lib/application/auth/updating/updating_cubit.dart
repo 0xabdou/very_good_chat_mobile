@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:very_good_chat/application/auth/registration/registration_validators.dart';
+import 'package:very_good_chat/application/auth/user_validators.dart';
 import 'package:very_good_chat/data/auth/user_dto.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
@@ -15,20 +15,20 @@ import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/shared/logger.dart';
 import 'package:very_good_chat/shared/utils/image_utils.dart' as image_utils;
 
-part 'registration_cubit.freezed.dart';
-part 'registration_state.dart';
+part 'updating_cubit.freezed.dart';
+part 'updating_state.dart';
 
 @injectable
-class RegistrationCubit extends Cubit<RegistrationState> {
-  RegistrationCubit({
+class UpdatingCubit extends Cubit<UpdatingState> {
+  UpdatingCubit({
     @required IAuthRepository authRepository,
-    @required RegistrationValidators registrationValidators,
+    @required UserValidators validators,
   })  : _repository = authRepository,
-        _validators = registrationValidators,
-        super(RegistrationState.initial());
+        _validators = validators,
+        super(UpdatingState.initial());
 
   final IAuthRepository _repository;
-  final RegistrationValidators _validators;
+  final UserValidators _validators;
 
   void init(AuthProviderInfo info) {
     emit(
@@ -85,16 +85,16 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   }
 
   // Cleaned state
-  RegistrationState get _state => state.copyWith(apiFailure: null);
+  UpdatingState get _state => state.copyWith(apiFailure: null);
 
   @override
-  void onChange(Change<RegistrationState> change) {
+  void onChange(Change<UpdatingState> change) {
     super.onChange(change);
     logger.d("From ${stateToString(change.currentState)}\n"
         "TO ${stateToString(change.nextState)}");
   }
 
-  String stateToString(RegistrationState state) {
+  String stateToString(UpdatingState state) {
     return 'RegistrationState(username: ${state.username}, name: ${state.name},'
         ' callingApi: ${state.callingApi} photoUrl: ${state.photoUrl}, '
         'photoBytes: ${state.photoBytes != null ? 'exists' : null}, '

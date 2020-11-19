@@ -1,7 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
 
-part of 'registration_cubit.dart';
+part of 'updating_cubit.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -10,11 +10,11 @@ part of 'registration_cubit.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-class _$RegistrationStateTearOff {
-  const _$RegistrationStateTearOff();
+class _$UpdatingStateTearOff {
+  const _$UpdatingStateTearOff();
 
 // ignore: unused_element
-  _RegistrationState call(
+  _UpdatingState call(
       {@required String authProviderAccessToken,
       @required String username,
       @required String name,
@@ -24,7 +24,7 @@ class _$RegistrationStateTearOff {
       String photoUrl,
       AuthFailure apiFailure,
       String usernameError}) {
-    return _RegistrationState(
+    return _UpdatingState(
       authProviderAccessToken: authProviderAccessToken,
       username: username,
       name: name,
@@ -40,10 +40,10 @@ class _$RegistrationStateTearOff {
 
 /// @nodoc
 // ignore: unused_element
-const $RegistrationState = _$RegistrationStateTearOff();
+const $UpdatingState = _$UpdatingStateTearOff();
 
 /// @nodoc
-mixin _$RegistrationState {
+mixin _$UpdatingState {
   String get authProviderAccessToken;
   String get username;
   String get name;
@@ -54,14 +54,14 @@ mixin _$RegistrationState {
   AuthFailure get apiFailure;
   String get usernameError;
 
-  $RegistrationStateCopyWith<RegistrationState> get copyWith;
+  $UpdatingStateCopyWith<UpdatingState> get copyWith;
 }
 
 /// @nodoc
-abstract class $RegistrationStateCopyWith<$Res> {
-  factory $RegistrationStateCopyWith(
-          RegistrationState value, $Res Function(RegistrationState) then) =
-      _$RegistrationStateCopyWithImpl<$Res>;
+abstract class $UpdatingStateCopyWith<$Res> {
+  factory $UpdatingStateCopyWith(
+          UpdatingState value, $Res Function(UpdatingState) then) =
+      _$UpdatingStateCopyWithImpl<$Res>;
   $Res call(
       {String authProviderAccessToken,
       String username,
@@ -77,13 +77,13 @@ abstract class $RegistrationStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$RegistrationStateCopyWithImpl<$Res>
-    implements $RegistrationStateCopyWith<$Res> {
-  _$RegistrationStateCopyWithImpl(this._value, this._then);
+class _$UpdatingStateCopyWithImpl<$Res>
+    implements $UpdatingStateCopyWith<$Res> {
+  _$UpdatingStateCopyWithImpl(this._value, this._then);
 
-  final RegistrationState _value;
+  final UpdatingState _value;
   // ignore: unused_field
-  final $Res Function(RegistrationState) _then;
+  final $Res Function(UpdatingState) _then;
 
   @override
   $Res call({
@@ -129,11 +129,11 @@ class _$RegistrationStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$RegistrationStateCopyWith<$Res>
-    implements $RegistrationStateCopyWith<$Res> {
-  factory _$RegistrationStateCopyWith(
-          _RegistrationState value, $Res Function(_RegistrationState) then) =
-      __$RegistrationStateCopyWithImpl<$Res>;
+abstract class _$UpdatingStateCopyWith<$Res>
+    implements $UpdatingStateCopyWith<$Res> {
+  factory _$UpdatingStateCopyWith(
+          _UpdatingState value, $Res Function(_UpdatingState) then) =
+      __$UpdatingStateCopyWithImpl<$Res>;
   @override
   $Res call(
       {String authProviderAccessToken,
@@ -151,15 +151,15 @@ abstract class _$RegistrationStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$RegistrationStateCopyWithImpl<$Res>
-    extends _$RegistrationStateCopyWithImpl<$Res>
-    implements _$RegistrationStateCopyWith<$Res> {
-  __$RegistrationStateCopyWithImpl(
-      _RegistrationState _value, $Res Function(_RegistrationState) _then)
-      : super(_value, (v) => _then(v as _RegistrationState));
+class __$UpdatingStateCopyWithImpl<$Res>
+    extends _$UpdatingStateCopyWithImpl<$Res>
+    implements _$UpdatingStateCopyWith<$Res> {
+  __$UpdatingStateCopyWithImpl(
+      _UpdatingState _value, $Res Function(_UpdatingState) _then)
+      : super(_value, (v) => _then(v as _UpdatingState));
 
   @override
-  _RegistrationState get _value => super._value as _RegistrationState;
+  _UpdatingState get _value => super._value as _UpdatingState;
 
   @override
   $Res call({
@@ -173,7 +173,7 @@ class __$RegistrationStateCopyWithImpl<$Res>
     Object apiFailure = freezed,
     Object usernameError = freezed,
   }) {
-    return _then(_RegistrationState(
+    return _then(_UpdatingState(
       authProviderAccessToken: authProviderAccessToken == freezed
           ? _value.authProviderAccessToken
           : authProviderAccessToken as String,
@@ -195,10 +195,8 @@ class __$RegistrationStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_RegistrationState
-    with DiagnosticableTreeMixin
-    implements _RegistrationState {
-  const _$_RegistrationState(
+class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
+  const _$_UpdatingState(
       {@required this.authProviderAccessToken,
       @required this.username,
       @required this.name,
@@ -235,14 +233,14 @@ class _$_RegistrationState
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'RegistrationState(authProviderAccessToken: $authProviderAccessToken, username: $username, name: $name, callingApi: $callingApi, done: $done, photoBytes: $photoBytes, photoUrl: $photoUrl, apiFailure: $apiFailure, usernameError: $usernameError)';
+    return 'UpdatingState(authProviderAccessToken: $authProviderAccessToken, username: $username, name: $name, callingApi: $callingApi, done: $done, photoBytes: $photoBytes, photoUrl: $photoUrl, apiFailure: $apiFailure, usernameError: $usernameError)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'RegistrationState'))
+      ..add(DiagnosticsProperty('type', 'UpdatingState'))
       ..add(DiagnosticsProperty(
           'authProviderAccessToken', authProviderAccessToken))
       ..add(DiagnosticsProperty('username', username))
@@ -258,7 +256,7 @@ class _$_RegistrationState
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _RegistrationState &&
+        (other is _UpdatingState &&
             (identical(
                     other.authProviderAccessToken, authProviderAccessToken) ||
                 const DeepCollectionEquality().equals(
@@ -301,12 +299,12 @@ class _$_RegistrationState
       const DeepCollectionEquality().hash(usernameError);
 
   @override
-  _$RegistrationStateCopyWith<_RegistrationState> get copyWith =>
-      __$RegistrationStateCopyWithImpl<_RegistrationState>(this, _$identity);
+  _$UpdatingStateCopyWith<_UpdatingState> get copyWith =>
+      __$UpdatingStateCopyWithImpl<_UpdatingState>(this, _$identity);
 }
 
-abstract class _RegistrationState implements RegistrationState {
-  const factory _RegistrationState(
+abstract class _UpdatingState implements UpdatingState {
+  const factory _UpdatingState(
       {@required String authProviderAccessToken,
       @required String username,
       @required String name,
@@ -315,7 +313,7 @@ abstract class _RegistrationState implements RegistrationState {
       Uint8List photoBytes,
       String photoUrl,
       AuthFailure apiFailure,
-      String usernameError}) = _$_RegistrationState;
+      String usernameError}) = _$_UpdatingState;
 
   @override
   String get authProviderAccessToken;
@@ -336,5 +334,5 @@ abstract class _RegistrationState implements RegistrationState {
   @override
   String get usernameError;
   @override
-  _$RegistrationStateCopyWith<_RegistrationState> get copyWith;
+  _$UpdatingStateCopyWith<_UpdatingState> get copyWith;
 }

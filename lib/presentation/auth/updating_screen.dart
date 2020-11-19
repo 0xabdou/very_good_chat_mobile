@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
-import 'package:very_good_chat/application/auth/registration/registration_cubit.dart';
+import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
 import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
 import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({
+class UpdatingScreen extends StatefulWidget {
+  const UpdatingScreen({
     Key key,
     @required this.authProviderInfo,
   }) : super(key: key);
@@ -15,11 +15,11 @@ class RegistrationScreen extends StatefulWidget {
   final AuthProviderInfo authProviderInfo;
 
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _UpdatingScreenState createState() => _UpdatingScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
-  RegistrationCubit cubit;
+class _UpdatingScreenState extends State<UpdatingScreen> {
+  UpdatingCubit cubit;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     const profilePhotoSize = 150.0;
-    return BlocConsumer<RegistrationCubit, RegistrationState>(
+    return BlocConsumer<UpdatingCubit, UpdatingState>(
       cubit: cubit,
       listener: (context, state) {
         if (state.done) {
@@ -153,7 +153,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  ImageProvider _getImageProvider(RegistrationState state) {
+  ImageProvider _getImageProvider(UpdatingState state) {
     if (state.photoBytes != null) {
       return MemoryImage(
         state.photoBytes,

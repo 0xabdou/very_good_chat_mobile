@@ -2,8 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:very_good_chat/application/auth/registration/registration_cubit.dart';
-import 'package:very_good_chat/application/auth/registration/registration_validators.dart';
+import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
+import 'package:very_good_chat/application/auth/user_validators.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 
@@ -11,37 +11,36 @@ import '../../../mock/mock_data.dart';
 
 class MockAuthRepository extends Mock implements IAuthRepository {}
 
-class MockRegistrationValidators extends Mock
-    implements RegistrationValidators {}
+class MockUpdatingValidators extends Mock implements UserValidators {}
 
 void main() {
   IAuthRepository mockRepository;
-  RegistrationValidators mockValidators;
-  RegistrationCubit cubit;
+  UserValidators mockValidators;
+  UpdatingCubit cubit;
 
   setUp(() {
     mockRepository = MockAuthRepository();
-    mockValidators = MockRegistrationValidators();
-    cubit = RegistrationCubit(
+    mockValidators = MockUpdatingValidators();
+    cubit = UpdatingCubit(
       authRepository: mockRepository,
-      registrationValidators: mockValidators,
+      validators: mockValidators,
     );
   });
 
-  blocTest<RegistrationCubit, RegistrationState>(
+  blocTest<UpdatingCubit, UpdatingState>(
     'initial state',
     build: () => cubit,
     verify: (cubit) {
-      expect(cubit.state, RegistrationState.initial());
+      expect(cubit.state, UpdatingState.initial());
     },
   );
 
-  blocTest<RegistrationCubit, RegistrationState>(
+  blocTest<UpdatingCubit, UpdatingState>(
     'init()',
     build: () => cubit,
     act: (cubit) => cubit.init(authProviderInfo),
     expect: [
-      RegistrationState.initial().copyWith(
+      UpdatingState.initial().copyWith(
         name: authProviderInfo.name,
         photoUrl: authProviderInfo.photoUrl,
       ),
@@ -52,7 +51,7 @@ void main() {
     const username = 'username';
     const usernameError = 'username error';
 
-    blocTest<RegistrationCubit, RegistrationState>(
+    blocTest<UpdatingCubit, UpdatingState>(
       'Should emit a state with the new username, and no username error, '
       'if the username is valid',
       build: () {
@@ -61,7 +60,7 @@ void main() {
       },
       act: (cubit) => cubit.usernameChanged(username),
       expect: [
-        RegistrationState.initial().copyWith(
+        UpdatingState.initial().copyWith(
           username: username,
         ),
       ],
@@ -70,7 +69,7 @@ void main() {
       },
     );
 
-    blocTest<RegistrationCubit, RegistrationState>(
+    blocTest<UpdatingCubit, UpdatingState>(
       'Should emit a state with the new username, and a username error, '
       'if the username is invalid',
       build: () {
@@ -80,7 +79,7 @@ void main() {
       },
       act: (cubit) => cubit.usernameChanged(username),
       expect: [
-        RegistrationState.initial().copyWith(
+        UpdatingState.initial().copyWith(
           username: username,
           usernameError: usernameError,
         ),
@@ -94,16 +93,16 @@ void main() {
   group('nameChanged()', () {
     const name = 'name';
 
-    blocTest<RegistrationCubit, RegistrationState>(
+    blocTest<UpdatingCubit, UpdatingState>(
       'should emit a state with the new name',
       build: () => cubit,
       act: (c) => c.nameChanged(name),
-      expect: [RegistrationState.initial().copyWith(name: name)],
+      expect: [UpdatingState.initial().copyWith(name: name)],
     );
   });
 
   group('submit()', () {
-    final seedState = RegistrationState(
+    final seedState = UpdatingState(
       authProviderAccessToken: userToCreate.authProviderAccessToken,
       username: userToCreate.username,
       name: userToCreate.name,
@@ -112,7 +111,7 @@ void main() {
       done: false,
     );
 
-    blocTest<RegistrationCubit, RegistrationState>(
+    blocTest<UpdatingCubit, UpdatingState>(
       'should emit the right states if all goes right',
       build: () {
         when(mockRepository.registerWithGoogle(userToCreate))
@@ -127,7 +126,7 @@ void main() {
       ],
     );
 
-    blocTest<RegistrationCubit, RegistrationState>(
+    blocTest<UpdatingCubit, UpdatingState>(
       'should emit the right states if something goes left',
       build: () {
         when(mockRepository.registerWithGoogle(userToCreate))
@@ -142,7 +141,7 @@ void main() {
       ],
     );
 
-    blocTest<RegistrationCubit, RegistrationState>(
+    blocTest<UpdatingCubit, UpdatingState>(
       'If no api error happened during the current event, '
       'the next state should not have apiFailure set',
       build: () => cubit,

@@ -13,20 +13,20 @@ import 'package:flutter/material.dart';
 import '../domain/auth/auth_provider_info.dart';
 import '../presentation/auth/logged_in_screen.dart';
 import '../presentation/auth/login_screen.dart';
-import '../presentation/auth/registration_screen.dart';
 import '../presentation/auth/splash_screen.dart';
+import '../presentation/auth/updating_screen.dart';
 import '../presentation/core/image_cropper.dart';
 
 class Routes {
   static const String splashScreen = '/';
   static const String loginScreen = '/login-screen';
-  static const String registrationScreen = '/registration-screen';
+  static const String updatingScreen = '/updating-screen';
   static const String loggedInScreen = '/logged-in-screen';
   static const String imageCropper = '/image-cropper';
   static const all = <String>{
     splashScreen,
     loginScreen,
-    registrationScreen,
+    updatingScreen,
     loggedInScreen,
     imageCropper,
   };
@@ -38,7 +38,7 @@ class AppRouter extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.splashScreen, page: SplashScreen),
     RouteDef(Routes.loginScreen, page: LoginScreen),
-    RouteDef(Routes.registrationScreen, page: RegistrationScreen),
+    RouteDef(Routes.updatingScreen, page: UpdatingScreen),
     RouteDef(Routes.loggedInScreen, page: LoggedInScreen),
     RouteDef(Routes.imageCropper, page: ImageCropper),
   ];
@@ -57,10 +57,10 @@ class AppRouter extends RouterBase {
         settings: data,
       );
     },
-    RegistrationScreen: (data) {
-      final args = data.getArgs<RegistrationScreenArguments>(nullOk: false);
+    UpdatingScreen: (data) {
+      final args = data.getArgs<UpdatingScreenArguments>(nullOk: false);
       return MaterialPageRoute<dynamic>(
-        builder: (context) => RegistrationScreen(
+        builder: (context) => UpdatingScreen(
           key: args.key,
           authProviderInfo: args.authProviderInfo,
         ),
@@ -91,11 +91,11 @@ class AppRouter extends RouterBase {
 /// Arguments holder classes
 /// *************************************************************************
 
-/// RegistrationScreen arguments holder class
-class RegistrationScreenArguments {
+/// UpdatingScreen arguments holder class
+class UpdatingScreenArguments {
   final Key key;
   final AuthProviderInfo authProviderInfo;
-  RegistrationScreenArguments({this.key, @required this.authProviderInfo});
+  UpdatingScreenArguments({this.key, @required this.authProviderInfo});
 }
 
 /// ImageCropper arguments holder class
