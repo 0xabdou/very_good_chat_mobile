@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -132,13 +132,21 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, User>> updateUserInfo(UserUpdates updates) {
-    // TODO: implement updateUserInfo
-    throw UnimplementedError();
+  Future<Either<AuthFailure, User>> updateUserInfo(UserUpdates updates) async {
+    try {
+      // TODO: Implement this
+      throw UnimplementedError();
+    } on DioError catch (e) {
+      logger.d(e);
+      if (e.type == DioErrorType.RESPONSE) {
+        return left(const AuthFailure.server());
+      }
+      return left(const AuthFailure.network());
+    }
   }
 
   @override
-  Future<Either<AuthFailure, String>> updateUserPhoto(File photo) {
+  Future<Either<AuthFailure, String>> updateUserPhoto(Uint8List photoBytes) {
     // TODO: implement updateUserPhoto
     throw UnimplementedError();
   }

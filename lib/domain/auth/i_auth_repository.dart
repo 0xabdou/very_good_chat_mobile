@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:very_good_chat/data/auth/user_dto.dart';
@@ -13,6 +13,6 @@ abstract class IAuthRepository {
   Future<Either<AuthFailure, Unit>> signInWithGoogle();
   Future<Either<AuthFailure, Unit>> registerWithGoogle(UserDtoToSend user);
   Future<Either<AuthFailure, Unit>> logout();
-  Future<Either<AuthFailure, String>> updateUserPhoto(File photo);
+  Future<Either<AuthFailure, String>> updateUserPhoto(Uint8List photoBytes);
   Future<Either<AuthFailure, User>> updateUserInfo(UserUpdates updates);
 }
