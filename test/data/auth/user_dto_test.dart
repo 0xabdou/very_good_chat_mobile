@@ -16,7 +16,7 @@ void main() {
     'username': 'username',
     'photoUrl': 'photoUrl',
   };
-  final userDtoReceived = UserDtoReceived(
+  final userCreated = UserCreated(
     accessToken: jsonReceived['accessToken'] as String,
     id: jsonReceived['id'] as String,
     username: jsonReceived['username'] as String,
@@ -24,11 +24,11 @@ void main() {
     photoUrl: jsonReceived['photoUrl'] as String,
   );
 
-  group('UserDtoReceived.fromJson', () {
+  group('UserCreated.fromJson', () {
     test('should throw an exception if a required key is missing', () async {
       // act and assert
       expect(
-        () => UserDtoReceived.fromJson(jsonReceivedWithMissingKey),
+        () => UserCreated.fromJson(jsonReceivedWithMissingKey),
         throwsA(isInstanceOf<BadKeyException>()),
       );
     });
@@ -36,16 +36,16 @@ void main() {
     test('should throw an exception if a required key is null', () async {
       // act and assert
       expect(
-        () => UserDtoReceived.fromJson(jsonReceivedWithNullKey),
+        () => UserCreated.fromJson(jsonReceivedWithNullKey),
         throwsA(isInstanceOf<BadKeyException>()),
       );
     });
 
-    test('should decode received user dto', () async {
+    test('should decode created user dto', () async {
       // act
-      final user = UserDtoReceived.fromJson(jsonReceived);
+      final user = UserCreated.fromJson(jsonReceived);
       // assert
-      expect(user, userDtoReceived);
+      expect(user, userCreated);
     });
   });
 }

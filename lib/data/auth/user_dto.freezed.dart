@@ -10,16 +10,16 @@ part of 'user_dto.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-class _$UserDtoToSendTearOff {
-  const _$UserDtoToSendTearOff();
+class _$UserToCreateTearOff {
+  const _$UserToCreateTearOff();
 
 // ignore: unused_element
-  _UserDtoToSend call(
+  _UserToCreate call(
       {@required String authProviderAccessToken,
       @required String username,
       String name,
       Uint8List photo}) {
-    return _UserDtoToSend(
+    return _UserToCreate(
       authProviderAccessToken: authProviderAccessToken,
       username: username,
       name: name,
@@ -30,23 +30,23 @@ class _$UserDtoToSendTearOff {
 
 /// @nodoc
 // ignore: unused_element
-const $UserDtoToSend = _$UserDtoToSendTearOff();
+const $UserToCreate = _$UserToCreateTearOff();
 
 /// @nodoc
-mixin _$UserDtoToSend {
+mixin _$UserToCreate {
   String get authProviderAccessToken;
   String get username;
   String get name;
   Uint8List get photo;
 
-  $UserDtoToSendCopyWith<UserDtoToSend> get copyWith;
+  $UserToCreateCopyWith<UserToCreate> get copyWith;
 }
 
 /// @nodoc
-abstract class $UserDtoToSendCopyWith<$Res> {
-  factory $UserDtoToSendCopyWith(
-          UserDtoToSend value, $Res Function(UserDtoToSend) then) =
-      _$UserDtoToSendCopyWithImpl<$Res>;
+abstract class $UserToCreateCopyWith<$Res> {
+  factory $UserToCreateCopyWith(
+          UserToCreate value, $Res Function(UserToCreate) then) =
+      _$UserToCreateCopyWithImpl<$Res>;
   $Res call(
       {String authProviderAccessToken,
       String username,
@@ -55,13 +55,12 @@ abstract class $UserDtoToSendCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserDtoToSendCopyWithImpl<$Res>
-    implements $UserDtoToSendCopyWith<$Res> {
-  _$UserDtoToSendCopyWithImpl(this._value, this._then);
+class _$UserToCreateCopyWithImpl<$Res> implements $UserToCreateCopyWith<$Res> {
+  _$UserToCreateCopyWithImpl(this._value, this._then);
 
-  final UserDtoToSend _value;
+  final UserToCreate _value;
   // ignore: unused_field
-  final $Res Function(UserDtoToSend) _then;
+  final $Res Function(UserToCreate) _then;
 
   @override
   $Res call({
@@ -82,11 +81,11 @@ class _$UserDtoToSendCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$UserDtoToSendCopyWith<$Res>
-    implements $UserDtoToSendCopyWith<$Res> {
-  factory _$UserDtoToSendCopyWith(
-          _UserDtoToSend value, $Res Function(_UserDtoToSend) then) =
-      __$UserDtoToSendCopyWithImpl<$Res>;
+abstract class _$UserToCreateCopyWith<$Res>
+    implements $UserToCreateCopyWith<$Res> {
+  factory _$UserToCreateCopyWith(
+          _UserToCreate value, $Res Function(_UserToCreate) then) =
+      __$UserToCreateCopyWithImpl<$Res>;
   @override
   $Res call(
       {String authProviderAccessToken,
@@ -96,15 +95,14 @@ abstract class _$UserDtoToSendCopyWith<$Res>
 }
 
 /// @nodoc
-class __$UserDtoToSendCopyWithImpl<$Res>
-    extends _$UserDtoToSendCopyWithImpl<$Res>
-    implements _$UserDtoToSendCopyWith<$Res> {
-  __$UserDtoToSendCopyWithImpl(
-      _UserDtoToSend _value, $Res Function(_UserDtoToSend) _then)
-      : super(_value, (v) => _then(v as _UserDtoToSend));
+class __$UserToCreateCopyWithImpl<$Res> extends _$UserToCreateCopyWithImpl<$Res>
+    implements _$UserToCreateCopyWith<$Res> {
+  __$UserToCreateCopyWithImpl(
+      _UserToCreate _value, $Res Function(_UserToCreate) _then)
+      : super(_value, (v) => _then(v as _UserToCreate));
 
   @override
-  _UserDtoToSend get _value => super._value as _UserDtoToSend;
+  _UserToCreate get _value => super._value as _UserToCreate;
 
   @override
   $Res call({
@@ -113,7 +111,7 @@ class __$UserDtoToSendCopyWithImpl<$Res>
     Object name = freezed,
     Object photo = freezed,
   }) {
-    return _then(_UserDtoToSend(
+    return _then(_UserToCreate(
       authProviderAccessToken: authProviderAccessToken == freezed
           ? _value.authProviderAccessToken
           : authProviderAccessToken as String,
@@ -125,8 +123,8 @@ class __$UserDtoToSendCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_UserDtoToSend implements _UserDtoToSend {
-  const _$_UserDtoToSend(
+class _$_UserToCreate implements _UserToCreate {
+  const _$_UserToCreate(
       {@required this.authProviderAccessToken,
       @required this.username,
       this.name,
@@ -145,13 +143,13 @@ class _$_UserDtoToSend implements _UserDtoToSend {
 
   @override
   String toString() {
-    return 'UserDtoToSend(authProviderAccessToken: $authProviderAccessToken, username: $username, name: $name, photo: $photo)';
+    return 'UserToCreate(authProviderAccessToken: $authProviderAccessToken, username: $username, name: $name, photo: $photo)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _UserDtoToSend &&
+        (other is _UserToCreate &&
             (identical(
                     other.authProviderAccessToken, authProviderAccessToken) ||
                 const DeepCollectionEquality().equals(
@@ -174,16 +172,16 @@ class _$_UserDtoToSend implements _UserDtoToSend {
       const DeepCollectionEquality().hash(photo);
 
   @override
-  _$UserDtoToSendCopyWith<_UserDtoToSend> get copyWith =>
-      __$UserDtoToSendCopyWithImpl<_UserDtoToSend>(this, _$identity);
+  _$UserToCreateCopyWith<_UserToCreate> get copyWith =>
+      __$UserToCreateCopyWithImpl<_UserToCreate>(this, _$identity);
 }
 
-abstract class _UserDtoToSend implements UserDtoToSend {
-  const factory _UserDtoToSend(
+abstract class _UserToCreate implements UserToCreate {
+  const factory _UserToCreate(
       {@required String authProviderAccessToken,
       @required String username,
       String name,
-      Uint8List photo}) = _$_UserDtoToSend;
+      Uint8List photo}) = _$_UserToCreate;
 
   @override
   String get authProviderAccessToken;
@@ -194,25 +192,25 @@ abstract class _UserDtoToSend implements UserDtoToSend {
   @override
   Uint8List get photo;
   @override
-  _$UserDtoToSendCopyWith<_UserDtoToSend> get copyWith;
+  _$UserToCreateCopyWith<_UserToCreate> get copyWith;
 }
 
-UserDtoReceived _$UserDtoReceivedFromJson(Map<String, dynamic> json) {
-  return _Received.fromJson(json);
+UserCreated _$UserCreatedFromJson(Map<String, dynamic> json) {
+  return _UserCreated.fromJson(json);
 }
 
 /// @nodoc
-class _$UserDtoReceivedTearOff {
-  const _$UserDtoReceivedTearOff();
+class _$UserCreatedTearOff {
+  const _$UserCreatedTearOff();
 
 // ignore: unused_element
-  _Received call(
+  _UserCreated call(
       {@required @requiredNonNull String accessToken,
       @required @requiredNonNull String id,
       @required @requiredNonNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl}) {
-    return _Received(
+    return _UserCreated(
       accessToken: accessToken,
       id: id,
       username: username,
@@ -222,17 +220,17 @@ class _$UserDtoReceivedTearOff {
   }
 
 // ignore: unused_element
-  UserDtoReceived fromJson(Map<String, Object> json) {
-    return UserDtoReceived.fromJson(json);
+  UserCreated fromJson(Map<String, Object> json) {
+    return UserCreated.fromJson(json);
   }
 }
 
 /// @nodoc
 // ignore: unused_element
-const $UserDtoReceived = _$UserDtoReceivedTearOff();
+const $UserCreated = _$UserCreatedTearOff();
 
 /// @nodoc
-mixin _$UserDtoReceived {
+mixin _$UserCreated {
   @requiredNonNull
   String get accessToken;
   @requiredNonNull
@@ -245,14 +243,14 @@ mixin _$UserDtoReceived {
   String get photoUrl;
 
   Map<String, dynamic> toJson();
-  $UserDtoReceivedCopyWith<UserDtoReceived> get copyWith;
+  $UserCreatedCopyWith<UserCreated> get copyWith;
 }
 
 /// @nodoc
-abstract class $UserDtoReceivedCopyWith<$Res> {
-  factory $UserDtoReceivedCopyWith(
-          UserDtoReceived value, $Res Function(UserDtoReceived) then) =
-      _$UserDtoReceivedCopyWithImpl<$Res>;
+abstract class $UserCreatedCopyWith<$Res> {
+  factory $UserCreatedCopyWith(
+          UserCreated value, $Res Function(UserCreated) then) =
+      _$UserCreatedCopyWithImpl<$Res>;
   $Res call(
       {@requiredNonNull String accessToken,
       @requiredNonNull String id,
@@ -262,13 +260,12 @@ abstract class $UserDtoReceivedCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserDtoReceivedCopyWithImpl<$Res>
-    implements $UserDtoReceivedCopyWith<$Res> {
-  _$UserDtoReceivedCopyWithImpl(this._value, this._then);
+class _$UserCreatedCopyWithImpl<$Res> implements $UserCreatedCopyWith<$Res> {
+  _$UserCreatedCopyWithImpl(this._value, this._then);
 
-  final UserDtoReceived _value;
+  final UserCreated _value;
   // ignore: unused_field
-  final $Res Function(UserDtoReceived) _then;
+  final $Res Function(UserCreated) _then;
 
   @override
   $Res call({
@@ -290,10 +287,11 @@ class _$UserDtoReceivedCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$ReceivedCopyWith<$Res>
-    implements $UserDtoReceivedCopyWith<$Res> {
-  factory _$ReceivedCopyWith(_Received value, $Res Function(_Received) then) =
-      __$ReceivedCopyWithImpl<$Res>;
+abstract class _$UserCreatedCopyWith<$Res>
+    implements $UserCreatedCopyWith<$Res> {
+  factory _$UserCreatedCopyWith(
+          _UserCreated value, $Res Function(_UserCreated) then) =
+      __$UserCreatedCopyWithImpl<$Res>;
   @override
   $Res call(
       {@requiredNonNull String accessToken,
@@ -304,13 +302,14 @@ abstract class _$ReceivedCopyWith<$Res>
 }
 
 /// @nodoc
-class __$ReceivedCopyWithImpl<$Res> extends _$UserDtoReceivedCopyWithImpl<$Res>
-    implements _$ReceivedCopyWith<$Res> {
-  __$ReceivedCopyWithImpl(_Received _value, $Res Function(_Received) _then)
-      : super(_value, (v) => _then(v as _Received));
+class __$UserCreatedCopyWithImpl<$Res> extends _$UserCreatedCopyWithImpl<$Res>
+    implements _$UserCreatedCopyWith<$Res> {
+  __$UserCreatedCopyWithImpl(
+      _UserCreated _value, $Res Function(_UserCreated) _then)
+      : super(_value, (v) => _then(v as _UserCreated));
 
   @override
-  _Received get _value => super._value as _Received;
+  _UserCreated get _value => super._value as _UserCreated;
 
   @override
   $Res call({
@@ -320,7 +319,7 @@ class __$ReceivedCopyWithImpl<$Res> extends _$UserDtoReceivedCopyWithImpl<$Res>
     Object name = freezed,
     Object photoUrl = freezed,
   }) {
-    return _then(_Received(
+    return _then(_UserCreated(
       accessToken:
           accessToken == freezed ? _value.accessToken : accessToken as String,
       id: id == freezed ? _value.id : id as String,
@@ -334,8 +333,8 @@ class __$ReceivedCopyWithImpl<$Res> extends _$UserDtoReceivedCopyWithImpl<$Res>
 @JsonSerializable()
 
 /// @nodoc
-class _$_Received implements _Received {
-  const _$_Received(
+class _$_UserCreated implements _UserCreated {
+  const _$_UserCreated(
       {@required @requiredNonNull this.accessToken,
       @required @requiredNonNull this.id,
       @required @requiredNonNull this.username,
@@ -345,8 +344,8 @@ class _$_Received implements _Received {
         assert(id != null),
         assert(username != null);
 
-  factory _$_Received.fromJson(Map<String, dynamic> json) =>
-      _$_$_ReceivedFromJson(json);
+  factory _$_UserCreated.fromJson(Map<String, dynamic> json) =>
+      _$_$_UserCreatedFromJson(json);
 
   @override
   @requiredNonNull
@@ -366,13 +365,13 @@ class _$_Received implements _Received {
 
   @override
   String toString() {
-    return 'UserDtoReceived(accessToken: $accessToken, id: $id, username: $username, name: $name, photoUrl: $photoUrl)';
+    return 'UserCreated(accessToken: $accessToken, id: $id, username: $username, name: $name, photoUrl: $photoUrl)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Received &&
+        (other is _UserCreated &&
             (identical(other.accessToken, accessToken) ||
                 const DeepCollectionEquality()
                     .equals(other.accessToken, accessToken)) &&
@@ -398,24 +397,25 @@ class _$_Received implements _Received {
       const DeepCollectionEquality().hash(photoUrl);
 
   @override
-  _$ReceivedCopyWith<_Received> get copyWith =>
-      __$ReceivedCopyWithImpl<_Received>(this, _$identity);
+  _$UserCreatedCopyWith<_UserCreated> get copyWith =>
+      __$UserCreatedCopyWithImpl<_UserCreated>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_ReceivedToJson(this);
+    return _$_$_UserCreatedToJson(this);
   }
 }
 
-abstract class _Received implements UserDtoReceived {
-  const factory _Received(
+abstract class _UserCreated implements UserCreated {
+  const factory _UserCreated(
       {@required @requiredNonNull String accessToken,
       @required @requiredNonNull String id,
       @required @requiredNonNull String username,
       @doNotIncludeIfNull String name,
-      @doNotIncludeIfNull String photoUrl}) = _$_Received;
+      @doNotIncludeIfNull String photoUrl}) = _$_UserCreated;
 
-  factory _Received.fromJson(Map<String, dynamic> json) = _$_Received.fromJson;
+  factory _UserCreated.fromJson(Map<String, dynamic> json) =
+      _$_UserCreated.fromJson;
 
   @override
   @requiredNonNull
@@ -433,5 +433,5 @@ abstract class _Received implements UserDtoReceived {
   @doNotIncludeIfNull
   String get photoUrl;
   @override
-  _$ReceivedCopyWith<_Received> get copyWith;
+  _$UserCreatedCopyWith<_UserCreated> get copyWith;
 }

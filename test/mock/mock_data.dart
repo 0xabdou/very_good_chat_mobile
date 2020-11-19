@@ -9,12 +9,12 @@ import 'package:very_good_chat/domain/auth/user.dart';
 class SqfliteDatabaseException extends Mock implements DatabaseException {}
 
 const user = User(id: 'id', username: 'username');
-const userDtoReceived = UserDtoReceived(
+const userDtoReceived = UserCreated(
   accessToken: 'accessToken',
   id: 'id',
   username: 'username',
 );
-const userDtoToSend = UserDtoToSend(
+const userDtoToSend = UserToCreate(
   authProviderAccessToken: 'accessToken',
   username: 'username',
   name: 'name',

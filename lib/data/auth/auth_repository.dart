@@ -113,7 +113,7 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<Either<AuthFailure, Unit>> registerWithGoogle(
-    UserDtoToSend user,
+    UserToCreate user,
   ) async {
     try {
       final userReceived = await _remoteDataSource.registerWithGoogle(user);

@@ -67,7 +67,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   Future<void> submit() async {
     emit(_state.copyWith(callingApi: true));
     final result = await _repository.registerWithGoogle(
-      UserDtoToSend(
+      UserToCreate(
         authProviderAccessToken: state.authProviderAccessToken,
         username: state.username,
         name: state.name,
