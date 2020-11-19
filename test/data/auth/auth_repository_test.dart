@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -302,7 +304,8 @@ void main() {
     setUp(() {
       when(mockRemoteDS.updateUserInfo(userUpdates))
           .thenAnswer((_) async => userUpdates);
-      when(mockLocalDS.updateUser(userUpdates)).thenAnswer((_) async => unit);
+      when(mockLocalDS.updateUserInfo(userUpdates))
+          .thenAnswer((_) async => unit);
       when(mockLocalDS.getPersistedUser())
           .thenAnswer((_) async => some(updatedUser));
     });
@@ -313,7 +316,7 @@ void main() {
       // assert
       expect(result, right(unit));
       verify(mockRemoteDS.updateUserInfo(userUpdates)).called(1);
-      verify(mockLocalDS.updateUser(userUpdates)).called(1);
+      verify(mockLocalDS.updateUserInfo(userUpdates)).called(1);
       verifyNoMoreInteractions(mockLocalDS);
       verifyNoMoreInteractions(mockRemoteDS);
       verifyNoMoreInteractions(mockGoogleSI);
@@ -340,9 +343,60 @@ void main() {
 
     test('should return local failure if there was one', () async {
       // arrange
-      when(mockLocalDS.updateUser(userUpdates)).thenThrow(databaseException);
+      when(mockLocalDS.updateUserInfo(userUpdates))
+          .thenThrow(databaseException);
       // act
       final result = await authRepository.updateUserInfo(userUpdates);
+      // assert
+      expect(result, left(const AuthFailure.local()));
+    });
+  });
+
+  group('updateUserPhoto()', () {
+    const photoUrl = 'new photo url';
+    final photoBytes = Uint8List.fromList([1, 3, 4]);
+    setUp(() {
+      when(mockRemoteDS.updateUserPhoto(photoBytes))
+          .thenAnswer((_) async => photoUrl);
+      when(mockLocalDS.updateUserPhoto(photoUrl)).thenAnswer((_) async => unit);
+    });
+
+    test('should update user photo if all goes well', () async {
+      // act
+      final result = await authRepository.updateUserPhoto(photoBytes);
+      // assert
+      expect(result, right(unit));
+      verify(mockRemoteDS.updateUserPhoto(photoBytes)).called(1);
+      verify(mockLocalDS.updateUserPhoto(photoUrl)).called(1);
+      verifyNoMoreInteractions(mockRemoteDS);
+      verifyNoMoreInteractions(mockLocalDS);
+      verifyZeroInteractions(mockGoogleSI);
+    });
+
+    test('should return a server failure if it happened', () async {
+      // arrange
+      when(mockRemoteDS.updateUserPhoto(photoBytes)).thenThrow(serverException);
+      // act
+      final result = await authRepository.updateUserPhoto(photoBytes);
+      // assert
+      expect(result, left(const AuthFailure.server()));
+    });
+
+    test('should return a network failure if it happened', () async {
+      // arrange
+      when(mockRemoteDS.updateUserPhoto(photoBytes))
+          .thenThrow(networkException);
+      // act
+      final result = await authRepository.updateUserPhoto(photoBytes);
+      // assert
+      expect(result, left(const AuthFailure.network()));
+    });
+
+    test('should return a local failure if it happened', () async {
+      // arrange
+      when(mockLocalDS.updateUserPhoto(photoUrl)).thenThrow(databaseException);
+      // act
+      final result = await authRepository.updateUserPhoto(photoBytes);
       // assert
       expect(result, left(const AuthFailure.local()));
     });

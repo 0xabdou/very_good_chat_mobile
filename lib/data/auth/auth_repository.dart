@@ -139,7 +139,7 @@ class AuthRepository implements IAuthRepository {
         return left(const AuthFailure.local());
       }
       final confirmedUpdates = await _remoteDataSource.updateUserInfo(updates);
-      await _localDataSource.updateUser(confirmedUpdates);
+      await _localDataSource.updateUserInfo(confirmedUpdates);
       return right(unit);
     } on DioError catch (e) {
       logger.d(e);
@@ -154,8 +154,22 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> updateUserPhoto(Uint8List photoBytes) {
-    // TODO: implement updateUserPhoto
-    throw UnimplementedError();
+  Future<Either<AuthFailure, Unit>> updateUserPhoto(
+    Uint8List photoBytes,
+  ) async {
+    try {
+      final photoUrl = await _remoteDataSource.updateUserPhoto(photoBytes);
+      await _localDataSource.updateUserPhoto(photoUrl);
+      return right(unit);
+    } on DioError catch (e) {
+      logger.d(e);
+      if (e.type == DioErrorType.RESPONSE) {
+        return left(const AuthFailure.server());
+      }
+      return left(const AuthFailure.network());
+    } on DatabaseException catch (e) {
+      logger.d(e);
+      return left(const AuthFailure.local());
+    }
   }
 }
