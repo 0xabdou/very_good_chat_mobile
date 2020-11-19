@@ -6,11 +6,11 @@ part of 'user_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Received _$_$_ReceivedFromJson(Map<String, dynamic> json) {
+_$_UserCreated _$_$_UserCreatedFromJson(Map<String, dynamic> json) {
   $checkKeys(json,
       requiredKeys: const ['accessToken', 'id', 'username'],
       disallowNullValues: const ['accessToken', 'id', 'username']);
-  return _$_Received(
+  return _$_UserCreated(
     accessToken: json['accessToken'] as String,
     id: json['id'] as String,
     username: json['username'] as String,
@@ -19,7 +19,7 @@ _$_Received _$_$_ReceivedFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$_$_ReceivedToJson(_$_Received instance) {
+Map<String, dynamic> _$_$_UserCreatedToJson(_$_UserCreated instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -33,5 +33,26 @@ Map<String, dynamic> _$_$_ReceivedToJson(_$_Received instance) {
   writeNotNull('username', instance.username);
   writeNotNull('name', instance.name);
   writeNotNull('photoUrl', instance.photoUrl);
+  return val;
+}
+
+_$_UserUpdates _$_$_UserUpdatesFromJson(Map<String, dynamic> json) {
+  return _$_UserUpdates(
+    username: json['username'] as String,
+    name: json['name'] as String,
+  );
+}
+
+Map<String, dynamic> _$_$_UserUpdatesToJson(_$_UserUpdates instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('username', instance.username);
+  writeNotNull('name', instance.name);
   return val;
 }

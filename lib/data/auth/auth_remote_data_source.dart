@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/data/auth/user_dto.dart';
-import 'package:very_good_chat/domain/auth/user_updates.dart';
 
 abstract class IAuthRemoteDataSource {
   /// Returns the user associated to the google access token

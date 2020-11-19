@@ -28,3 +28,14 @@ abstract class UserCreated with _$UserCreated {
   factory UserCreated.fromJson(Map<String, dynamic> json) =>
       _$UserCreatedFromJson(json);
 }
+
+@freezed
+abstract class UserUpdates with _$UserUpdates {
+  const factory UserUpdates({
+    @doNotIncludeIfNull String username,
+    @doNotIncludeIfNull String name,
+  }) = _UserUpdates;
+
+  factory UserUpdates.fromJson(Map<String, dynamic> json) =>
+      _$UserUpdatesFromJson(json);
+}

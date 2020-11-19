@@ -14,7 +14,6 @@ import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
-import 'package:very_good_chat/domain/auth/user_updates.dart';
 import 'package:very_good_chat/shared/logger.dart';
 
 @LazySingleton(as: IAuthRepository)

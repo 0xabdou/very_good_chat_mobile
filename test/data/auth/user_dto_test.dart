@@ -48,4 +48,23 @@ void main() {
       expect(user, userCreated);
     });
   });
+
+  group('UserUpdates', () {
+    final updatesJson = <String, dynamic>{'username': 'username'};
+    final updates = UserUpdates(username: updatesJson['username'] as String);
+
+    test('should serialize', () async {
+      // act
+      final result = updates.toJson();
+      // assert
+      expect(result, updatesJson);
+    });
+
+    test('should deserialize', () async {
+      // act
+      final result = UserUpdates.fromJson(updatesJson);
+      // assert
+      expect(result, updates);
+    });
+  });
 }
