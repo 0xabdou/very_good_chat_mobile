@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -12,6 +14,7 @@ import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
+import 'package:very_good_chat/domain/auth/user_updates.dart';
 import 'package:very_good_chat/shared/logger.dart';
 
 @LazySingleton(as: IAuthRepository)
@@ -126,5 +129,17 @@ class AuthRepository implements IAuthRepository {
       logger.d(e);
       return left(const AuthFailure.local());
     }
+  }
+
+  @override
+  Future<Either<AuthFailure, User>> updateUserInfo(UserUpdates updates) {
+    // TODO: implement updateUserInfo
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<AuthFailure, String>> updateUserPhoto(File photo) {
+    // TODO: implement updateUserPhoto
+    throw UnimplementedError();
   }
 }
