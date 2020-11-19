@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_chat/data/auth/user_dto.dart';
 
+import '../../mock/mock_data.dart';
+
 void main() {
   const jsonReceived = <String, dynamic>{
     'accessToken': 'accessToken',
@@ -66,5 +68,55 @@ void main() {
       // assert
       expect(result, updates);
     });
+
+    test('isEmpty should return true if all fields are null', () async {
+      // arrange
+      const empty = UserUpdates();
+      // act
+      final result = empty.isEmpty();
+      // assert
+      expect(result, true);
+    });
+
+    test('isEmpty should return false if some field is not null', () async {
+      // arrange
+      const notEmpty = UserUpdates(username: 'username');
+      // act
+      final result = notEmpty.isEmpty();
+      // assert
+      expect(result, false);
+    });
+
+    test(
+      'hasUpdates should return true if a field is different than its '
+      'corresponding one in the user object',
+      () async {
+        // arrange
+        final updates = UserUpdates(
+          username: user.username,
+          name: 'different name',
+        );
+        // act
+        final result = updates.hasUpdates(user);
+        // assert
+        expect(result, true);
+      },
+    );
+
+    test(
+      'hasUpdates should return false if all fields are equal to their '
+      'corresponding ones in the user object',
+      () async {
+        // arrange
+        final updates = UserUpdates(
+          username: user.username,
+          name: user.name,
+        );
+        // act
+        final result = updates.hasUpdates(user);
+        // assert
+        expect(result, false);
+      },
+    );
   });
 }

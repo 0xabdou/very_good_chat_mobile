@@ -14,7 +14,8 @@ abstract class IAuthRemoteDataSource {
 
   Future<String> updateUserPhoto(Uint8List photoBytes);
 
-  Future<UserCreated> updateUserInfo(UserUpdates updates);
+  /// Updates and returns the updated user received from the backend
+  Future<UserUpdates> updateUserInfo(UserUpdates updates);
 }
 
 @LazySingleton(as: IAuthRemoteDataSource)
@@ -46,12 +47,13 @@ class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
   }
 
   @override
-  Future<UserCreated> updateUserInfo(UserUpdates updates) async {
+  Future<UserUpdates> updateUserInfo(UserUpdates updates) async {
     await Future.delayed(const Duration(seconds: 1));
-    return _user = _user.copyWith(
+    _user = _user.copyWith(
       username: updates.username ?? _user.username,
       name: updates.name ?? _user.name,
     );
+    return updates;
   }
 
   @override

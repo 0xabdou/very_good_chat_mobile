@@ -131,21 +131,30 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, User>> updateUserInfo(UserUpdates updates) async {
+  Future<Either<AuthFailure, Unit>> updateUserInfo(UserUpdates updates) async {
     try {
-      // TODO: Implement this
-      throw UnimplementedError();
+      if (updates.isEmpty()) {
+        // This should not happen
+        logger.w('Tried to update a user with no updates');
+        return left(const AuthFailure.local());
+      }
+      final confirmedUpdates = await _remoteDataSource.updateUserInfo(updates);
+      await _localDataSource.updateUser(confirmedUpdates);
+      return right(unit);
     } on DioError catch (e) {
       logger.d(e);
       if (e.type == DioErrorType.RESPONSE) {
         return left(const AuthFailure.server());
       }
       return left(const AuthFailure.network());
+    } on DatabaseException catch (e) {
+      logger.d(e);
+      return left(const AuthFailure.local());
     }
   }
 
   @override
-  Future<Either<AuthFailure, String>> updateUserPhoto(Uint8List photoBytes) {
+  Future<Either<AuthFailure, Unit>> updateUserPhoto(Uint8List photoBytes) {
     // TODO: implement updateUserPhoto
     throw UnimplementedError();
   }

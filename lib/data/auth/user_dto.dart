@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/shared/custom_json_annotations.dart';
 
 part 'user_dto.freezed.dart';
@@ -30,7 +31,9 @@ abstract class UserCreated with _$UserCreated {
 }
 
 @freezed
-abstract class UserUpdates with _$UserUpdates {
+abstract class UserUpdates implements _$UserUpdates {
+  const UserUpdates._();
+
   const factory UserUpdates({
     @doNotIncludeIfNull String username,
     @doNotIncludeIfNull String name,
@@ -38,4 +41,12 @@ abstract class UserUpdates with _$UserUpdates {
 
   factory UserUpdates.fromJson(Map<String, dynamic> json) =>
       _$UserUpdatesFromJson(json);
+
+  bool isEmpty() {
+    return username == null && name == null;
+  }
+
+  bool hasUpdates(User user) {
+    return username != user.username || name != user.name;
+  }
 }

@@ -104,10 +104,10 @@ void main() {
 
   group('submit()', () {
     final seedState = RegistrationState(
-      authProviderAccessToken: userDtoToSend.authProviderAccessToken,
-      username: userDtoToSend.username,
-      name: userDtoToSend.name,
-      photoBytes: userDtoToSend.photo,
+      authProviderAccessToken: userToCreate.authProviderAccessToken,
+      username: userToCreate.username,
+      name: userToCreate.name,
+      photoBytes: userToCreate.photo,
       callingApi: false,
       done: false,
     );
@@ -115,7 +115,7 @@ void main() {
     blocTest<RegistrationCubit, RegistrationState>(
       'should emit the right states if all goes right',
       build: () {
-        when(mockRepository.registerWithGoogle(userDtoToSend))
+        when(mockRepository.registerWithGoogle(userToCreate))
             .thenAnswer((_) async => right(unit));
         return cubit;
       },
@@ -130,7 +130,7 @@ void main() {
     blocTest<RegistrationCubit, RegistrationState>(
       'should emit the right states if something goes left',
       build: () {
-        when(mockRepository.registerWithGoogle(userDtoToSend))
+        when(mockRepository.registerWithGoogle(userToCreate))
             .thenAnswer((_) async => left(const AuthFailure.server()));
         return cubit;
       },

@@ -539,9 +539,10 @@ class __$UserUpdatesCopyWithImpl<$Res> extends _$UserUpdatesCopyWithImpl<$Res>
 @JsonSerializable()
 
 /// @nodoc
-class _$_UserUpdates implements _UserUpdates {
+class _$_UserUpdates extends _UserUpdates {
   const _$_UserUpdates(
-      {@doNotIncludeIfNull this.username, @doNotIncludeIfNull this.name});
+      {@doNotIncludeIfNull this.username, @doNotIncludeIfNull this.name})
+      : super._();
 
   factory _$_UserUpdates.fromJson(Map<String, dynamic> json) =>
       _$_$_UserUpdatesFromJson(json);
@@ -585,7 +586,8 @@ class _$_UserUpdates implements _UserUpdates {
   }
 }
 
-abstract class _UserUpdates implements UserUpdates {
+abstract class _UserUpdates extends UserUpdates {
+  const _UserUpdates._() : super._();
   const factory _UserUpdates(
       {@doNotIncludeIfNull String username,
       @doNotIncludeIfNull String name}) = _$_UserUpdates;

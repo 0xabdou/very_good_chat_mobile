@@ -7,6 +7,7 @@ import 'package:very_good_chat/domain/auth/user.dart';
 
 abstract class IAuthLocalDataSource {
   Future<Unit> persistUser(UserCreated user);
+  Future<Unit> updateUser(UserUpdates updates);
   Future<Option<User>> getPersistedUser();
   Future<Unit> logout();
 }
@@ -57,6 +58,12 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
   @override
   Future<Unit> persistUser(UserCreated user) async {
     await _db.insert(userTable, user.toJson());
+    return unit;
+  }
+
+  @override
+  Future<Unit> updateUser(UserUpdates updates) async {
+    await _db.update(userTable, updates.toJson());
     return unit;
   }
 }

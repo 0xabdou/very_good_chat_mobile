@@ -172,7 +172,7 @@ void main() {
       );
       when(mockGoogleSIAuth.accessToken).thenReturn(accessToken);
       when(mockRemoteDS.signInWithGoogle(accessToken)).thenAnswer(
-        (_) async => userDtoReceived,
+        (_) async => userCreated,
       );
     });
 
@@ -183,7 +183,7 @@ void main() {
       expect(result, right(unit));
       verify(mockGoogleSI.signIn()).called(1);
       verify(mockRemoteDS.signInWithGoogle(accessToken)).called(1);
-      verify(mockLocalDS.persistUser(userDtoReceived));
+      verify(mockLocalDS.persistUser(userCreated));
     });
 
     test("should return notRegistered if the user wasn't found", () async {
@@ -236,8 +236,7 @@ void main() {
 
     test('should return a failure if there was a network error', () async {
       // arrange
-      when(mockLocalDS.persistUser(userDtoReceived))
-          .thenThrow(networkException);
+      when(mockLocalDS.persistUser(userCreated)).thenThrow(networkException);
       // act
       final result = await authRepository.signInWithGoogle();
       // assert
@@ -246,8 +245,7 @@ void main() {
 
     test('should return a failure if there was a database error', () async {
       // arrange
-      when(mockLocalDS.persistUser(userDtoReceived))
-          .thenThrow(databaseException);
+      when(mockLocalDS.persistUser(userCreated)).thenThrow(databaseException);
       // act
       final result = await authRepository.signInWithGoogle();
       // assert
@@ -257,13 +255,13 @@ void main() {
 
   group('registerWithGoogle()', () {
     setUp(() {
-      when(mockRemoteDS.registerWithGoogle(userDtoToSend))
-          .thenAnswer((_) async => userDtoReceived);
+      when(mockRemoteDS.registerWithGoogle(userToCreate))
+          .thenAnswer((_) async => userCreated);
     });
 
     test('should register with google if all goes right', () async {
       // act
-      final result = await authRepository.registerWithGoogle(userDtoToSend);
+      final result = await authRepository.registerWithGoogle(userToCreate);
       // assert
       expect(result, right(unit));
     });
@@ -272,7 +270,7 @@ void main() {
       // arrange
       when(mockRemoteDS.registerWithGoogle(any)).thenThrow(serverException);
       // act
-      final result = await authRepository.registerWithGoogle(userDtoToSend);
+      final result = await authRepository.registerWithGoogle(userToCreate);
       // assert
       expect(result, left(const AuthFailure.server()));
     });
@@ -281,7 +279,7 @@ void main() {
       // arrange
       when(mockRemoteDS.registerWithGoogle(any)).thenThrow(networkException);
       // act
-      final result = await authRepository.registerWithGoogle(userDtoToSend);
+      final result = await authRepository.registerWithGoogle(userToCreate);
       // assert
       expect(result, left(const AuthFailure.network()));
     });
@@ -290,7 +288,61 @@ void main() {
       // arrange
       when(mockLocalDS.persistUser(any)).thenThrow(databaseException);
       // act
-      final result = await authRepository.registerWithGoogle(userDtoToSend);
+      final result = await authRepository.registerWithGoogle(userToCreate);
+      // assert
+      expect(result, left(const AuthFailure.local()));
+    });
+  });
+
+  group('updateUserInfo()', () {
+    final updatedUser = user.copyWith(
+      username: userUpdates.username,
+      name: userUpdates.name,
+    );
+    setUp(() {
+      when(mockRemoteDS.updateUserInfo(userUpdates))
+          .thenAnswer((_) async => userUpdates);
+      when(mockLocalDS.updateUser(userUpdates)).thenAnswer((_) async => unit);
+      when(mockLocalDS.getPersistedUser())
+          .thenAnswer((_) async => some(updatedUser));
+    });
+
+    test('should update the user if all goes right', () async {
+      // act
+      final result = await authRepository.updateUserInfo(userUpdates);
+      // assert
+      expect(result, right(unit));
+      verify(mockRemoteDS.updateUserInfo(userUpdates)).called(1);
+      verify(mockLocalDS.updateUser(userUpdates)).called(1);
+      verifyNoMoreInteractions(mockLocalDS);
+      verifyNoMoreInteractions(mockRemoteDS);
+      verifyNoMoreInteractions(mockGoogleSI);
+    });
+
+    test('should return server failure if there was one', () async {
+      // arrange
+      when(mockRemoteDS.updateUserInfo(userUpdates)).thenThrow(serverException);
+      // act
+      final result = await authRepository.updateUserInfo(userUpdates);
+      // assert
+      expect(result, left(const AuthFailure.server()));
+    });
+
+    test('should return network failure if there was one', () async {
+      // arrange
+      when(mockRemoteDS.updateUserInfo(userUpdates))
+          .thenThrow(networkException);
+      // act
+      final result = await authRepository.updateUserInfo(userUpdates);
+      // assert
+      expect(result, left(const AuthFailure.network()));
+    });
+
+    test('should return local failure if there was one', () async {
+      // arrange
+      when(mockLocalDS.updateUser(userUpdates)).thenThrow(databaseException);
+      // act
+      final result = await authRepository.updateUserInfo(userUpdates);
       // assert
       expect(result, left(const AuthFailure.local()));
     });
