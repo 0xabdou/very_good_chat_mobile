@@ -11,8 +11,8 @@ abstract class UserDtoToSend with _$UserDtoToSend {
   const factory UserDtoToSend({
     @required String authProviderAccessToken,
     @required String username,
-    @doNotIncludeIfNull String name,
-    @doNotIncludeIfNull Uint8List photo,
+    String name,
+    Uint8List photo,
   }) = _UserDtoToSend;
 }
 

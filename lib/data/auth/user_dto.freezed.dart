@@ -17,8 +17,8 @@ class _$UserDtoToSendTearOff {
   _UserDtoToSend call(
       {@required String authProviderAccessToken,
       @required String username,
-      @doNotIncludeIfNull String name,
-      @doNotIncludeIfNull Uint8List photo}) {
+      String name,
+      Uint8List photo}) {
     return _UserDtoToSend(
       authProviderAccessToken: authProviderAccessToken,
       username: username,
@@ -36,9 +36,7 @@ const $UserDtoToSend = _$UserDtoToSendTearOff();
 mixin _$UserDtoToSend {
   String get authProviderAccessToken;
   String get username;
-  @doNotIncludeIfNull
   String get name;
-  @doNotIncludeIfNull
   Uint8List get photo;
 
   $UserDtoToSendCopyWith<UserDtoToSend> get copyWith;
@@ -52,8 +50,8 @@ abstract class $UserDtoToSendCopyWith<$Res> {
   $Res call(
       {String authProviderAccessToken,
       String username,
-      @doNotIncludeIfNull String name,
-      @doNotIncludeIfNull Uint8List photo});
+      String name,
+      Uint8List photo});
 }
 
 /// @nodoc
@@ -93,8 +91,8 @@ abstract class _$UserDtoToSendCopyWith<$Res>
   $Res call(
       {String authProviderAccessToken,
       String username,
-      @doNotIncludeIfNull String name,
-      @doNotIncludeIfNull Uint8List photo});
+      String name,
+      Uint8List photo});
 }
 
 /// @nodoc
@@ -131,8 +129,8 @@ class _$_UserDtoToSend implements _UserDtoToSend {
   const _$_UserDtoToSend(
       {@required this.authProviderAccessToken,
       @required this.username,
-      @doNotIncludeIfNull this.name,
-      @doNotIncludeIfNull this.photo})
+      this.name,
+      this.photo})
       : assert(authProviderAccessToken != null),
         assert(username != null);
 
@@ -141,10 +139,8 @@ class _$_UserDtoToSend implements _UserDtoToSend {
   @override
   final String username;
   @override
-  @doNotIncludeIfNull
   final String name;
   @override
-  @doNotIncludeIfNull
   final Uint8List photo;
 
   @override
@@ -186,18 +182,16 @@ abstract class _UserDtoToSend implements UserDtoToSend {
   const factory _UserDtoToSend(
       {@required String authProviderAccessToken,
       @required String username,
-      @doNotIncludeIfNull String name,
-      @doNotIncludeIfNull Uint8List photo}) = _$_UserDtoToSend;
+      String name,
+      Uint8List photo}) = _$_UserDtoToSend;
 
   @override
   String get authProviderAccessToken;
   @override
   String get username;
   @override
-  @doNotIncludeIfNull
   String get name;
   @override
-  @doNotIncludeIfNull
   Uint8List get photo;
   @override
   _$UserDtoToSendCopyWith<_UserDtoToSend> get copyWith;

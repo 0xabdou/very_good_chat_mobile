@@ -137,6 +137,6 @@ class _ImageCropperState extends State<ImageCropper> {
       imageEditorOption: option,
     );
 
-    return Uint8List.fromList(bytes);
+    return bytes;
   }
 }
