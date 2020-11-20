@@ -24,6 +24,8 @@ class AppWidget extends StatelessWidget {
               return Theme(
                 data: ThemeData(
                   brightness: Brightness.dark,
+                  primaryColor: Colors.black,
+                  canvasColor: Colors.black,
                 ),
                 child: extendedNav,
               );

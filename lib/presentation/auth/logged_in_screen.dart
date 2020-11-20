@@ -19,22 +19,30 @@ class LoggedInScreen extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            ExtendedNavigator.root.push(
-              Routes.updatingScreen,
-              arguments: UpdatingScreenArguments(
-                currentUser: user,
+        leading: Padding(
+          padding: const EdgeInsets.all(8),
+          child: InkWell(
+            onTap: () {
+              ExtendedNavigator.root.push(
+                Routes.updatingScreen,
+                arguments: UpdatingScreenArguments(
+                  currentUser: user,
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(100),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.network(
+                user.photoUrl,
               ),
-            );
-          },
-          child: Image.network(user.photoUrl),
+            ),
+          ),
         ),
-        title: ListTile(
-          title: Text(user.name),
-          subtitle: Text(user.username),
-        ),
+        title: const Text('Chats'),
+        centerTitle: true,
       ),
+      backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: RaisedButton(
           onPressed: () => authCubit.logout(),
