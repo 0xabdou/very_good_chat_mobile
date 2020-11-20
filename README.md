@@ -13,8 +13,13 @@ Project started at: November 10th 2020 1:56 PM GMT+1
 
 // TODO:
 [✔️] Registration
+
 [✔️] Sign-in
+
 [✔️] Profile editing
+
 [⌛] Adding friends
+
 [⌛] Messaging friends
+
 [⌛] Push notifications
