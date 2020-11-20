@@ -7,7 +7,8 @@ import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 
 abstract class IAuthRepository {
-  Future<Either<AuthFailure, Option<User>>> getSignedInUser();
+  Future<Either<AuthFailure, Option<User>>> getPersistedUser();
+  Future<Either<AuthFailure, User>> getRemoteUser();
   Future<Either<AuthFailure, Option<AuthProviderInfo>>> getAuthProviderInfo();
   Future<Either<AuthFailure, Unit>> signInWithGoogle();
   Future<Either<AuthFailure, Unit>> registerWithGoogle(UserToCreate user);

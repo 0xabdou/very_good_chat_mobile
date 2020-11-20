@@ -28,32 +28,62 @@ void main() {
   );
 
   group('checkAuthStatus', () {
-    blocTest<AuthCubit, AuthState>(
-      'should emit loggedIn if a user is logged in',
-      build: () {
-        when(mockRepository.getSignedInUser())
+    group('if a user is logged in', () {
+      final remoteUser = user.copyWith(id: 'id_2');
+      setUp(() {
+        when(mockRepository.getPersistedUser())
             .thenAnswer((_) async => right(some(user)));
-        return authCubit;
-      },
-      act: (cubit) => cubit.checkAuthStatus(),
-      expect: const [AuthState.loggedIn(user)],
-      verify: (_) {
-        verify(mockRepository.getSignedInUser()).called(1);
-        verifyNoMoreInteractions(mockRepository);
-      },
-    );
+      });
+
+      blocTest<AuthCubit, AuthState>(
+        'should emit [loggedIn(localUser), loggedIn(remoteUser)] if a user is '
+        'logged in and the remote user was fetched successfully',
+        build: () {
+          when(mockRepository.getRemoteUser())
+              .thenAnswer((_) async => right(remoteUser));
+          return authCubit;
+        },
+        act: (cubit) => cubit.checkAuthStatus(),
+        expect: [
+          const AuthState.loggedIn(user),
+          AuthState.loggedIn(remoteUser),
+        ],
+        verify: (_) {
+          verify(mockRepository.getPersistedUser()).called(1);
+          verify(mockRepository.getRemoteUser()).called(1);
+          verifyNoMoreInteractions(mockRepository);
+        },
+      );
+
+      blocTest<AuthCubit, AuthState>(
+        'should emit [loggedIn(localUser)] if a user is '
+        'logged in and the remote user was not fetched',
+        build: () {
+          when(mockRepository.getRemoteUser())
+              .thenAnswer((_) async => left(const AuthFailure.server()));
+          return authCubit;
+        },
+        act: (cubit) => cubit.checkAuthStatus(),
+        expect: const [AuthState.loggedIn(user)],
+        verify: (_) {
+          verify(mockRepository.getPersistedUser()).called(1);
+          verify(mockRepository.getRemoteUser()).called(1);
+          verifyNoMoreInteractions(mockRepository);
+        },
+      );
+    });
 
     blocTest<AuthCubit, AuthState>(
       'should emit loggedOut if no user is logged in',
       build: () {
-        when(mockRepository.getSignedInUser())
+        when(mockRepository.getPersistedUser())
             .thenAnswer((_) async => right(none()));
         return authCubit;
       },
       act: (cubit) => cubit.checkAuthStatus(),
       expect: const [AuthState.loggedOut()],
       verify: (_) {
-        verify(mockRepository.getSignedInUser()).called(1);
+        verify(mockRepository.getPersistedUser()).called(1);
         verifyNoMoreInteractions(mockRepository);
       },
     );
@@ -61,14 +91,14 @@ void main() {
     blocTest<AuthCubit, AuthState>(
       'should emit logged out with error if some failure happened',
       build: () {
-        when(mockRepository.getSignedInUser())
+        when(mockRepository.getPersistedUser())
             .thenAnswer((_) async => left(const AuthFailure.network()));
         return authCubit;
       },
       act: (cubit) => cubit.checkAuthStatus(),
       expect: const [AuthState.loggedOut(failure: AuthFailure.network())],
       verify: (_) {
-        verify(mockRepository.getSignedInUser()).called(1);
+        verify(mockRepository.getPersistedUser()).called(1);
         verifyNoMoreInteractions(mockRepository);
       },
     );
@@ -78,7 +108,7 @@ void main() {
     setUp(() {
       when(mockRepository.signInWithGoogle())
           .thenAnswer((_) async => right(unit));
-      when(mockRepository.getSignedInUser())
+      when(mockRepository.getPersistedUser())
           .thenAnswer((_) async => right(some(user)));
     });
 
@@ -92,7 +122,7 @@ void main() {
       ],
       verify: (_) {
         verify(mockRepository.signInWithGoogle()).called(1);
-        verify(mockRepository.getSignedInUser()).called(1);
+        verify(mockRepository.getPersistedUser()).called(1);
         verifyNoMoreInteractions(mockRepository);
       },
     );
@@ -118,7 +148,7 @@ void main() {
     blocTest<AuthCubit, AuthState>(
       'Should emit logged out with error if the getting persisted user fails',
       build: () {
-        when(mockRepository.getSignedInUser())
+        when(mockRepository.getPersistedUser())
             .thenAnswer((_) async => left(const AuthFailure.local()));
         return authCubit;
       },
@@ -129,7 +159,7 @@ void main() {
       ],
       verify: (_) {
         verify(mockRepository.signInWithGoogle()).called(1);
-        verify(mockRepository.getSignedInUser()).called(1);
+        verify(mockRepository.getPersistedUser()).called(1);
         verifyNoMoreInteractions(mockRepository);
       },
     );

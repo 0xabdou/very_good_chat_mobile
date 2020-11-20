@@ -21,8 +21,8 @@ class AuthCubit extends Cubit<AuthState> {
   final IAuthRepository _repository;
 
   Future<void> checkAuthStatus() async {
-    final either = await _repository.getSignedInUser();
-    either.fold(
+    final persistedUserResult = await _repository.getPersistedUser();
+    persistedUserResult.fold(
       (failure) {
         emit(AuthState.loggedOut(failure: failure));
       },
@@ -31,8 +31,15 @@ class AuthCubit extends Cubit<AuthState> {
           () {
             emit(const AuthState.loggedOut());
           },
-          (user) {
+          (user) async {
             emit(AuthState.loggedIn(user));
+            final remoteUserResult = await _repository.getRemoteUser();
+            remoteUserResult.fold(
+              (f) {},
+              (remoteUser) {
+                emit(AuthState.loggedIn(remoteUser));
+              },
+            );
           },
         );
       },
@@ -73,7 +80,7 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
 
-    final userResult = await _repository.getSignedInUser();
+    final userResult = await _repository.getPersistedUser();
     userResult.fold(
       (f) {
         emit(AuthState.loggedOut(failure: f));

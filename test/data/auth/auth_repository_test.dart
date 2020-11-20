@@ -8,6 +8,7 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/data/auth/auth_local_data_source.dart';
 import 'package:very_good_chat/data/auth/auth_remote_data_source.dart';
 import 'package:very_good_chat/data/auth/auth_repository.dart';
+import 'package:very_good_chat/data/auth/user_dto.dart';
 import 'package:very_good_chat/domain/auth/auth_failure.dart';
 import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 
@@ -45,14 +46,14 @@ void main() {
     );
   });
 
-  group('getSignedInUser()', () {
+  group('getPersistedUser()', () {
     setUp(() {
       when(mockLocalDS.getPersistedUser()).thenAnswer((_) async => some(user));
     });
 
     test('should call the right functions', () async {
       // act
-      await authRepository.getSignedInUser();
+      await authRepository.getPersistedUser();
       // assert
       verify(mockLocalDS.getPersistedUser()).called(1);
       verifyNoMoreInteractions(mockLocalDS);
@@ -62,7 +63,7 @@ void main() {
 
     test('should return a user on success', () async {
       // act
-      final result = await authRepository.getSignedInUser();
+      final result = await authRepository.getPersistedUser();
       // assert
       expect(result, right(some(user)));
     });
@@ -73,7 +74,59 @@ void main() {
         SqfliteDatabaseException(),
       );
       // act
-      final result = await authRepository.getSignedInUser();
+      final result = await authRepository.getPersistedUser();
+      // assert
+      expect(result, left(const AuthFailure.local()));
+    });
+  });
+
+  group('getRemoteUser()', () {
+    setUp(() {
+      when(mockRemoteDS.getSignedInUser()).thenAnswer((_) async => user);
+      when(mockLocalDS.updateUserInfo(any)).thenAnswer((_) async => unit);
+      when(mockLocalDS.updateUserPhoto(any)).thenAnswer((_) async => unit);
+    });
+
+    test(
+      'should return the remote user and persist it if all goes right',
+      () async {
+        // act
+        final result = await authRepository.getRemoteUser();
+        // assert
+        expect(result, right(user));
+        verify(mockRemoteDS.getSignedInUser()).called(1);
+        verify(mockLocalDS.updateUserPhoto(user.photoUrl)).called(1);
+        verify(mockLocalDS.updateUserInfo(UserUpdates.fromJson(user.toJson())))
+            .called(1);
+        verifyNoMoreInteractions(mockRemoteDS);
+        verifyNoMoreInteractions(mockLocalDS);
+        verifyZeroInteractions(mockGoogleSI);
+      },
+    );
+
+    test('should return a server failure if there was one', () async {
+      // arrange
+      when(mockRemoteDS.getSignedInUser()).thenThrow(serverException);
+      // act
+      final result = await authRepository.getRemoteUser();
+      // assert
+      expect(result, left(const AuthFailure.server()));
+    });
+
+    test('should return a network failure if there was one', () async {
+      // arrange
+      when(mockRemoteDS.getSignedInUser()).thenThrow(networkException);
+      // act
+      final result = await authRepository.getRemoteUser();
+      // assert
+      expect(result, left(const AuthFailure.network()));
+    });
+
+    test('should return a local failure if there was one', () async {
+      // arrange
+      when(mockLocalDS.updateUserInfo(any)).thenThrow(databaseException);
+      // act
+      final result = await authRepository.getRemoteUser();
       // assert
       expect(result, left(const AuthFailure.local()));
     });

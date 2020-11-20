@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/data/auth/user_dto.dart';
+import 'package:very_good_chat/domain/auth/user.dart';
 
 abstract class IAuthRemoteDataSource {
   /// Returns the user associated to the google access token
@@ -11,6 +12,8 @@ abstract class IAuthRemoteDataSource {
   Future<UserCreated> signInWithGoogle(String accessToken);
 
   Future<UserCreated> registerWithGoogle(UserToCreate user);
+
+  Future<User> getSignedInUser();
 
   Future<String> updateUserPhoto(Uint8List photoBytes);
 
@@ -43,6 +46,17 @@ class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
     throw DioError(
       type: DioErrorType.RESPONSE,
       response: Response(statusCode: 404),
+    );
+  }
+
+  @override
+  Future<User> getSignedInUser() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return User(
+      id: _user.id,
+      username: 'LAYL#N TBON MOK2',
+      name: _user.name,
+      photoUrl: _user.photoUrl,
     );
   }
 

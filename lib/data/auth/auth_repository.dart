@@ -31,10 +31,32 @@ class AuthRepository implements IAuthRepository {
   final GoogleSignIn _googleSignIn;
 
   @override
-  Future<Either<AuthFailure, Option<User>>> getSignedInUser() async {
+  Future<Either<AuthFailure, Option<User>>> getPersistedUser() async {
     try {
       final user = await _localDataSource.getPersistedUser();
       return right(user);
+    } on DatabaseException catch (e) {
+      logger.d(e);
+      return left(const AuthFailure.local());
+    }
+  }
+
+  @override
+  Future<Either<AuthFailure, User>> getRemoteUser() async {
+    try {
+      final user = await _remoteDataSource.getSignedInUser();
+      final futures = [
+        _localDataSource.updateUserInfo(UserUpdates.fromJson(user.toJson())),
+        _localDataSource.updateUserPhoto(user.photoUrl),
+      ];
+      await Future.wait(futures);
+      return right(user);
+    } on DioError catch (e) {
+      logger.d(e);
+      if (e.type == DioErrorType.RESPONSE) {
+        return left(const AuthFailure.server());
+      }
+      return left(const AuthFailure.network());
     } on DatabaseException catch (e) {
       logger.d(e);
       return left(const AuthFailure.local());
