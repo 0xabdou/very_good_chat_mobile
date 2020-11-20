@@ -2,67 +2,20 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
+import 'package:very_good_chat/presentation/core/navigation_handler.dart';
 import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
 
-class AppWidget extends StatefulWidget {
-  @override
-  _AppWidgetState createState() => _AppWidgetState();
-}
-
-class _AppWidgetState extends State<AppWidget> {
-  AuthCubit authCubit;
-
-  @override
-  void initState() {
-    authCubit = getIt.get<AuthCubit>()..checkAuthStatus();
-    super.initState();
-  }
-
+class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
-      cubit: authCubit,
-      listenWhen: (prev, cur) {
-        return prev.maybeMap(
-          loggedOut: (_) {
-            return cur.maybeMap(
-              loggedOut: (_) => false,
-              orElse: () => true,
-            );
-          },
-          orElse: () => true,
-        );
-      },
-      listener: (context, state) {
-        state.map(
-          initial: (_) {},
-          loggedIn: (_) {
-            ExtendedNavigator.root.pushAndRemoveUntil(
-              Routes.loggedInScreen,
-              (route) => route.isFirst,
-            );
-          },
-          loggedOut: (_) {
-            ExtendedNavigator.root.pushAndRemoveUntil(
-              Routes.loginScreen,
-              (route) => route.isFirst,
-            );
-          },
-          registering: (r) {
-            ExtendedNavigator.root.push(
-              Routes.updatingScreen,
-              arguments: UpdatingScreenArguments(authProviderInfo: r.authInfo),
-            );
-          },
-        );
-      },
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<AuthCubit>(
-            create: (_) => authCubit,
-          ),
-        ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthCubit>(
+          create: (_) => getIt()..checkAuthStatus(),
+        ),
+      ],
+      child: NavigationHandler(
         child: MaterialApp(
           title: 'Very Good Chat',
           builder: ExtendedNavigator.builder(
