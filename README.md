@@ -23,4 +23,4 @@ Project started at: November 10th 2020 1:56 PM GMT+1
 
 [⌛] Messaging friends
 
-[⌛] Push notifications
+[⌛⌛⌛] Adding a backend and Push notifications
