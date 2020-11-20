@@ -48,7 +48,6 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
       cubit: cubit,
       listener: (context, state) {
         if (state.done) {
-          context.read<AuthCubit>().checkAuthStatus();
           ExtendedNavigator.root.pop();
         }
       },

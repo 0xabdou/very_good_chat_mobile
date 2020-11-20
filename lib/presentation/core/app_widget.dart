@@ -38,15 +38,19 @@ class _AppWidgetState extends State<AppWidget> {
         state.map(
           initial: (_) {},
           loggedIn: (_) {
-            ExtendedNavigator.root.popUntil((r) => r.isFirst);
-            ExtendedNavigator.root.replace(Routes.loggedInScreen);
+            ExtendedNavigator.root.pushAndRemoveUntil(
+              Routes.loggedInScreen,
+              (route) => route.isFirst,
+            );
           },
           loggedOut: (_) {
-            ExtendedNavigator.root.popUntil((r) => r.isFirst);
-            ExtendedNavigator.root.replace(Routes.loginScreen);
+            ExtendedNavigator.root.pushAndRemoveUntil(
+              Routes.loginScreen,
+              (route) => route.isFirst,
+            );
           },
           registering: (r) {
-            ExtendedNavigator.root.replace(
+            ExtendedNavigator.root.push(
               Routes.updatingScreen,
               arguments: UpdatingScreenArguments(authProviderInfo: r.authInfo),
             );
