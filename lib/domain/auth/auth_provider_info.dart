@@ -6,7 +6,7 @@ part 'auth_provider_info.freezed.dart';
 abstract class AuthProviderInfo with _$AuthProviderInfo {
   const factory AuthProviderInfo({
     @required String accessToken,
-    @required String name,
-    @required String photoUrl,
+    String name,
+    String photoUrl,
   }) = _AuthProviderInfo;
 }

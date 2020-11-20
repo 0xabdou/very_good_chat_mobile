@@ -11,6 +11,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../domain/auth/auth_provider_info.dart';
+import '../domain/auth/user.dart';
 import '../presentation/auth/logged_in_screen.dart';
 import '../presentation/auth/login_screen.dart';
 import '../presentation/auth/splash_screen.dart';
@@ -58,11 +59,14 @@ class AppRouter extends RouterBase {
       );
     },
     UpdatingScreen: (data) {
-      final args = data.getArgs<UpdatingScreenArguments>(nullOk: false);
+      final args = data.getArgs<UpdatingScreenArguments>(
+        orElse: () => UpdatingScreenArguments(),
+      );
       return MaterialPageRoute<dynamic>(
         builder: (context) => UpdatingScreen(
           key: args.key,
           authProviderInfo: args.authProviderInfo,
+          currentUser: args.currentUser,
         ),
         settings: data,
       );
@@ -95,7 +99,8 @@ class AppRouter extends RouterBase {
 class UpdatingScreenArguments {
   final Key key;
   final AuthProviderInfo authProviderInfo;
-  UpdatingScreenArguments({this.key, @required this.authProviderInfo});
+  final User currentUser;
+  UpdatingScreenArguments({this.key, this.authProviderInfo, this.currentUser});
 }
 
 /// ImageCropper arguments holder class

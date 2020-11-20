@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/shared/logger.dart';
+import 'package:very_good_chat/shared/router.gr.dart';
 
 class LoggedInScreen extends StatelessWidget {
   @override
@@ -17,7 +19,17 @@ class LoggedInScreen extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        leading: Image.network(user.photoUrl),
+        leading: InkWell(
+          onTap: () {
+            ExtendedNavigator.root.push(
+              Routes.updatingScreen,
+              arguments: UpdatingScreenArguments(
+                currentUser: user,
+              ),
+            );
+          },
+          child: Image.network(user.photoUrl),
+        ),
         title: ListTile(
           title: Text(user.name),
           subtitle: Text(user.username),

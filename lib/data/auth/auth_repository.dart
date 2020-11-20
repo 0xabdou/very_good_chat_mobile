@@ -52,7 +52,7 @@ class AuthRepository implements IAuthRepository {
         some(
           AuthProviderInfo(
             accessToken: auth.accessToken,
-            name: user.displayName ?? '',
+            name: user.displayName,
             photoUrl: user.photoUrl,
           ),
         ),
@@ -154,13 +154,13 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> updateUserPhoto(
+  Future<Either<AuthFailure, String>> updateUserPhoto(
     Uint8List photoBytes,
   ) async {
     try {
       final photoUrl = await _remoteDataSource.updateUserPhoto(photoBytes);
       await _localDataSource.updateUserPhoto(photoUrl);
-      return right(unit);
+      return right(photoUrl);
     } on DioError catch (e) {
       logger.d(e);
       if (e.type == DioErrorType.RESPONSE) {

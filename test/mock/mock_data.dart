@@ -17,16 +17,12 @@ const userCreated = UserCreated(
 const userToCreate = UserToCreate(
   authProviderAccessToken: 'accessToken',
   username: 'username',
-  name: 'name',
 );
 const userUpdates = UserUpdates(
   username: 'username_2',
-  name: 'name_2',
 );
 const authProviderInfo = AuthProviderInfo(
   accessToken: 'access_token',
-  name: 'Some Name',
-  photoUrl: 'Some Photo',
 );
 
 final platformException = PlatformException(code: 'code', message: 'message');

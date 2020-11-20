@@ -15,9 +15,7 @@ class _$AuthProviderInfoTearOff {
 
 // ignore: unused_element
   _AuthProviderInfo call(
-      {@required String accessToken,
-      @required String name,
-      @required String photoUrl}) {
+      {@required String accessToken, String name, String photoUrl}) {
     return _AuthProviderInfo(
       accessToken: accessToken,
       name: name,
@@ -110,12 +108,8 @@ class __$AuthProviderInfoCopyWithImpl<$Res>
 /// @nodoc
 class _$_AuthProviderInfo implements _AuthProviderInfo {
   const _$_AuthProviderInfo(
-      {@required this.accessToken,
-      @required this.name,
-      @required this.photoUrl})
-      : assert(accessToken != null),
-        assert(name != null),
-        assert(photoUrl != null);
+      {@required this.accessToken, this.name, this.photoUrl})
+      : assert(accessToken != null);
 
   @override
   final String accessToken;
@@ -158,8 +152,8 @@ class _$_AuthProviderInfo implements _AuthProviderInfo {
 abstract class _AuthProviderInfo implements AuthProviderInfo {
   const factory _AuthProviderInfo(
       {@required String accessToken,
-      @required String name,
-      @required String photoUrl}) = _$_AuthProviderInfo;
+      String name,
+      String photoUrl}) = _$_AuthProviderInfo;
 
   @override
   String get accessToken;

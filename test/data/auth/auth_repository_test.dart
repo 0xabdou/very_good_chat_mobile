@@ -365,7 +365,7 @@ void main() {
       // act
       final result = await authRepository.updateUserPhoto(photoBytes);
       // assert
-      expect(result, right(unit));
+      expect(result, right(photoUrl));
       verify(mockRemoteDS.updateUserPhoto(photoBytes)).called(1);
       verify(mockLocalDS.updateUserPhoto(photoUrl)).called(1);
       verifyNoMoreInteractions(mockRemoteDS);

@@ -15,21 +15,25 @@ class _$UpdatingStateTearOff {
 
 // ignore: unused_element
   _UpdatingState call(
-      {@required String authProviderAccessToken,
-      @required String username,
+      {@required String username,
       @required String name,
-      @required bool callingApi,
-      @required bool done,
+      bool callingApi = false,
+      bool done = false,
+      bool registering = false,
+      bool uploadingPhoto = false,
+      String authProviderAccessToken,
       Uint8List photoBytes,
       String photoUrl,
       AuthFailure apiFailure,
       String usernameError}) {
     return _UpdatingState(
-      authProviderAccessToken: authProviderAccessToken,
       username: username,
       name: name,
       callingApi: callingApi,
       done: done,
+      registering: registering,
+      uploadingPhoto: uploadingPhoto,
+      authProviderAccessToken: authProviderAccessToken,
       photoBytes: photoBytes,
       photoUrl: photoUrl,
       apiFailure: apiFailure,
@@ -44,11 +48,13 @@ const $UpdatingState = _$UpdatingStateTearOff();
 
 /// @nodoc
 mixin _$UpdatingState {
-  String get authProviderAccessToken;
   String get username;
   String get name;
   bool get callingApi;
   bool get done;
+  bool get registering;
+  bool get uploadingPhoto;
+  String get authProviderAccessToken;
   Uint8List get photoBytes;
   String get photoUrl;
   AuthFailure get apiFailure;
@@ -63,11 +69,13 @@ abstract class $UpdatingStateCopyWith<$Res> {
           UpdatingState value, $Res Function(UpdatingState) then) =
       _$UpdatingStateCopyWithImpl<$Res>;
   $Res call(
-      {String authProviderAccessToken,
-      String username,
+      {String username,
       String name,
       bool callingApi,
       bool done,
+      bool registering,
+      bool uploadingPhoto,
+      String authProviderAccessToken,
       Uint8List photoBytes,
       String photoUrl,
       AuthFailure apiFailure,
@@ -87,25 +95,32 @@ class _$UpdatingStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authProviderAccessToken = freezed,
     Object username = freezed,
     Object name = freezed,
     Object callingApi = freezed,
     Object done = freezed,
+    Object registering = freezed,
+    Object uploadingPhoto = freezed,
+    Object authProviderAccessToken = freezed,
     Object photoBytes = freezed,
     Object photoUrl = freezed,
     Object apiFailure = freezed,
     Object usernameError = freezed,
   }) {
     return _then(_value.copyWith(
-      authProviderAccessToken: authProviderAccessToken == freezed
-          ? _value.authProviderAccessToken
-          : authProviderAccessToken as String,
       username: username == freezed ? _value.username : username as String,
       name: name == freezed ? _value.name : name as String,
       callingApi:
           callingApi == freezed ? _value.callingApi : callingApi as bool,
       done: done == freezed ? _value.done : done as bool,
+      registering:
+          registering == freezed ? _value.registering : registering as bool,
+      uploadingPhoto: uploadingPhoto == freezed
+          ? _value.uploadingPhoto
+          : uploadingPhoto as bool,
+      authProviderAccessToken: authProviderAccessToken == freezed
+          ? _value.authProviderAccessToken
+          : authProviderAccessToken as String,
       photoBytes:
           photoBytes == freezed ? _value.photoBytes : photoBytes as Uint8List,
       photoUrl: photoUrl == freezed ? _value.photoUrl : photoUrl as String,
@@ -136,11 +151,13 @@ abstract class _$UpdatingStateCopyWith<$Res>
       __$UpdatingStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String authProviderAccessToken,
-      String username,
+      {String username,
       String name,
       bool callingApi,
       bool done,
+      bool registering,
+      bool uploadingPhoto,
+      String authProviderAccessToken,
       Uint8List photoBytes,
       String photoUrl,
       AuthFailure apiFailure,
@@ -163,25 +180,32 @@ class __$UpdatingStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object authProviderAccessToken = freezed,
     Object username = freezed,
     Object name = freezed,
     Object callingApi = freezed,
     Object done = freezed,
+    Object registering = freezed,
+    Object uploadingPhoto = freezed,
+    Object authProviderAccessToken = freezed,
     Object photoBytes = freezed,
     Object photoUrl = freezed,
     Object apiFailure = freezed,
     Object usernameError = freezed,
   }) {
     return _then(_UpdatingState(
-      authProviderAccessToken: authProviderAccessToken == freezed
-          ? _value.authProviderAccessToken
-          : authProviderAccessToken as String,
       username: username == freezed ? _value.username : username as String,
       name: name == freezed ? _value.name : name as String,
       callingApi:
           callingApi == freezed ? _value.callingApi : callingApi as bool,
       done: done == freezed ? _value.done : done as bool,
+      registering:
+          registering == freezed ? _value.registering : registering as bool,
+      uploadingPhoto: uploadingPhoto == freezed
+          ? _value.uploadingPhoto
+          : uploadingPhoto as bool,
+      authProviderAccessToken: authProviderAccessToken == freezed
+          ? _value.authProviderAccessToken
+          : authProviderAccessToken as String,
       photoBytes:
           photoBytes == freezed ? _value.photoBytes : photoBytes as Uint8List,
       photoUrl: photoUrl == freezed ? _value.photoUrl : photoUrl as String,
@@ -197,31 +221,42 @@ class __$UpdatingStateCopyWithImpl<$Res>
 /// @nodoc
 class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
   const _$_UpdatingState(
-      {@required this.authProviderAccessToken,
-      @required this.username,
+      {@required this.username,
       @required this.name,
-      @required this.callingApi,
-      @required this.done,
+      this.callingApi = false,
+      this.done = false,
+      this.registering = false,
+      this.uploadingPhoto = false,
+      this.authProviderAccessToken,
       this.photoBytes,
       this.photoUrl,
       this.apiFailure,
       this.usernameError})
-      : assert(authProviderAccessToken != null),
-        assert(username != null),
+      : assert(username != null),
         assert(name != null),
         assert(callingApi != null),
-        assert(done != null);
+        assert(done != null),
+        assert(registering != null),
+        assert(uploadingPhoto != null);
 
-  @override
-  final String authProviderAccessToken;
   @override
   final String username;
   @override
   final String name;
+  @JsonKey(defaultValue: false)
   @override
   final bool callingApi;
+  @JsonKey(defaultValue: false)
   @override
   final bool done;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool registering;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool uploadingPhoto;
+  @override
+  final String authProviderAccessToken;
   @override
   final Uint8List photoBytes;
   @override
@@ -233,7 +268,7 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UpdatingState(authProviderAccessToken: $authProviderAccessToken, username: $username, name: $name, callingApi: $callingApi, done: $done, photoBytes: $photoBytes, photoUrl: $photoUrl, apiFailure: $apiFailure, usernameError: $usernameError)';
+    return 'UpdatingState(username: $username, name: $name, callingApi: $callingApi, done: $done, registering: $registering, uploadingPhoto: $uploadingPhoto, authProviderAccessToken: $authProviderAccessToken, photoBytes: $photoBytes, photoUrl: $photoUrl, apiFailure: $apiFailure, usernameError: $usernameError)';
   }
 
   @override
@@ -241,12 +276,14 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'UpdatingState'))
-      ..add(DiagnosticsProperty(
-          'authProviderAccessToken', authProviderAccessToken))
       ..add(DiagnosticsProperty('username', username))
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('callingApi', callingApi))
       ..add(DiagnosticsProperty('done', done))
+      ..add(DiagnosticsProperty('registering', registering))
+      ..add(DiagnosticsProperty('uploadingPhoto', uploadingPhoto))
+      ..add(DiagnosticsProperty(
+          'authProviderAccessToken', authProviderAccessToken))
       ..add(DiagnosticsProperty('photoBytes', photoBytes))
       ..add(DiagnosticsProperty('photoUrl', photoUrl))
       ..add(DiagnosticsProperty('apiFailure', apiFailure))
@@ -257,10 +294,6 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _UpdatingState &&
-            (identical(
-                    other.authProviderAccessToken, authProviderAccessToken) ||
-                const DeepCollectionEquality().equals(
-                    other.authProviderAccessToken, authProviderAccessToken)) &&
             (identical(other.username, username) ||
                 const DeepCollectionEquality()
                     .equals(other.username, username)) &&
@@ -271,6 +304,16 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
                     .equals(other.callingApi, callingApi)) &&
             (identical(other.done, done) ||
                 const DeepCollectionEquality().equals(other.done, done)) &&
+            (identical(other.registering, registering) ||
+                const DeepCollectionEquality()
+                    .equals(other.registering, registering)) &&
+            (identical(other.uploadingPhoto, uploadingPhoto) ||
+                const DeepCollectionEquality()
+                    .equals(other.uploadingPhoto, uploadingPhoto)) &&
+            (identical(
+                    other.authProviderAccessToken, authProviderAccessToken) ||
+                const DeepCollectionEquality().equals(
+                    other.authProviderAccessToken, authProviderAccessToken)) &&
             (identical(other.photoBytes, photoBytes) ||
                 const DeepCollectionEquality()
                     .equals(other.photoBytes, photoBytes)) &&
@@ -288,11 +331,13 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(authProviderAccessToken) ^
       const DeepCollectionEquality().hash(username) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(callingApi) ^
       const DeepCollectionEquality().hash(done) ^
+      const DeepCollectionEquality().hash(registering) ^
+      const DeepCollectionEquality().hash(uploadingPhoto) ^
+      const DeepCollectionEquality().hash(authProviderAccessToken) ^
       const DeepCollectionEquality().hash(photoBytes) ^
       const DeepCollectionEquality().hash(photoUrl) ^
       const DeepCollectionEquality().hash(apiFailure) ^
@@ -305,18 +350,18 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
 
 abstract class _UpdatingState implements UpdatingState {
   const factory _UpdatingState(
-      {@required String authProviderAccessToken,
-      @required String username,
+      {@required String username,
       @required String name,
-      @required bool callingApi,
-      @required bool done,
+      bool callingApi,
+      bool done,
+      bool registering,
+      bool uploadingPhoto,
+      String authProviderAccessToken,
       Uint8List photoBytes,
       String photoUrl,
       AuthFailure apiFailure,
       String usernameError}) = _$_UpdatingState;
 
-  @override
-  String get authProviderAccessToken;
   @override
   String get username;
   @override
@@ -325,6 +370,12 @@ abstract class _UpdatingState implements UpdatingState {
   bool get callingApi;
   @override
   bool get done;
+  @override
+  bool get registering;
+  @override
+  bool get uploadingPhoto;
+  @override
+  String get authProviderAccessToken;
   @override
   Uint8List get photoBytes;
   @override
