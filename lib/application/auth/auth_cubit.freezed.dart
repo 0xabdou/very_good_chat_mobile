@@ -48,34 +48,34 @@ const $AuthState = _$AuthStateTearOff();
 /// @nodoc
 mixin _$AuthState {
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result initial(),
-    @required Result loggedIn(User user),
-    @required Result registering(AuthProviderInfo authInfo),
-    @required Result loggedOut(bool loggingIn, AuthFailure failure),
+  TResult when<TResult extends Object>({
+    @required TResult initial(),
+    @required TResult loggedIn(User user),
+    @required TResult registering(AuthProviderInfo authInfo),
+    @required TResult loggedOut(bool loggingIn, AuthFailure failure),
   });
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result initial(),
-    Result loggedIn(User user),
-    Result registering(AuthProviderInfo authInfo),
-    Result loggedOut(bool loggingIn, AuthFailure failure),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult initial(),
+    TResult loggedIn(User user),
+    TResult registering(AuthProviderInfo authInfo),
+    TResult loggedOut(bool loggingIn, AuthFailure failure),
+    @required TResult orElse(),
   });
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result initial(_Initial value),
-    @required Result loggedIn(_LoggedIn value),
-    @required Result registering(_Registering value),
-    @required Result loggedOut(_LoggedOut value),
+  TResult map<TResult extends Object>({
+    @required TResult initial(_Initial value),
+    @required TResult loggedIn(_LoggedIn value),
+    @required TResult registering(_Registering value),
+    @required TResult loggedOut(_LoggedOut value),
   });
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result initial(_Initial value),
-    Result loggedIn(_LoggedIn value),
-    Result registering(_Registering value),
-    Result loggedOut(_LoggedOut value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult initial(_Initial value),
+    TResult loggedIn(_LoggedIn value),
+    TResult registering(_Registering value),
+    TResult loggedOut(_LoggedOut value),
+    @required TResult orElse(),
   });
 }
 
@@ -135,11 +135,11 @@ class _$_Initial with DiagnosticableTreeMixin implements _Initial {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result initial(),
-    @required Result loggedIn(User user),
-    @required Result registering(AuthProviderInfo authInfo),
-    @required Result loggedOut(bool loggingIn, AuthFailure failure),
+  TResult when<TResult extends Object>({
+    @required TResult initial(),
+    @required TResult loggedIn(User user),
+    @required TResult registering(AuthProviderInfo authInfo),
+    @required TResult loggedOut(bool loggingIn, AuthFailure failure),
   }) {
     assert(initial != null);
     assert(loggedIn != null);
@@ -150,12 +150,12 @@ class _$_Initial with DiagnosticableTreeMixin implements _Initial {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result initial(),
-    Result loggedIn(User user),
-    Result registering(AuthProviderInfo authInfo),
-    Result loggedOut(bool loggingIn, AuthFailure failure),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult initial(),
+    TResult loggedIn(User user),
+    TResult registering(AuthProviderInfo authInfo),
+    TResult loggedOut(bool loggingIn, AuthFailure failure),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (initial != null) {
@@ -166,11 +166,11 @@ class _$_Initial with DiagnosticableTreeMixin implements _Initial {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result initial(_Initial value),
-    @required Result loggedIn(_LoggedIn value),
-    @required Result registering(_Registering value),
-    @required Result loggedOut(_LoggedOut value),
+  TResult map<TResult extends Object>({
+    @required TResult initial(_Initial value),
+    @required TResult loggedIn(_LoggedIn value),
+    @required TResult registering(_Registering value),
+    @required TResult loggedOut(_LoggedOut value),
   }) {
     assert(initial != null);
     assert(loggedIn != null);
@@ -181,12 +181,12 @@ class _$_Initial with DiagnosticableTreeMixin implements _Initial {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result initial(_Initial value),
-    Result loggedIn(_LoggedIn value),
-    Result registering(_Registering value),
-    Result loggedOut(_LoggedOut value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult initial(_Initial value),
+    TResult loggedIn(_LoggedIn value),
+    TResult registering(_Registering value),
+    TResult loggedOut(_LoggedOut value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (initial != null) {
@@ -276,11 +276,11 @@ class _$_LoggedIn with DiagnosticableTreeMixin implements _LoggedIn {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result initial(),
-    @required Result loggedIn(User user),
-    @required Result registering(AuthProviderInfo authInfo),
-    @required Result loggedOut(bool loggingIn, AuthFailure failure),
+  TResult when<TResult extends Object>({
+    @required TResult initial(),
+    @required TResult loggedIn(User user),
+    @required TResult registering(AuthProviderInfo authInfo),
+    @required TResult loggedOut(bool loggingIn, AuthFailure failure),
   }) {
     assert(initial != null);
     assert(loggedIn != null);
@@ -291,12 +291,12 @@ class _$_LoggedIn with DiagnosticableTreeMixin implements _LoggedIn {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result initial(),
-    Result loggedIn(User user),
-    Result registering(AuthProviderInfo authInfo),
-    Result loggedOut(bool loggingIn, AuthFailure failure),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult initial(),
+    TResult loggedIn(User user),
+    TResult registering(AuthProviderInfo authInfo),
+    TResult loggedOut(bool loggingIn, AuthFailure failure),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (loggedIn != null) {
@@ -307,11 +307,11 @@ class _$_LoggedIn with DiagnosticableTreeMixin implements _LoggedIn {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result initial(_Initial value),
-    @required Result loggedIn(_LoggedIn value),
-    @required Result registering(_Registering value),
-    @required Result loggedOut(_LoggedOut value),
+  TResult map<TResult extends Object>({
+    @required TResult initial(_Initial value),
+    @required TResult loggedIn(_LoggedIn value),
+    @required TResult registering(_Registering value),
+    @required TResult loggedOut(_LoggedOut value),
   }) {
     assert(initial != null);
     assert(loggedIn != null);
@@ -322,12 +322,12 @@ class _$_LoggedIn with DiagnosticableTreeMixin implements _LoggedIn {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result initial(_Initial value),
-    Result loggedIn(_LoggedIn value),
-    Result registering(_Registering value),
-    Result loggedOut(_LoggedOut value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult initial(_Initial value),
+    TResult loggedIn(_LoggedIn value),
+    TResult registering(_Registering value),
+    TResult loggedOut(_LoggedOut value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (loggedIn != null) {
@@ -423,11 +423,11 @@ class _$_Registering with DiagnosticableTreeMixin implements _Registering {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result initial(),
-    @required Result loggedIn(User user),
-    @required Result registering(AuthProviderInfo authInfo),
-    @required Result loggedOut(bool loggingIn, AuthFailure failure),
+  TResult when<TResult extends Object>({
+    @required TResult initial(),
+    @required TResult loggedIn(User user),
+    @required TResult registering(AuthProviderInfo authInfo),
+    @required TResult loggedOut(bool loggingIn, AuthFailure failure),
   }) {
     assert(initial != null);
     assert(loggedIn != null);
@@ -438,12 +438,12 @@ class _$_Registering with DiagnosticableTreeMixin implements _Registering {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result initial(),
-    Result loggedIn(User user),
-    Result registering(AuthProviderInfo authInfo),
-    Result loggedOut(bool loggingIn, AuthFailure failure),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult initial(),
+    TResult loggedIn(User user),
+    TResult registering(AuthProviderInfo authInfo),
+    TResult loggedOut(bool loggingIn, AuthFailure failure),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (registering != null) {
@@ -454,11 +454,11 @@ class _$_Registering with DiagnosticableTreeMixin implements _Registering {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result initial(_Initial value),
-    @required Result loggedIn(_LoggedIn value),
-    @required Result registering(_Registering value),
-    @required Result loggedOut(_LoggedOut value),
+  TResult map<TResult extends Object>({
+    @required TResult initial(_Initial value),
+    @required TResult loggedIn(_LoggedIn value),
+    @required TResult registering(_Registering value),
+    @required TResult loggedOut(_LoggedOut value),
   }) {
     assert(initial != null);
     assert(loggedIn != null);
@@ -469,12 +469,12 @@ class _$_Registering with DiagnosticableTreeMixin implements _Registering {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result initial(_Initial value),
-    Result loggedIn(_LoggedIn value),
-    Result registering(_Registering value),
-    Result loggedOut(_LoggedOut value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult initial(_Initial value),
+    TResult loggedIn(_LoggedIn value),
+    TResult registering(_Registering value),
+    TResult loggedOut(_LoggedOut value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (registering != null) {
@@ -580,11 +580,11 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result initial(),
-    @required Result loggedIn(User user),
-    @required Result registering(AuthProviderInfo authInfo),
-    @required Result loggedOut(bool loggingIn, AuthFailure failure),
+  TResult when<TResult extends Object>({
+    @required TResult initial(),
+    @required TResult loggedIn(User user),
+    @required TResult registering(AuthProviderInfo authInfo),
+    @required TResult loggedOut(bool loggingIn, AuthFailure failure),
   }) {
     assert(initial != null);
     assert(loggedIn != null);
@@ -595,12 +595,12 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result initial(),
-    Result loggedIn(User user),
-    Result registering(AuthProviderInfo authInfo),
-    Result loggedOut(bool loggingIn, AuthFailure failure),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult initial(),
+    TResult loggedIn(User user),
+    TResult registering(AuthProviderInfo authInfo),
+    TResult loggedOut(bool loggingIn, AuthFailure failure),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (loggedOut != null) {
@@ -611,11 +611,11 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result initial(_Initial value),
-    @required Result loggedIn(_LoggedIn value),
-    @required Result registering(_Registering value),
-    @required Result loggedOut(_LoggedOut value),
+  TResult map<TResult extends Object>({
+    @required TResult initial(_Initial value),
+    @required TResult loggedIn(_LoggedIn value),
+    @required TResult registering(_Registering value),
+    @required TResult loggedOut(_LoggedOut value),
   }) {
     assert(initial != null);
     assert(loggedIn != null);
@@ -626,12 +626,12 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result initial(_Initial value),
-    Result loggedIn(_LoggedIn value),
-    Result registering(_Registering value),
-    Result loggedOut(_LoggedOut value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult initial(_Initial value),
+    TResult loggedIn(_LoggedIn value),
+    TResult registering(_Registering value),
+    TResult loggedOut(_LoggedOut value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (loggedOut != null) {

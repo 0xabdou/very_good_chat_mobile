@@ -46,38 +46,38 @@ const $AuthFailure = _$AuthFailureTearOff();
 /// @nodoc
 mixin _$AuthFailure {
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result canceledByUser(),
-    @required Result notRegistered(),
-    @required Result local(),
-    @required Result server(),
-    @required Result network(),
+  TResult when<TResult extends Object>({
+    @required TResult canceledByUser(),
+    @required TResult notRegistered(),
+    @required TResult local(),
+    @required TResult server(),
+    @required TResult network(),
   });
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result canceledByUser(),
-    Result notRegistered(),
-    Result local(),
-    Result server(),
-    Result network(),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult canceledByUser(),
+    TResult notRegistered(),
+    TResult local(),
+    TResult server(),
+    TResult network(),
+    @required TResult orElse(),
   });
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result canceledByUser(_CanceledByUser value),
-    @required Result notRegistered(_NotRegistered value),
-    @required Result local(_Local value),
-    @required Result server(_Server value),
-    @required Result network(_Network value),
+  TResult map<TResult extends Object>({
+    @required TResult canceledByUser(_CanceledByUser value),
+    @required TResult notRegistered(_NotRegistered value),
+    @required TResult local(_Local value),
+    @required TResult server(_Server value),
+    @required TResult network(_Network value),
   });
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result canceledByUser(_CanceledByUser value),
-    Result notRegistered(_NotRegistered value),
-    Result local(_Local value),
-    Result server(_Server value),
-    Result network(_Network value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult canceledByUser(_CanceledByUser value),
+    TResult notRegistered(_NotRegistered value),
+    TResult local(_Local value),
+    TResult server(_Server value),
+    TResult network(_Network value),
+    @required TResult orElse(),
   });
 }
 
@@ -135,12 +135,12 @@ class _$_CanceledByUser implements _CanceledByUser {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result canceledByUser(),
-    @required Result notRegistered(),
-    @required Result local(),
-    @required Result server(),
-    @required Result network(),
+  TResult when<TResult extends Object>({
+    @required TResult canceledByUser(),
+    @required TResult notRegistered(),
+    @required TResult local(),
+    @required TResult server(),
+    @required TResult network(),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -152,13 +152,13 @@ class _$_CanceledByUser implements _CanceledByUser {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result canceledByUser(),
-    Result notRegistered(),
-    Result local(),
-    Result server(),
-    Result network(),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult canceledByUser(),
+    TResult notRegistered(),
+    TResult local(),
+    TResult server(),
+    TResult network(),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (canceledByUser != null) {
@@ -169,12 +169,12 @@ class _$_CanceledByUser implements _CanceledByUser {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result canceledByUser(_CanceledByUser value),
-    @required Result notRegistered(_NotRegistered value),
-    @required Result local(_Local value),
-    @required Result server(_Server value),
-    @required Result network(_Network value),
+  TResult map<TResult extends Object>({
+    @required TResult canceledByUser(_CanceledByUser value),
+    @required TResult notRegistered(_NotRegistered value),
+    @required TResult local(_Local value),
+    @required TResult server(_Server value),
+    @required TResult network(_Network value),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -186,13 +186,13 @@ class _$_CanceledByUser implements _CanceledByUser {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result canceledByUser(_CanceledByUser value),
-    Result notRegistered(_NotRegistered value),
-    Result local(_Local value),
-    Result server(_Server value),
-    Result network(_Network value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult canceledByUser(_CanceledByUser value),
+    TResult notRegistered(_NotRegistered value),
+    TResult local(_Local value),
+    TResult server(_Server value),
+    TResult network(_Network value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (canceledByUser != null) {
@@ -243,12 +243,12 @@ class _$_NotRegistered implements _NotRegistered {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result canceledByUser(),
-    @required Result notRegistered(),
-    @required Result local(),
-    @required Result server(),
-    @required Result network(),
+  TResult when<TResult extends Object>({
+    @required TResult canceledByUser(),
+    @required TResult notRegistered(),
+    @required TResult local(),
+    @required TResult server(),
+    @required TResult network(),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -260,13 +260,13 @@ class _$_NotRegistered implements _NotRegistered {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result canceledByUser(),
-    Result notRegistered(),
-    Result local(),
-    Result server(),
-    Result network(),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult canceledByUser(),
+    TResult notRegistered(),
+    TResult local(),
+    TResult server(),
+    TResult network(),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (notRegistered != null) {
@@ -277,12 +277,12 @@ class _$_NotRegistered implements _NotRegistered {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result canceledByUser(_CanceledByUser value),
-    @required Result notRegistered(_NotRegistered value),
-    @required Result local(_Local value),
-    @required Result server(_Server value),
-    @required Result network(_Network value),
+  TResult map<TResult extends Object>({
+    @required TResult canceledByUser(_CanceledByUser value),
+    @required TResult notRegistered(_NotRegistered value),
+    @required TResult local(_Local value),
+    @required TResult server(_Server value),
+    @required TResult network(_Network value),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -294,13 +294,13 @@ class _$_NotRegistered implements _NotRegistered {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result canceledByUser(_CanceledByUser value),
-    Result notRegistered(_NotRegistered value),
-    Result local(_Local value),
-    Result server(_Server value),
-    Result network(_Network value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult canceledByUser(_CanceledByUser value),
+    TResult notRegistered(_NotRegistered value),
+    TResult local(_Local value),
+    TResult server(_Server value),
+    TResult network(_Network value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (notRegistered != null) {
@@ -349,12 +349,12 @@ class _$_Local implements _Local {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result canceledByUser(),
-    @required Result notRegistered(),
-    @required Result local(),
-    @required Result server(),
-    @required Result network(),
+  TResult when<TResult extends Object>({
+    @required TResult canceledByUser(),
+    @required TResult notRegistered(),
+    @required TResult local(),
+    @required TResult server(),
+    @required TResult network(),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -366,13 +366,13 @@ class _$_Local implements _Local {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result canceledByUser(),
-    Result notRegistered(),
-    Result local(),
-    Result server(),
-    Result network(),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult canceledByUser(),
+    TResult notRegistered(),
+    TResult local(),
+    TResult server(),
+    TResult network(),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (local != null) {
@@ -383,12 +383,12 @@ class _$_Local implements _Local {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result canceledByUser(_CanceledByUser value),
-    @required Result notRegistered(_NotRegistered value),
-    @required Result local(_Local value),
-    @required Result server(_Server value),
-    @required Result network(_Network value),
+  TResult map<TResult extends Object>({
+    @required TResult canceledByUser(_CanceledByUser value),
+    @required TResult notRegistered(_NotRegistered value),
+    @required TResult local(_Local value),
+    @required TResult server(_Server value),
+    @required TResult network(_Network value),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -400,13 +400,13 @@ class _$_Local implements _Local {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result canceledByUser(_CanceledByUser value),
-    Result notRegistered(_NotRegistered value),
-    Result local(_Local value),
-    Result server(_Server value),
-    Result network(_Network value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult canceledByUser(_CanceledByUser value),
+    TResult notRegistered(_NotRegistered value),
+    TResult local(_Local value),
+    TResult server(_Server value),
+    TResult network(_Network value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (local != null) {
@@ -455,12 +455,12 @@ class _$_Server implements _Server {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result canceledByUser(),
-    @required Result notRegistered(),
-    @required Result local(),
-    @required Result server(),
-    @required Result network(),
+  TResult when<TResult extends Object>({
+    @required TResult canceledByUser(),
+    @required TResult notRegistered(),
+    @required TResult local(),
+    @required TResult server(),
+    @required TResult network(),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -472,13 +472,13 @@ class _$_Server implements _Server {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result canceledByUser(),
-    Result notRegistered(),
-    Result local(),
-    Result server(),
-    Result network(),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult canceledByUser(),
+    TResult notRegistered(),
+    TResult local(),
+    TResult server(),
+    TResult network(),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (server != null) {
@@ -489,12 +489,12 @@ class _$_Server implements _Server {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result canceledByUser(_CanceledByUser value),
-    @required Result notRegistered(_NotRegistered value),
-    @required Result local(_Local value),
-    @required Result server(_Server value),
-    @required Result network(_Network value),
+  TResult map<TResult extends Object>({
+    @required TResult canceledByUser(_CanceledByUser value),
+    @required TResult notRegistered(_NotRegistered value),
+    @required TResult local(_Local value),
+    @required TResult server(_Server value),
+    @required TResult network(_Network value),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -506,13 +506,13 @@ class _$_Server implements _Server {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result canceledByUser(_CanceledByUser value),
-    Result notRegistered(_NotRegistered value),
-    Result local(_Local value),
-    Result server(_Server value),
-    Result network(_Network value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult canceledByUser(_CanceledByUser value),
+    TResult notRegistered(_NotRegistered value),
+    TResult local(_Local value),
+    TResult server(_Server value),
+    TResult network(_Network value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (server != null) {
@@ -561,12 +561,12 @@ class _$_Network implements _Network {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result canceledByUser(),
-    @required Result notRegistered(),
-    @required Result local(),
-    @required Result server(),
-    @required Result network(),
+  TResult when<TResult extends Object>({
+    @required TResult canceledByUser(),
+    @required TResult notRegistered(),
+    @required TResult local(),
+    @required TResult server(),
+    @required TResult network(),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -578,13 +578,13 @@ class _$_Network implements _Network {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result canceledByUser(),
-    Result notRegistered(),
-    Result local(),
-    Result server(),
-    Result network(),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult canceledByUser(),
+    TResult notRegistered(),
+    TResult local(),
+    TResult server(),
+    TResult network(),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (network != null) {
@@ -595,12 +595,12 @@ class _$_Network implements _Network {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result canceledByUser(_CanceledByUser value),
-    @required Result notRegistered(_NotRegistered value),
-    @required Result local(_Local value),
-    @required Result server(_Server value),
-    @required Result network(_Network value),
+  TResult map<TResult extends Object>({
+    @required TResult canceledByUser(_CanceledByUser value),
+    @required TResult notRegistered(_NotRegistered value),
+    @required TResult local(_Local value),
+    @required TResult server(_Server value),
+    @required TResult network(_Network value),
   }) {
     assert(canceledByUser != null);
     assert(notRegistered != null);
@@ -612,13 +612,13 @@ class _$_Network implements _Network {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result canceledByUser(_CanceledByUser value),
-    Result notRegistered(_NotRegistered value),
-    Result local(_Local value),
-    Result server(_Server value),
-    Result network(_Network value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult canceledByUser(_CanceledByUser value),
+    TResult notRegistered(_NotRegistered value),
+    TResult local(_Local value),
+    TResult server(_Server value),
+    TResult network(_Network value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (network != null) {

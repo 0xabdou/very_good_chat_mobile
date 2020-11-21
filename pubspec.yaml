@@ -67,7 +67,7 @@ dev_dependencies:
   # Runs code generation builds
   build_runner: ^1.10.4
   # Awesome code generator
-  freezed: ^0.12.2
+  freezed: 0.12.3
   # Code generator for json serializations
   json_serializable: ^3.5.0
   # Mocks for testing
