@@ -3,6 +3,8 @@
   <img width="256" src="https://raw.githubusercontent.com/aouahib/very_good_chat/master/assets/images/logo/vgc.png">
 </p>
 
+[![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
+
 A very good chat app :)
 
 I wanted to show Very Good Ventures how good of a coder I am.
