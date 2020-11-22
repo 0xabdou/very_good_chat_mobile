@@ -10,10 +10,10 @@ abstract class IAuthRemoteDataSource {
   /// Returns the user associated to the google access token
   /// If no user exists, throws a DioError with code 404, to indicate that
   /// the user has to register first
-  Future<UserCreated> signInWithGoogle(String accessToken);
+  Future<SignedInUser> signInWithGoogle(String accessToken);
 
   /// Register a user with google
-  Future<UserCreated> registerWithGoogle(UserToCreate user);
+  Future<SignedInUser> registerWithGoogle(UserToCreate user);
 
   /// Get the signed in user
   Future<User> getSignedInUser();
@@ -28,7 +28,7 @@ abstract class IAuthRemoteDataSource {
 /// A fake implementation of [IAuthRemoteDataSource]
 @LazySingleton(as: IAuthRemoteDataSource)
 class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
-  static UserCreated _user = const UserCreated(
+  static SignedInUser _user = const SignedInUser(
     accessToken: 'accessToken',
     id: 'userId',
     username: 'abdou.ouahib',
@@ -38,7 +38,7 @@ class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
   );
 
   @override
-  Future<UserCreated> registerWithGoogle(
+  Future<SignedInUser> registerWithGoogle(
     UserToCreate user,
   ) async {
     await Future.delayed(const Duration(seconds: 1));
@@ -46,7 +46,7 @@ class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
   }
 
   @override
-  Future<UserCreated> signInWithGoogle(String accessToken) async {
+  Future<SignedInUser> signInWithGoogle(String accessToken) async {
     await Future.delayed(const Duration(seconds: 1));
     throw DioError(
       type: DioErrorType.RESPONSE,

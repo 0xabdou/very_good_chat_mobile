@@ -195,22 +195,22 @@ abstract class _UserToCreate implements UserToCreate {
   _$UserToCreateCopyWith<_UserToCreate> get copyWith;
 }
 
-UserCreated _$UserCreatedFromJson(Map<String, dynamic> json) {
-  return _UserCreated.fromJson(json);
+SignedInUser _$SignedInUserFromJson(Map<String, dynamic> json) {
+  return _SignedInUser.fromJson(json);
 }
 
 /// @nodoc
-class _$UserCreatedTearOff {
-  const _$UserCreatedTearOff();
+class _$SignedInUserTearOff {
+  const _$SignedInUserTearOff();
 
 // ignore: unused_element
-  _UserCreated call(
+  _SignedInUser call(
       {@required @requiredNonNull String accessToken,
       @required @requiredNonNull String id,
       @required @requiredNonNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl}) {
-    return _UserCreated(
+    return _SignedInUser(
       accessToken: accessToken,
       id: id,
       username: username,
@@ -220,17 +220,17 @@ class _$UserCreatedTearOff {
   }
 
 // ignore: unused_element
-  UserCreated fromJson(Map<String, Object> json) {
-    return UserCreated.fromJson(json);
+  SignedInUser fromJson(Map<String, Object> json) {
+    return SignedInUser.fromJson(json);
   }
 }
 
 /// @nodoc
 // ignore: unused_element
-const $UserCreated = _$UserCreatedTearOff();
+const $SignedInUser = _$SignedInUserTearOff();
 
 /// @nodoc
-mixin _$UserCreated {
+mixin _$SignedInUser {
   @requiredNonNull
   String get accessToken;
   @requiredNonNull
@@ -243,14 +243,14 @@ mixin _$UserCreated {
   String get photoUrl;
 
   Map<String, dynamic> toJson();
-  $UserCreatedCopyWith<UserCreated> get copyWith;
+  $SignedInUserCopyWith<SignedInUser> get copyWith;
 }
 
 /// @nodoc
-abstract class $UserCreatedCopyWith<$Res> {
-  factory $UserCreatedCopyWith(
-          UserCreated value, $Res Function(UserCreated) then) =
-      _$UserCreatedCopyWithImpl<$Res>;
+abstract class $SignedInUserCopyWith<$Res> {
+  factory $SignedInUserCopyWith(
+          SignedInUser value, $Res Function(SignedInUser) then) =
+      _$SignedInUserCopyWithImpl<$Res>;
   $Res call(
       {@requiredNonNull String accessToken,
       @requiredNonNull String id,
@@ -260,12 +260,12 @@ abstract class $UserCreatedCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserCreatedCopyWithImpl<$Res> implements $UserCreatedCopyWith<$Res> {
-  _$UserCreatedCopyWithImpl(this._value, this._then);
+class _$SignedInUserCopyWithImpl<$Res> implements $SignedInUserCopyWith<$Res> {
+  _$SignedInUserCopyWithImpl(this._value, this._then);
 
-  final UserCreated _value;
+  final SignedInUser _value;
   // ignore: unused_field
-  final $Res Function(UserCreated) _then;
+  final $Res Function(SignedInUser) _then;
 
   @override
   $Res call({
@@ -287,11 +287,11 @@ class _$UserCreatedCopyWithImpl<$Res> implements $UserCreatedCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$UserCreatedCopyWith<$Res>
-    implements $UserCreatedCopyWith<$Res> {
-  factory _$UserCreatedCopyWith(
-          _UserCreated value, $Res Function(_UserCreated) then) =
-      __$UserCreatedCopyWithImpl<$Res>;
+abstract class _$SignedInUserCopyWith<$Res>
+    implements $SignedInUserCopyWith<$Res> {
+  factory _$SignedInUserCopyWith(
+          _SignedInUser value, $Res Function(_SignedInUser) then) =
+      __$SignedInUserCopyWithImpl<$Res>;
   @override
   $Res call(
       {@requiredNonNull String accessToken,
@@ -302,14 +302,14 @@ abstract class _$UserCreatedCopyWith<$Res>
 }
 
 /// @nodoc
-class __$UserCreatedCopyWithImpl<$Res> extends _$UserCreatedCopyWithImpl<$Res>
-    implements _$UserCreatedCopyWith<$Res> {
-  __$UserCreatedCopyWithImpl(
-      _UserCreated _value, $Res Function(_UserCreated) _then)
-      : super(_value, (v) => _then(v as _UserCreated));
+class __$SignedInUserCopyWithImpl<$Res> extends _$SignedInUserCopyWithImpl<$Res>
+    implements _$SignedInUserCopyWith<$Res> {
+  __$SignedInUserCopyWithImpl(
+      _SignedInUser _value, $Res Function(_SignedInUser) _then)
+      : super(_value, (v) => _then(v as _SignedInUser));
 
   @override
-  _UserCreated get _value => super._value as _UserCreated;
+  _SignedInUser get _value => super._value as _SignedInUser;
 
   @override
   $Res call({
@@ -319,7 +319,7 @@ class __$UserCreatedCopyWithImpl<$Res> extends _$UserCreatedCopyWithImpl<$Res>
     Object name = freezed,
     Object photoUrl = freezed,
   }) {
-    return _then(_UserCreated(
+    return _then(_SignedInUser(
       accessToken:
           accessToken == freezed ? _value.accessToken : accessToken as String,
       id: id == freezed ? _value.id : id as String,
@@ -333,8 +333,8 @@ class __$UserCreatedCopyWithImpl<$Res> extends _$UserCreatedCopyWithImpl<$Res>
 @JsonSerializable()
 
 /// @nodoc
-class _$_UserCreated implements _UserCreated {
-  const _$_UserCreated(
+class _$_SignedInUser implements _SignedInUser {
+  const _$_SignedInUser(
       {@required @requiredNonNull this.accessToken,
       @required @requiredNonNull this.id,
       @required @requiredNonNull this.username,
@@ -344,8 +344,8 @@ class _$_UserCreated implements _UserCreated {
         assert(id != null),
         assert(username != null);
 
-  factory _$_UserCreated.fromJson(Map<String, dynamic> json) =>
-      _$_$_UserCreatedFromJson(json);
+  factory _$_SignedInUser.fromJson(Map<String, dynamic> json) =>
+      _$_$_SignedInUserFromJson(json);
 
   @override
   @requiredNonNull
@@ -365,13 +365,13 @@ class _$_UserCreated implements _UserCreated {
 
   @override
   String toString() {
-    return 'UserCreated(accessToken: $accessToken, id: $id, username: $username, name: $name, photoUrl: $photoUrl)';
+    return 'SignedInUser(accessToken: $accessToken, id: $id, username: $username, name: $name, photoUrl: $photoUrl)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _UserCreated &&
+        (other is _SignedInUser &&
             (identical(other.accessToken, accessToken) ||
                 const DeepCollectionEquality()
                     .equals(other.accessToken, accessToken)) &&
@@ -397,25 +397,25 @@ class _$_UserCreated implements _UserCreated {
       const DeepCollectionEquality().hash(photoUrl);
 
   @override
-  _$UserCreatedCopyWith<_UserCreated> get copyWith =>
-      __$UserCreatedCopyWithImpl<_UserCreated>(this, _$identity);
+  _$SignedInUserCopyWith<_SignedInUser> get copyWith =>
+      __$SignedInUserCopyWithImpl<_SignedInUser>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_UserCreatedToJson(this);
+    return _$_$_SignedInUserToJson(this);
   }
 }
 
-abstract class _UserCreated implements UserCreated {
-  const factory _UserCreated(
+abstract class _SignedInUser implements SignedInUser {
+  const factory _SignedInUser(
       {@required @requiredNonNull String accessToken,
       @required @requiredNonNull String id,
       @required @requiredNonNull String username,
       @doNotIncludeIfNull String name,
-      @doNotIncludeIfNull String photoUrl}) = _$_UserCreated;
+      @doNotIncludeIfNull String photoUrl}) = _$_SignedInUser;
 
-  factory _UserCreated.fromJson(Map<String, dynamic> json) =
-      _$_UserCreated.fromJson;
+  factory _SignedInUser.fromJson(Map<String, dynamic> json) =
+      _$_SignedInUser.fromJson;
 
   @override
   @requiredNonNull
@@ -433,7 +433,7 @@ abstract class _UserCreated implements UserCreated {
   @doNotIncludeIfNull
   String get photoUrl;
   @override
-  _$UserCreatedCopyWith<_UserCreated> get copyWith;
+  _$SignedInUserCopyWith<_SignedInUser> get copyWith;
 }
 
 UserUpdates _$UserUpdatesFromJson(Map<String, dynamic> json) {

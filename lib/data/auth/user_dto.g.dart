@@ -6,11 +6,11 @@ part of 'user_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UserCreated _$_$_UserCreatedFromJson(Map<String, dynamic> json) {
+_$_SignedInUser _$_$_SignedInUserFromJson(Map<String, dynamic> json) {
   $checkKeys(json,
       requiredKeys: const ['accessToken', 'id', 'username'],
       disallowNullValues: const ['accessToken', 'id', 'username']);
-  return _$_UserCreated(
+  return _$_SignedInUser(
     accessToken: json['accessToken'] as String,
     id: json['id'] as String,
     username: json['username'] as String,
@@ -19,7 +19,7 @@ _$_UserCreated _$_$_UserCreatedFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$_$_UserCreatedToJson(_$_UserCreated instance) {
+Map<String, dynamic> _$_$_SignedInUserToJson(_$_SignedInUser instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

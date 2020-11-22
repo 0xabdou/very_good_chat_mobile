@@ -247,7 +247,6 @@ class _ProfileImage extends StatelessWidget {
         state.photoUrl,
       );
     }
-    // TODO: provide proper placeholder
-    return const AssetImage('');
+    return const AssetImage('assets/images/profile_photo.png');
   }
 }

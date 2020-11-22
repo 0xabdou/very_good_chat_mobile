@@ -8,7 +8,7 @@ import 'package:very_good_chat/domain/auth/user.dart';
 /// An interface for local data sources that operate with auth data
 abstract class IAuthLocalDataSource {
   /// Persist a [user] locally
-  Future<Unit> persistUser(UserCreated user);
+  Future<Unit> persistUser(SignedInUser user);
 
   /// Update the persisted user info
   Future<Unit> updateUserInfo(UserUpdates updates);
@@ -81,7 +81,7 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
   }
 
   @override
-  Future<Unit> persistUser(UserCreated user) async {
+  Future<Unit> persistUser(SignedInUser user) async {
     await _db.insert(userTable, user.toJson());
     return unit;
   }

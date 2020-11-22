@@ -18,7 +18,7 @@ void main() {
     'username': 'username',
     'photoUrl': 'photoUrl',
   };
-  final userCreated = UserCreated(
+  final userCreated = SignedInUser(
     accessToken: jsonReceived['accessToken'] as String,
     id: jsonReceived['id'] as String,
     username: jsonReceived['username'] as String,
@@ -30,7 +30,7 @@ void main() {
     test('should throw an exception if a required key is missing', () async {
       // act and assert
       expect(
-        () => UserCreated.fromJson(jsonReceivedWithMissingKey),
+        () => SignedInUser.fromJson(jsonReceivedWithMissingKey),
         throwsA(isInstanceOf<BadKeyException>()),
       );
     });
@@ -38,14 +38,14 @@ void main() {
     test('should throw an exception if a required key is null', () async {
       // act and assert
       expect(
-        () => UserCreated.fromJson(jsonReceivedWithNullKey),
+        () => SignedInUser.fromJson(jsonReceivedWithNullKey),
         throwsA(isInstanceOf<BadKeyException>()),
       );
     });
 
     test('should decode created user dto', () async {
       // act
-      final user = UserCreated.fromJson(jsonReceived);
+      final user = SignedInUser.fromJson(jsonReceived);
       // assert
       expect(user, userCreated);
     });

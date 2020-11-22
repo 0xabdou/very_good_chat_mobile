@@ -20,21 +20,20 @@ abstract class UserToCreate with _$UserToCreate {
 }
 
 /// A class that hold the data of a signed in user
-// TODO: Change class name
 @freezed
-abstract class UserCreated with _$UserCreated {
+abstract class SignedInUser with _$SignedInUser{
   /// Constructor
-  const factory UserCreated({
+  const factory SignedInUser({
     @requiredNonNull @required String accessToken,
     @requiredNonNull @required String id,
     @requiredNonNull @required String username,
     @doNotIncludeIfNull String name,
     @doNotIncludeIfNull String photoUrl,
-  }) = _UserCreated;
+  }) = _SignedInUser;
 
   /// Serializes this object to json
-  factory UserCreated.fromJson(Map<String, dynamic> json) =>
-      _$UserCreatedFromJson(json);
+  factory SignedInUser.fromJson(Map<String, dynamic> json) =>
+      _$SignedInUserFromJson(json);
 }
 
 /// A class that holds the data used to update a user

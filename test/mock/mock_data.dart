@@ -11,7 +11,7 @@ class SqfliteDatabaseException extends Mock implements DatabaseException {}
 
 // Auth
 const user = User(id: 'id', username: 'username');
-const userCreated = UserCreated(
+const userCreated = SignedInUser(
   accessToken: 'accessToken',
   id: 'id',
   username: 'username',
