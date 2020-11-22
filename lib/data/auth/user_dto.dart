@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
-import 'package:very_good_chat/shared/custom_json_annotations.dart';
+import 'package:very_good_chat/shared/utils/serialization_utils.dart';
 
 part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
@@ -21,12 +21,12 @@ abstract class UserToCreate with _$UserToCreate {
 
 /// A class that hold the data of a signed in user
 @freezed
-abstract class SignedInUser with _$SignedInUser{
+abstract class SignedInUser with _$SignedInUser {
   /// Constructor
   const factory SignedInUser({
-    @requiredNonNull @required String accessToken,
-    @requiredNonNull @required String id,
-    @requiredNonNull @required String username,
+    @requiredNotNull @required String accessToken,
+    @requiredNotNull @required String id,
+    @requiredNotNull @required String username,
     @doNotIncludeIfNull String name,
     @doNotIncludeIfNull String photoUrl,
   }) = _SignedInUser;

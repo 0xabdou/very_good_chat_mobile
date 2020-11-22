@@ -15,7 +15,7 @@ _$_Friend _$_$_FriendFromJson(Map<String, dynamic> json) {
     username: json['username'] as String,
     name: json['name'] as String,
     photoUrl: json['photoUrl'] as String,
-    lastSeen: _lastSeenFromJson(json['lastSeen'] as int),
+    lastSeen: dateTimeFromJson(json['lastSeen'] as int),
   );
 }
 
@@ -32,6 +32,6 @@ Map<String, dynamic> _$_$_FriendToJson(_$_Friend instance) {
   writeNotNull('username', instance.username);
   writeNotNull('name', instance.name);
   writeNotNull('photoUrl', instance.photoUrl);
-  writeNotNull('lastSeen', _lastSeenToJson(instance.lastSeen));
+  writeNotNull('lastSeen', dateTimeToJson(instance.lastSeen));
   return val;
 }

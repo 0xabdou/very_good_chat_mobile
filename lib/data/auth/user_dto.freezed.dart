@@ -205,9 +205,9 @@ class _$SignedInUserTearOff {
 
 // ignore: unused_element
   _SignedInUser call(
-      {@required @requiredNonNull String accessToken,
-      @required @requiredNonNull String id,
-      @required @requiredNonNull String username,
+      {@required @requiredNotNull String accessToken,
+      @required @requiredNotNull String id,
+      @required @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl}) {
     return _SignedInUser(
@@ -231,11 +231,11 @@ const $SignedInUser = _$SignedInUserTearOff();
 
 /// @nodoc
 mixin _$SignedInUser {
-  @requiredNonNull
+  @requiredNotNull
   String get accessToken;
-  @requiredNonNull
+  @requiredNotNull
   String get id;
-  @requiredNonNull
+  @requiredNotNull
   String get username;
   @doNotIncludeIfNull
   String get name;
@@ -252,9 +252,9 @@ abstract class $SignedInUserCopyWith<$Res> {
           SignedInUser value, $Res Function(SignedInUser) then) =
       _$SignedInUserCopyWithImpl<$Res>;
   $Res call(
-      {@requiredNonNull String accessToken,
-      @requiredNonNull String id,
-      @requiredNonNull String username,
+      {@requiredNotNull String accessToken,
+      @requiredNotNull String id,
+      @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl});
 }
@@ -294,9 +294,9 @@ abstract class _$SignedInUserCopyWith<$Res>
       __$SignedInUserCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@requiredNonNull String accessToken,
-      @requiredNonNull String id,
-      @requiredNonNull String username,
+      {@requiredNotNull String accessToken,
+      @requiredNotNull String id,
+      @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl});
 }
@@ -335,9 +335,9 @@ class __$SignedInUserCopyWithImpl<$Res> extends _$SignedInUserCopyWithImpl<$Res>
 /// @nodoc
 class _$_SignedInUser implements _SignedInUser {
   const _$_SignedInUser(
-      {@required @requiredNonNull this.accessToken,
-      @required @requiredNonNull this.id,
-      @required @requiredNonNull this.username,
+      {@required @requiredNotNull this.accessToken,
+      @required @requiredNotNull this.id,
+      @required @requiredNotNull this.username,
       @doNotIncludeIfNull this.name,
       @doNotIncludeIfNull this.photoUrl})
       : assert(accessToken != null),
@@ -348,13 +348,13 @@ class _$_SignedInUser implements _SignedInUser {
       _$_$_SignedInUserFromJson(json);
 
   @override
-  @requiredNonNull
+  @requiredNotNull
   final String accessToken;
   @override
-  @requiredNonNull
+  @requiredNotNull
   final String id;
   @override
-  @requiredNonNull
+  @requiredNotNull
   final String username;
   @override
   @doNotIncludeIfNull
@@ -408,9 +408,9 @@ class _$_SignedInUser implements _SignedInUser {
 
 abstract class _SignedInUser implements SignedInUser {
   const factory _SignedInUser(
-      {@required @requiredNonNull String accessToken,
-      @required @requiredNonNull String id,
-      @required @requiredNonNull String username,
+      {@required @requiredNotNull String accessToken,
+      @required @requiredNotNull String id,
+      @required @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl}) = _$_SignedInUser;
 
@@ -418,13 +418,13 @@ abstract class _SignedInUser implements SignedInUser {
       _$_SignedInUser.fromJson;
 
   @override
-  @requiredNonNull
+  @requiredNotNull
   String get accessToken;
   @override
-  @requiredNonNull
+  @requiredNotNull
   String get id;
   @override
-  @requiredNonNull
+  @requiredNotNull
   String get username;
   @override
   @doNotIncludeIfNull

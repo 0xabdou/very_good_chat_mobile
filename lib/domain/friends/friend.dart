@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:very_good_chat/shared/custom_json_annotations.dart';
+import 'package:very_good_chat/shared/utils/serialization_utils.dart';
 
 part 'friend.freezed.dart';
 part 'friend.g.dart';
@@ -9,8 +9,8 @@ part 'friend.g.dart';
 abstract class Friend with _$Friend {
   /// Constructor
   const factory Friend({
-    @requiredNonNull @required String id,
-    @requiredNonNull @required String username,
+    @requiredNotNull @required String id,
+    @requiredNotNull @required String username,
     @doNotIncludeIfNull String name,
     @doNotIncludeIfNull String photoUrl,
     @_lastSeenJsonKey DateTime lastSeen,
@@ -21,11 +21,7 @@ abstract class Friend with _$Friend {
 }
 
 const _lastSeenJsonKey = JsonKey(
-  toJson: _lastSeenToJson,
-  fromJson: _lastSeenFromJson,
+  toJson: dateTimeToJson,
+  fromJson: dateTimeFromJson,
   includeIfNull: false,
 );
-
-int _lastSeenToJson(DateTime d) => d.millisecondsSinceEpoch;
-
-DateTime _lastSeenFromJson(int ms) => DateTime.fromMillisecondsSinceEpoch(ms);

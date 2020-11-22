@@ -18,8 +18,8 @@ class _$FriendTearOff {
 
 // ignore: unused_element
   _Friend call(
-      {@required @requiredNonNull String id,
-      @required @requiredNonNull String username,
+      {@required @requiredNotNull String id,
+      @required @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl,
       @_lastSeenJsonKey DateTime lastSeen}) {
@@ -44,9 +44,9 @@ const $Friend = _$FriendTearOff();
 
 /// @nodoc
 mixin _$Friend {
-  @requiredNonNull
+  @requiredNotNull
   String get id;
-  @requiredNonNull
+  @requiredNotNull
   String get username;
   @doNotIncludeIfNull
   String get name;
@@ -64,8 +64,8 @@ abstract class $FriendCopyWith<$Res> {
   factory $FriendCopyWith(Friend value, $Res Function(Friend) then) =
       _$FriendCopyWithImpl<$Res>;
   $Res call(
-      {@requiredNonNull String id,
-      @requiredNonNull String username,
+      {@requiredNotNull String id,
+      @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl,
       @_lastSeenJsonKey DateTime lastSeen});
@@ -103,8 +103,8 @@ abstract class _$FriendCopyWith<$Res> implements $FriendCopyWith<$Res> {
       __$FriendCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@requiredNonNull String id,
-      @requiredNonNull String username,
+      {@requiredNotNull String id,
+      @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl,
       @_lastSeenJsonKey DateTime lastSeen});
@@ -142,8 +142,8 @@ class __$FriendCopyWithImpl<$Res> extends _$FriendCopyWithImpl<$Res>
 /// @nodoc
 class _$_Friend implements _Friend {
   const _$_Friend(
-      {@required @requiredNonNull this.id,
-      @required @requiredNonNull this.username,
+      {@required @requiredNotNull this.id,
+      @required @requiredNotNull this.username,
       @doNotIncludeIfNull this.name,
       @doNotIncludeIfNull this.photoUrl,
       @_lastSeenJsonKey this.lastSeen})
@@ -154,10 +154,10 @@ class _$_Friend implements _Friend {
       _$_$_FriendFromJson(json);
 
   @override
-  @requiredNonNull
+  @requiredNotNull
   final String id;
   @override
-  @requiredNonNull
+  @requiredNotNull
   final String username;
   @override
   @doNotIncludeIfNull
@@ -214,8 +214,8 @@ class _$_Friend implements _Friend {
 
 abstract class _Friend implements Friend {
   const factory _Friend(
-      {@required @requiredNonNull String id,
-      @required @requiredNonNull String username,
+      {@required @requiredNotNull String id,
+      @required @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl,
       @_lastSeenJsonKey DateTime lastSeen}) = _$_Friend;
@@ -223,10 +223,10 @@ abstract class _Friend implements Friend {
   factory _Friend.fromJson(Map<String, dynamic> json) = _$_Friend.fromJson;
 
   @override
-  @requiredNonNull
+  @requiredNotNull
   String get id;
   @override
-  @requiredNonNull
+  @requiredNotNull
   String get username;
   @override
   @doNotIncludeIfNull

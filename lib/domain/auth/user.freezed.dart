@@ -18,8 +18,8 @@ class _$UserTearOff {
 
 // ignore: unused_element
   _User call(
-      {@required @requiredNonNull String id,
-      @required @requiredNonNull String username,
+      {@required @requiredNotNull String id,
+      @required @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl}) {
     return _User(
@@ -42,9 +42,9 @@ const $User = _$UserTearOff();
 
 /// @nodoc
 mixin _$User {
-  @requiredNonNull
+  @requiredNotNull
   String get id;
-  @requiredNonNull
+  @requiredNotNull
   String get username;
   @doNotIncludeIfNull
   String get name;
@@ -60,8 +60,8 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res>;
   $Res call(
-      {@requiredNonNull String id,
-      @requiredNonNull String username,
+      {@requiredNotNull String id,
+      @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl});
 }
@@ -96,8 +96,8 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$UserCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@requiredNonNull String id,
-      @requiredNonNull String username,
+      {@requiredNotNull String id,
+      @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl});
 }
@@ -132,8 +132,8 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
 /// @nodoc
 class _$_User implements _User {
   const _$_User(
-      {@required @requiredNonNull this.id,
-      @required @requiredNonNull this.username,
+      {@required @requiredNotNull this.id,
+      @required @requiredNotNull this.username,
       @doNotIncludeIfNull this.name,
       @doNotIncludeIfNull this.photoUrl})
       : assert(id != null),
@@ -143,10 +143,10 @@ class _$_User implements _User {
       _$_$_UserFromJson(json);
 
   @override
-  @requiredNonNull
+  @requiredNotNull
   final String id;
   @override
-  @requiredNonNull
+  @requiredNotNull
   final String username;
   @override
   @doNotIncludeIfNull
@@ -196,18 +196,18 @@ class _$_User implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {@required @requiredNonNull String id,
-      @required @requiredNonNull String username,
+      {@required @requiredNotNull String id,
+      @required @requiredNotNull String username,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
   @override
-  @requiredNonNull
+  @requiredNotNull
   String get id;
   @override
-  @requiredNonNull
+  @requiredNotNull
   String get username;
   @override
   @doNotIncludeIfNull
