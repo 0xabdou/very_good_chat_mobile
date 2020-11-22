@@ -41,7 +41,10 @@ class AuthCubit extends Cubit<AuthState> {
             remoteUserResult.fold(
               (f) {},
               (remoteUser) {
-                emit(AuthState.loggedIn(remoteUser));
+                state.maybeMap(
+                  loggedIn: (_) => emit(AuthState.loggedIn(remoteUser)),
+                  orElse: () {},
+                );
               },
             );
           },
@@ -104,7 +107,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   /// Logs out the user and emits the logged out state
-  Future<void> logout() async {
+  void logout() async {
     // ignore: unawaited_futures
     _repository.logout();
     emit(const AuthState.loggedOut());

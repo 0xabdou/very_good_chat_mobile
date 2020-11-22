@@ -37,7 +37,8 @@ void main() {
 
       blocTest<AuthCubit, AuthState>(
         'should emit [loggedIn(localUser), loggedIn(remoteUser)] if a user is '
-        'logged in and the remote user was fetched successfully',
+        'logged in and the remote user was fetched successfully '
+        'and the user is still logged in',
         build: () {
           when(mockRepository.getRemoteUser())
               .thenAnswer((_) async => right(remoteUser));
@@ -52,6 +53,31 @@ void main() {
           verify(mockRepository.getPersistedUser()).called(1);
           verify(mockRepository.getRemoteUser()).called(1);
           verifyNoMoreInteractions(mockRepository);
+        },
+      );
+
+      blocTest<AuthCubit, AuthState>(
+        'should emit [loggedIn(localUser), loggedOut] if a user is '
+        'logged in and the remote user was fetched successfully '
+        'but the user logged out before it was fetched',
+        build: () {
+          when(mockRepository.getRemoteUser()).thenAnswer((_) => Future.delayed(
+                const Duration(seconds: 2),
+                () => right(user),
+              ));
+          return authCubit;
+        },
+        act: (cubit) async {
+          await cubit.checkAuthStatus();
+          cubit.logout();
+        },
+        expect: [
+          const AuthState.loggedIn(user),
+          const AuthState.loggedOut(),
+        ],
+        verify: (_) {
+          verify(mockRepository.getPersistedUser()).called(1);
+          verify(mockRepository.getRemoteUser()).called(1);
         },
       );
 
