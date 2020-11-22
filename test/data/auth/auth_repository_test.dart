@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mockito/mockito.dart';
@@ -267,16 +268,35 @@ void main() {
       verifyZeroInteractions(mockLocalDS);
     });
 
-    test('should return a failure if google sign in throws', () async {
-      // arrange
-      when(mockGoogleSI.signIn()).thenThrow(platformException);
-      // act
-      final result = await authRepository.signInWithGoogle();
-      // assert
-      expect(result, left(const AuthFailure.local()));
-      verifyZeroInteractions(mockRemoteDS);
-      verifyZeroInteractions(mockLocalDS);
-    });
+    test(
+      'should return a network failure if google sign in throws one',
+      () async {
+        // arrange
+        when(mockGoogleSI.signIn()).thenThrow(
+          PlatformException(code: 'network_error'),
+        );
+        // act
+        final result = await authRepository.signInWithGoogle();
+        // assert
+        expect(result, left(const AuthFailure.network()));
+        verifyZeroInteractions(mockRemoteDS);
+        verifyZeroInteractions(mockLocalDS);
+      },
+    );
+
+    test(
+      'should return a local failure if google sign in throws something else',
+      () async {
+        // arrange
+        when(mockGoogleSI.signIn()).thenThrow(platformException);
+        // act
+        final result = await authRepository.signInWithGoogle();
+        // assert
+        expect(result, left(const AuthFailure.local()));
+        verifyZeroInteractions(mockRemoteDS);
+        verifyZeroInteractions(mockLocalDS);
+      },
+    );
 
     test('should return a failure if there was a server error', () async {
       // arrange

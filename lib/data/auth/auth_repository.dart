@@ -118,6 +118,7 @@ class AuthRepository implements IAuthRepository {
       return right(unit);
     } on PlatformException catch (e) {
       logger.d(e);
+      if (e.code == 'network_error') return left(const AuthFailure.network());
       return left(const AuthFailure.local());
     } on DatabaseException catch (e) {
       logger.d(e);
