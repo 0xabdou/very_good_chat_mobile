@@ -5,6 +5,7 @@ import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/shared/logger.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
 
+/// The screen that's shown if the user is logged in
 class LoggedInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class LoggedInScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: RaisedButton(
-          onPressed: () => authCubit.logout(),
+          onPressed: authCubit.logout,
           child: const Text('Logout'),
         ),
       ),

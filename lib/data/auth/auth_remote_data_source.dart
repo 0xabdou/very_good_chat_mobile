@@ -5,22 +5,27 @@ import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/data/auth/user_dto.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 
+/// An interface for remote data sources that operate with auth data
 abstract class IAuthRemoteDataSource {
   /// Returns the user associated to the google access token
   /// If no user exists, throws a DioError with code 404, to indicate that
   /// the user has to register first
   Future<UserCreated> signInWithGoogle(String accessToken);
 
+  /// Register a user with google
   Future<UserCreated> registerWithGoogle(UserToCreate user);
 
+  /// Get the signed in user
   Future<User> getSignedInUser();
 
+  /// Update the current user's profile photo
   Future<String> updateUserPhoto(Uint8List photoBytes);
 
   /// Updates and returns the updated user received from the backend
   Future<UserUpdates> updateUserInfo(UserUpdates updates);
 }
 
+/// A fake implementation of [IAuthRemoteDataSource]
 @LazySingleton(as: IAuthRemoteDataSource)
 class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
   static UserCreated _user = const UserCreated(

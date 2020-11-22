@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
+/// The screen that's shown if the user is logged out
 class LoginScreen extends StatelessWidget {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -48,11 +49,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     InkWell(
-                      onTap: loggingIn
-                          ? null
-                          : () {
-                              authCubit.loginWithGoogle();
-                            },
+                      onTap: loggingIn ? null : authCubit.loginWithGoogle,
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(

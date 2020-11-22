@@ -18,18 +18,11 @@ class _$FriendTearOff {
 
 // ignore: unused_element
   _Friend call(
-      {@required
-      @requiredNonNull
-          String id,
-      @required
-      @requiredNonNull
-          String username,
-      @doNotIncludeIfNull
-          String name,
-      @doNotIncludeIfNull
-          String photoUrl,
-      @JsonKey(toJson: _lastSeenToJson, fromJson: _lastSeenFromJson, includeIfNull: false)
-          DateTime lastSeen}) {
+      {@required @requiredNonNull String id,
+      @required @requiredNonNull String username,
+      @doNotIncludeIfNull String name,
+      @doNotIncludeIfNull String photoUrl,
+      @_lastSeenJsonKey DateTime lastSeen}) {
     return _Friend(
       id: id,
       username: username,
@@ -59,10 +52,7 @@ mixin _$Friend {
   String get name;
   @doNotIncludeIfNull
   String get photoUrl;
-  @JsonKey(
-      toJson: _lastSeenToJson,
-      fromJson: _lastSeenFromJson,
-      includeIfNull: false)
+  @_lastSeenJsonKey
   DateTime get lastSeen;
 
   Map<String, dynamic> toJson();
@@ -74,16 +64,11 @@ abstract class $FriendCopyWith<$Res> {
   factory $FriendCopyWith(Friend value, $Res Function(Friend) then) =
       _$FriendCopyWithImpl<$Res>;
   $Res call(
-      {@requiredNonNull
-          String id,
-      @requiredNonNull
-          String username,
-      @doNotIncludeIfNull
-          String name,
-      @doNotIncludeIfNull
-          String photoUrl,
-      @JsonKey(toJson: _lastSeenToJson, fromJson: _lastSeenFromJson, includeIfNull: false)
-          DateTime lastSeen});
+      {@requiredNonNull String id,
+      @requiredNonNull String username,
+      @doNotIncludeIfNull String name,
+      @doNotIncludeIfNull String photoUrl,
+      @_lastSeenJsonKey DateTime lastSeen});
 }
 
 /// @nodoc
@@ -118,16 +103,11 @@ abstract class _$FriendCopyWith<$Res> implements $FriendCopyWith<$Res> {
       __$FriendCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@requiredNonNull
-          String id,
-      @requiredNonNull
-          String username,
-      @doNotIncludeIfNull
-          String name,
-      @doNotIncludeIfNull
-          String photoUrl,
-      @JsonKey(toJson: _lastSeenToJson, fromJson: _lastSeenFromJson, includeIfNull: false)
-          DateTime lastSeen});
+      {@requiredNonNull String id,
+      @requiredNonNull String username,
+      @doNotIncludeIfNull String name,
+      @doNotIncludeIfNull String photoUrl,
+      @_lastSeenJsonKey DateTime lastSeen});
 }
 
 /// @nodoc
@@ -162,18 +142,11 @@ class __$FriendCopyWithImpl<$Res> extends _$FriendCopyWithImpl<$Res>
 /// @nodoc
 class _$_Friend implements _Friend {
   const _$_Friend(
-      {@required
-      @requiredNonNull
-          this.id,
-      @required
-      @requiredNonNull
-          this.username,
-      @doNotIncludeIfNull
-          this.name,
-      @doNotIncludeIfNull
-          this.photoUrl,
-      @JsonKey(toJson: _lastSeenToJson, fromJson: _lastSeenFromJson, includeIfNull: false)
-          this.lastSeen})
+      {@required @requiredNonNull this.id,
+      @required @requiredNonNull this.username,
+      @doNotIncludeIfNull this.name,
+      @doNotIncludeIfNull this.photoUrl,
+      @_lastSeenJsonKey this.lastSeen})
       : assert(id != null),
         assert(username != null);
 
@@ -193,10 +166,7 @@ class _$_Friend implements _Friend {
   @doNotIncludeIfNull
   final String photoUrl;
   @override
-  @JsonKey(
-      toJson: _lastSeenToJson,
-      fromJson: _lastSeenFromJson,
-      includeIfNull: false)
+  @_lastSeenJsonKey
   final DateTime lastSeen;
 
   @override
@@ -244,18 +214,11 @@ class _$_Friend implements _Friend {
 
 abstract class _Friend implements Friend {
   const factory _Friend(
-      {@required
-      @requiredNonNull
-          String id,
-      @required
-      @requiredNonNull
-          String username,
-      @doNotIncludeIfNull
-          String name,
-      @doNotIncludeIfNull
-          String photoUrl,
-      @JsonKey(toJson: _lastSeenToJson, fromJson: _lastSeenFromJson, includeIfNull: false)
-          DateTime lastSeen}) = _$_Friend;
+      {@required @requiredNonNull String id,
+      @required @requiredNonNull String username,
+      @doNotIncludeIfNull String name,
+      @doNotIncludeIfNull String photoUrl,
+      @_lastSeenJsonKey DateTime lastSeen}) = _$_Friend;
 
   factory _Friend.fromJson(Map<String, dynamic> json) = _$_Friend.fromJson;
 
@@ -272,10 +235,7 @@ abstract class _Friend implements Friend {
   @doNotIncludeIfNull
   String get photoUrl;
   @override
-  @JsonKey(
-      toJson: _lastSeenToJson,
-      fromJson: _lastSeenFromJson,
-      includeIfNull: false)
+  @_lastSeenJsonKey
   DateTime get lastSeen;
   @override
   _$FriendCopyWith<_Friend> get copyWith;

@@ -14,4 +14,6 @@ import 'package:very_good_chat/presentation/core/image_cropper.dart';
     MaterialRoute(page: ImageCropper),
   ],
 )
+
+/// Class used by AutoRoute code gen
 class $AppRouter {}

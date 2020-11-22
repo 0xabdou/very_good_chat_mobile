@@ -11,8 +11,10 @@ import 'package:very_good_chat/shared/logger.dart';
 part 'auth_cubit.freezed.dart';
 part 'auth_state.dart';
 
+/// State management for authentication and user features
 @lazySingleton
 class AuthCubit extends Cubit<AuthState> {
+  /// Constructor that initializes dependencies and sets the initial state
   AuthCubit({
     @required IAuthRepository authRepository,
   })  : _repository = authRepository,
@@ -20,6 +22,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   final IAuthRepository _repository;
 
+  /// Checks the current auth status (logged in/out)
+  /// and emits the corresponding state
   Future<void> checkAuthStatus() async {
     final persistedUserResult = await _repository.getPersistedUser();
     persistedUserResult.fold(
@@ -46,6 +50,7 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
+  /// Attempts to login with google and emits state depending on the result
   Future<void> loginWithGoogle() async {
     emit(const AuthState.loggedOut(loggingIn: true));
     final signInResult = await _repository.signInWithGoogle();
@@ -55,6 +60,7 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     if (signInFailure != null) {
+      // ignore: unawaited_futures
       signInFailure.maybeWhen(
         notRegistered: () async {
           final authInfoResult = await _repository.getAuthProviderInfo();
@@ -87,7 +93,7 @@ class AuthCubit extends Cubit<AuthState> {
       },
       (userOption) {
         if (userOption.isNone()) {
-          logger.w("Signed in successfully but no user is persisted");
+          logger.w('Signed in successfully but no user is persisted');
           emit(const AuthState.loggedOut(failure: AuthFailure.local()));
         } else {
           final user = userOption.getOrElse(() => null);
@@ -97,7 +103,9 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
+  /// Logs out the user and emits the logged out state
   Future<void> logout() async {
+    // ignore: unawaited_futures
     _repository.logout();
     emit(const AuthState.loggedOut());
   }
@@ -105,6 +113,6 @@ class AuthCubit extends Cubit<AuthState> {
   @override
   void onChange(Change<AuthState> change) {
     super.onChange(change);
-    logger.d("From ${change.currentState}\nTO ${change.nextState}");
+    logger.d('From ${change.currentState}\nTO ${change.nextState}');
   }
 }

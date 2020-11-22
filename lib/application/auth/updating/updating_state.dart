@@ -1,7 +1,9 @@
 part of 'updating_cubit.dart';
 
+/// The state class of registering/updating user info
 @freezed
 abstract class UpdatingState with _$UpdatingState {
+  /// Defines the state
   const factory UpdatingState({
     @required String username,
     @required String name,
@@ -16,6 +18,7 @@ abstract class UpdatingState with _$UpdatingState {
     String usernameError,
   }) = _UpdatingState;
 
+  /// Factory for conveniently creating an initial state
   factory UpdatingState.initial() => const UpdatingState(
         username: '',
         name: '',

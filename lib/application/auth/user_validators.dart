@@ -1,10 +1,13 @@
 import 'package:injectable/injectable.dart';
 
+/// A class with validators for the user fields
 @lazySingleton
 class UserValidators {
   final _usernameRegex = RegExp(
-    r"^[A-Za-z0-9]{1}[A-Za-z0-9._]{2,14}[A-Za-z0-9]{1}$",
+    r'^[A-Za-z0-9]{1}[A-Za-z0-9._]{2,14}[A-Za-z0-9]{1}$',
   );
+
+  /// Returns an error if the [username] is invalid, else returns null
   String validateUsername(String username) {
     String error;
     if (username.length < 4) {
@@ -16,7 +19,7 @@ class UserValidators {
     } else if (username.endsWith('.') || username.endsWith('_')) {
       error = "Can't contain . or _ at the end";
     } else if (!_usernameRegex.hasMatch(username)) {
-      error = "Should contain characters, numbers, _, and . only";
+      error = 'Should contain characters, numbers, _, and . only';
     }
     return error;
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// The screen that's shown when checking auth status
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

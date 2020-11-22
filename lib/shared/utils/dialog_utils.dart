@@ -1,7 +1,9 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
+/// A simple yes/no dialog widget
 class YesNoDialog extends StatelessWidget {
+  /// Constructor
   const YesNoDialog({
     Key key,
     @required this.title,
@@ -10,9 +12,16 @@ class YesNoDialog extends StatelessWidget {
     @required this.noText,
   }) : super(key: key);
 
+  /// Dialog's title
   final String title;
+
+  /// Dialog's content
   final String content;
+
+  /// Dialog's 'yes button' text
   final String yesText;
+
+  /// Dialog's 'no button' text
   final String noText;
 
   @override
@@ -38,6 +47,7 @@ class YesNoDialog extends StatelessWidget {
   }
 }
 
+/// Show a dialog and returns the user's input
 Future<bool> yesNoDialog(
   BuildContext context, {
   String title = 'Cancel',
@@ -54,9 +64,10 @@ Future<bool> yesNoDialog(
       noText: noText,
     ),
   ) as bool;
-  return result;
+  return result ?? false;
 }
 
+/// Show an error snack bar with the provided error message
 void showErrorSnackBar(BuildContext context, String errorMsg) {
   Flushbar(
     message: errorMsg,

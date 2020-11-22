@@ -16,8 +16,10 @@ import 'package:very_good_chat/domain/auth/i_auth_repository.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/shared/logger.dart';
 
+/// An implementation of [IAuthRepository]
 @LazySingleton(as: IAuthRepository)
 class AuthRepository implements IAuthRepository {
+  /// Constructor
   AuthRepository({
     @required IAuthRemoteDataSource authRemoteDataSource,
     @required IAuthLocalDataSource authLocalDataSource,

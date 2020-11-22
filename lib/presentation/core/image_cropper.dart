@@ -6,15 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:image_editor/image_editor.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart' as dialog_utils;
 
+/// A screen that helps edit images
 class ImageCropper extends StatefulWidget {
+  /// Constructor
   const ImageCropper({
     Key key,
-    @required this.imageBytes,
-    this.cropRatio,
-  }) : super(key: key);
+    @required Uint8List imageBytes,
+    double cropRatio,
+  })  : _imageBytes = imageBytes,
+        _cropRatio = cropRatio,
+        super(key: key);
 
-  final Uint8List imageBytes;
-  final double cropRatio;
+  final Uint8List _imageBytes;
+  final double _cropRatio;
 
   @override
   _ImageCropperState createState() => _ImageCropperState();
@@ -26,18 +30,13 @@ class _ImageCropperState extends State<ImageCropper> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        final result = await dialog_utils.yesNoDialog(context);
-        if (result == null) return false;
-        return result;
-      },
+      onWillPop: () => dialog_utils.yesNoDialog(context),
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             onPressed: () async {
               final result = await dialog_utils.yesNoDialog(context);
-              if (result == null || !result) return;
-              Navigator.pop(context);
+              if (result) Navigator.pop(context);
             },
             icon: const Icon(Icons.clear),
           ),
@@ -53,13 +52,13 @@ class _ImageCropperState extends State<ImageCropper> {
           ],
         ),
         body: ExtendedImage.memory(
-          widget.imageBytes,
+          widget._imageBytes,
           extendedImageEditorKey: editorKey,
           fit: BoxFit.contain,
           mode: ExtendedImageMode.editor,
           initEditorConfigHandler: (state) {
             return EditorConfig(
-              cropAspectRatio: widget.cropRatio,
+              cropAspectRatio: widget._cropRatio,
             );
           },
         ),

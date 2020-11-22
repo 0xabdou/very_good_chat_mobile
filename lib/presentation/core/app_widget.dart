@@ -6,6 +6,7 @@ import 'package:very_good_chat/presentation/core/navigation_handler.dart';
 import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
 
+/// The root widget of the app
 class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

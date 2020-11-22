@@ -8,18 +8,22 @@ import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
+/// The screen that's shown when registering/updating profile
 class UpdatingScreen extends StatefulWidget {
+  ///  Constructor
   /// If [authProviderInfo] is provided, it's a registration page
   /// If [currentUser] is provided, it's a profile updating page
   const UpdatingScreen({
     Key key,
-    this.authProviderInfo,
-    this.currentUser,
+    AuthProviderInfo authProviderInfo,
+    User currentUser,
   })  : assert(authProviderInfo != null || currentUser != null),
+        _currentUser = currentUser,
+        _authProviderInfo = authProviderInfo,
         super(key: key);
 
-  final AuthProviderInfo authProviderInfo;
-  final User currentUser;
+  final AuthProviderInfo _authProviderInfo;
+  final User _currentUser;
 
   @override
   _UpdatingScreenState createState() => _UpdatingScreenState();
@@ -32,12 +36,12 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
   @override
   void initState() {
     cubit = getIt();
-    if (widget.authProviderInfo != null) {
+    if (widget._authProviderInfo != null) {
       registering = true;
-      cubit.registering(widget.authProviderInfo);
+      cubit.registering(widget._authProviderInfo);
     } else {
       registering = false;
-      cubit.updating(widget.currentUser);
+      cubit.updating(widget._currentUser);
     }
     super.initState();
   }
@@ -60,6 +64,7 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
           onWillPop: () async {
             final result = (await yesNoDialog(context)) ?? false;
             if (result) {
+              // ignore: unawaited_futures
               context.read<AuthCubit>().logout();
             }
             return false;
@@ -122,7 +127,7 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
                       ),
                       const SizedBox(height: 16),
                       // if registering
-                      if (widget.authProviderInfo != null)
+                      if (widget._authProviderInfo != null)
                         MaterialButton(
                           onPressed:
                               submitDisabled ? null : () => cubit.submit(),
@@ -242,6 +247,7 @@ class _ProfileImage extends StatelessWidget {
         state.photoUrl,
       );
     }
+    // TODO: provide proper placeholder
     return const AssetImage('');
   }
 }

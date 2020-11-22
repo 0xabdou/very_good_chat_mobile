@@ -4,20 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
 
+/// A widget that listens for auth state changes and handles navigation
 class NavigationHandler extends StatelessWidget {
+  /// Constructor
   const NavigationHandler({
     Key key,
-    @required this.child,
-  }) : super(key: key);
+    @required Widget child,
+  })  : _child = child,
+        super(key: key);
 
-  final Widget child;
+  final Widget _child;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listenWhen: _shouldListen,
       listener: (_, state) => _maybeNavigate(state),
-      child: child,
+      child: _child,
     );
   }
 }

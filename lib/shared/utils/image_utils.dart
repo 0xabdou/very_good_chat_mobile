@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:photo/photo.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
 
+/// A class for picking/manipulating images
 abstract class ImageUtils {
+  /// Concrete implementation of [ImageUtils]
   static ImageUtils instance = _VeryGoodImageUtils();
 
+  /// Display photos in a list/grid and let user pick one
   Future<Uint8List> pickImage(BuildContext context);
+
+  /// Edit a picture
   Future<Uint8List> editImage({
     @required BuildContext context,
     @required Uint8List originalBytes,

@@ -21,8 +21,10 @@ import 'package:very_good_chat/shared/utils/image_utils.dart';
 part 'updating_cubit.freezed.dart';
 part 'updating_state.dart';
 
+/// State management for registering and updating user info
 @injectable
 class UpdatingCubit extends Cubit<UpdatingState> {
+  /// Constructor that initializes dependencies and sets the initial state
   UpdatingCubit({
     @required IAuthRepository authRepository,
     @required UserValidators validators,
@@ -36,6 +38,9 @@ class UpdatingCubit extends Cubit<UpdatingState> {
   final UserValidators _validators;
   final AuthCubit _authCubit;
 
+  /// Should be called once at the start
+  /// if the cubit is meant for updating user info
+  /// If this is called, don't call registering()
   void updating(User currentUser) {
     emit(
       state.copyWith(
@@ -47,6 +52,9 @@ class UpdatingCubit extends Cubit<UpdatingState> {
     );
   }
 
+  /// Should be called once at the start
+  /// if the cubit is meant for registering
+  /// If this is called, don't call updating()
   void registering(AuthProviderInfo info) {
     emit(
       state.copyWith(
@@ -58,15 +66,25 @@ class UpdatingCubit extends Cubit<UpdatingState> {
     );
   }
 
+  /// Called when the text in the username text field is changed
+  /// emits a state with the new username
+  /// If the username is invalid, the emitted state will contain the error
   void usernameChanged(String username) {
     final error = _validators.validateUsername(username);
     emit(_state.copyWith(username: username, usernameError: error));
   }
 
+  /// Called when the text in the name text field is changed
+  /// emits a state with the new name
   void nameChanged(String name) {
     emit(_state.copyWith(name: name));
   }
 
+  /// Lets the user select and modify a picture
+  /// If the user is updating his profile, the picture is uploaded and a new
+  /// state is emitted with the url
+  /// If the user is registering, a new state is emitted with the selected
+  /// photo bytes, and will be uploaded when submitting later
   Future<void> pickPhoto(BuildContext context) async {
     try {
       final originalBytes = await ImageUtils.instance.pickImage(context);
@@ -102,6 +120,7 @@ class UpdatingCubit extends Cubit<UpdatingState> {
     }
   }
 
+  /// Submits user info to backend
   Future<void> submit() async {
     emit(_state.copyWith(callingApi: true));
     Either<AuthFailure, Unit> result;
@@ -149,11 +168,11 @@ class UpdatingCubit extends Cubit<UpdatingState> {
   @override
   void onChange(Change<UpdatingState> change) {
     super.onChange(change);
-    logger.d("From ${stateToString(change.currentState)}\n"
-        "TO ${stateToString(change.nextState)}");
+    logger.d('From ${_stateToString(change.currentState)}\n'
+        'TO ${_stateToString(change.nextState)}');
   }
 
-  String stateToString(UpdatingState state) {
+  String _stateToString(UpdatingState state) {
     return 'UpdatingState(registering: ${state.registering}, '
         'username: ${state.username}, '
         'name: ${state.name}, '
