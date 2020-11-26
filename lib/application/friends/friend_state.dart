@@ -7,6 +7,7 @@ abstract class FriendState with _$FriendState {
   const factory FriendState({
     @required List<Friend> friends,
     @required List<FriendRequest> friendRequests,
+    FriendFailure failure,
   }) = _FriendState;
 
   /// Returns the initial friends state
