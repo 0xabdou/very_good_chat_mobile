@@ -6,7 +6,6 @@ import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
 import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
-import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 /// The screen that's shown when registering/updating profile
@@ -16,13 +15,16 @@ class UpdatingScreen extends StatefulWidget {
   /// If [currentUser] is provided, it's a profile updating page
   const UpdatingScreen({
     Key key,
+    @required UpdatingCubit cubit,
     AuthProviderInfo authProviderInfo,
     User currentUser,
   })  : assert(authProviderInfo != null || currentUser != null),
+        _cubit = cubit,
         _currentUser = currentUser,
         _authProviderInfo = authProviderInfo,
         super(key: key);
 
+  final UpdatingCubit _cubit;
   final AuthProviderInfo _authProviderInfo;
   final User _currentUser;
 
@@ -36,7 +38,7 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
 
   @override
   void initState() {
-    cubit = getIt();
+    cubit = widget._cubit;
     if (widget._authProviderInfo != null) {
       registering = true;
       cubit.registering(widget._authProviderInfo);
@@ -81,7 +83,10 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
                   child: ListView(
                     shrinkWrap: true,
                     children: [
-                      ProfileImage(cubit: cubit),
+                      UpdatingProfilePicture(
+                        state: state,
+                        onEditPressed: () => cubit.pickPhoto(context),
+                      ),
                       TextFormField(
                         onChanged: (s) => cubit.usernameChanged(s),
                         validator: (_) => state.usernameError,
@@ -148,100 +153,97 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
 
 /// Profile image for updating screen
 @visibleForTesting
-class ProfileImage extends StatelessWidget {
+class UpdatingProfilePicture extends StatelessWidget {
   /// Constructor
-  const ProfileImage({
+  const UpdatingProfilePicture({
     Key key,
-    @required this.cubit,
+    @required this.state,
+    @required this.onEditPressed,
   }) : super(key: key);
 
-  ///  Auth cubit
-  final UpdatingCubit cubit;
+  ///  Updating state
+  final UpdatingState state;
+
+  /// Call back for when the edit button is pressed
+  final void Function() onEditPressed;
 
   @override
   Widget build(BuildContext context) {
     const profilePhotoSize = 150.0;
-    return BlocBuilder<UpdatingCubit, UpdatingState>(
-      cubit: cubit,
-      builder: (context, state) {
-        final disabled = state.uploadingPhoto || state.callingApi;
-        return Align(
-          child: SizedBox(
-            height: profilePhotoSize,
-            width: profilePhotoSize,
-            child: Stack(
-              children: [
-                // The actual photo
-                Container(
-                  height: profilePhotoSize,
-                  width: profilePhotoSize,
+    final disabled = state.uploadingPhoto || state.callingApi;
+    return Align(
+      child: SizedBox(
+        height: profilePhotoSize,
+        width: profilePhotoSize,
+        child: Stack(
+          children: [
+            // The actual photo
+            ClipRRect(
+              borderRadius: BorderRadius.circular(profilePhotoSize),
+              child: SizedBox(
+                height: profilePhotoSize,
+                width: profilePhotoSize,
+                child: _getImage(state),
+              ),
+            ),
+            // A spinner + overlay, visible while uploading
+            if (state.uploadingPhoto)
+              Positioned.fill(
+                child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(profilePhotoSize),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: _getImageProvider(state),
+                    color: Theme.of(context).accentColor.withOpacity(0.3),
+                  ),
+                  child: const CircularProgressIndicator(),
+                ),
+              ),
+            // An edit button
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: Material(
+                elevation: 5,
+                shape: const CircleBorder(),
+                color: Theme.of(context)
+                    .accentColor
+                    .withOpacity(disabled ? 0.3 : 1),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(100),
+                    onTap: disabled ? null : onEditPressed,
+                    child: Icon(
+                      Icons.edit,
+                      size: 20,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
-                // A spinner + overlay, visible while uploading
-                if (state.uploadingPhoto)
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(profilePhotoSize),
-                        color: Theme.of(context).accentColor.withOpacity(0.3),
-                      ),
-                      child: const CircularProgressIndicator(),
-                    ),
-                  ),
-                // An edit button
-                Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: Material(
-                    elevation: 5,
-                    shape: const CircleBorder(),
-                    color: Theme.of(context)
-                        .accentColor
-                        .withOpacity(disabled ? 0.3 : 1),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(100),
-                        onTap: disabled ? null : () => cubit.pickPhoto(context),
-                        child: Icon(
-                          Icons.edit,
-                          size: 20,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
-  ImageProvider _getImageProvider(UpdatingState state) {
+  Image _getImage(UpdatingState state) {
     if (state.photoBytes != null) {
-      return MemoryImage(
+      return Image.memory(
         state.photoBytes,
       );
     }
     if (state.photoUrl != null) {
-      return NetworkImage(
+      return Image.network(
         state.photoUrl,
       );
     }
-    return const AssetImage('assets/images/profile_photo.png');
+    return Image.asset('assets/images/profile_photo.png');
   }
 }
 
 /// The registration screen's submit button
+@visibleForTesting
 class RegistrationSubmitButton extends StatelessWidget {
   /// Constructor
   const RegistrationSubmitButton({

@@ -25,6 +25,7 @@ const userUpdates = UserUpdates(
 );
 const authProviderInfo = AuthProviderInfo(
   accessToken: 'access_token',
+  name: 'name',
 );
 // Friend
 const friend = Friend(id: 'id', username: 'username');
