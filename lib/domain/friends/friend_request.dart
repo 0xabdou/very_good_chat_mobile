@@ -9,9 +9,9 @@ part 'friend_request.g.dart';
 abstract class FriendRequest with _$FriendRequest {
   /// Constructor
   const factory FriendRequest({
-    @requiredNotNull String userId,
-    @_sentAtJsonKey DateTime sentAt,
-    @requiredNotNull bool sent,
+    @requiredNotNull @required String userId,
+    @_sentAtJsonKey @required DateTime sentAt,
+    @requiredNotNull @required bool sent,
   }) = _FriendRequest;
 
   /// Serialize this object

@@ -18,9 +18,9 @@ class _$FriendRequestTearOff {
 
 // ignore: unused_element
   _FriendRequest call(
-      {@requiredNotNull String userId,
-      @_sentAtJsonKey DateTime sentAt,
-      @requiredNotNull bool sent}) {
+      {@required @requiredNotNull String userId,
+      @required @_sentAtJsonKey DateTime sentAt,
+      @required @requiredNotNull bool sent}) {
     return _FriendRequest(
       userId: userId,
       sentAt: sentAt,
@@ -128,9 +128,12 @@ class __$FriendRequestCopyWithImpl<$Res>
 /// @nodoc
 class _$_FriendRequest implements _FriendRequest {
   const _$_FriendRequest(
-      {@requiredNotNull this.userId,
-      @_sentAtJsonKey this.sentAt,
-      @requiredNotNull this.sent});
+      {@required @requiredNotNull this.userId,
+      @required @_sentAtJsonKey this.sentAt,
+      @required @requiredNotNull this.sent})
+      : assert(userId != null),
+        assert(sentAt != null),
+        assert(sent != null);
 
   factory _$_FriendRequest.fromJson(Map<String, dynamic> json) =>
       _$_$_FriendRequestFromJson(json);
@@ -181,9 +184,9 @@ class _$_FriendRequest implements _FriendRequest {
 
 abstract class _FriendRequest implements FriendRequest {
   const factory _FriendRequest(
-      {@requiredNotNull String userId,
-      @_sentAtJsonKey DateTime sentAt,
-      @requiredNotNull bool sent}) = _$_FriendRequest;
+      {@required @requiredNotNull String userId,
+      @required @_sentAtJsonKey DateTime sentAt,
+      @required @requiredNotNull bool sent}) = _$_FriendRequest;
 
   factory _FriendRequest.fromJson(Map<String, dynamic> json) =
       _$_FriendRequest.fromJson;

@@ -1,9 +1,16 @@
 import 'package:dartz/dartz.dart';
+import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 
 /// Interface for friend repositories
 abstract class IFriendRepository {
+  /// Get a list of all friends from the backend
+  Future<Either<FriendFailure, List<Friend>>> getFriendsRemotely();
+
+  /// Get a list of all friends from the local storage
+  Future<Either<FriendFailure, List<Friend>>> getFriendsLocally();
+
   /// Send a friend request to the user with [userId]
   Future<Either<FriendFailure, Unit>> sendFriendRequest(String userId);
 
