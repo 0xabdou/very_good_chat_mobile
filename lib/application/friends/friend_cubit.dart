@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
@@ -11,6 +12,7 @@ part 'friend_cubit.freezed.dart';
 part 'friend_state.dart';
 
 /// State management for friends feature
+@lazySingleton
 class FriendCubit extends Cubit<FriendState> {
   /// Constructor
   FriendCubit({

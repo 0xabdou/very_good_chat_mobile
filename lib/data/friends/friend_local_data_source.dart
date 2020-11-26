@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 
@@ -13,6 +14,7 @@ abstract class IFriendLocalDataSource {
 }
 
 /// An implementation of [IFriendLocalDataSource] that uses [Sqflite] [Database]
+@Injectable(as: IFriendLocalDataSource)
 class FriendLocalDataSource implements IFriendLocalDataSource {
   /// Constructor
   FriendLocalDataSource({
@@ -57,7 +59,7 @@ class FriendLocalDataSource implements IFriendLocalDataSource {
   @override
   Future<List<Friend>> getPersistedFriends() async {
     final results = await _db.query(friendTable);
-    return results.map((result) => Friend.fromJson(result));
+    return results.map((result) => Friend.fromJson(result)).toList();
   }
 
   @override

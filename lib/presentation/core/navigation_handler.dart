@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
+import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
 
@@ -52,6 +53,7 @@ void _maybeNavigate(AuthState state) {
         Routes.loggedInScreen,
         (route) => route.isFirst,
       );
+      getIt<FriendCubit>().fetchFriends();
     },
     loggedOut: (_) {
       ExtendedNavigator.root.pushAndRemoveUntil(

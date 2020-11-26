@@ -12,10 +12,15 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../application/auth/auth_cubit.dart';
 import '../data/auth/auth_repository.dart';
+import '../application/friends/friend_cubit.dart';
+import '../data/friends/friend_repository.dart';
 import '../data/auth/google_sign_in_injectable.dart';
 import '../data/auth/auth_local_data_source.dart';
 import '../data/auth/auth_remote_data_source.dart';
 import '../domain/auth/i_auth_repository.dart';
+import '../data/friends/friend_local_data_source.dart';
+import '../data/friends/friend_remote_data_source.dart';
+import '../domain/friends/i_friend_repository.dart';
 import 'third_party_injectable.dart';
 import '../application/auth/updating/updating_cubit.dart';
 import '../application/auth/user_validators.dart';
@@ -43,9 +48,17 @@ Future<GetIt> $initGetIt(
         authLocalDataSource: get<IAuthLocalDataSource>(),
         googleSignIn: get<GoogleSignIn>(),
       ));
+  gh.factory<IFriendLocalDataSource>(
+      () => FriendLocalDataSource(database: get<Database>()));
+  gh.factory<IFriendRemoteDataSource>(() => FriendRemoteDataSource());
+  gh.factory<IFriendRepository>(() => FriendRepository(
+      remoteDataSource: get<IFriendRemoteDataSource>(),
+      localDataSource: get<IFriendLocalDataSource>()));
   gh.lazySingleton<UserValidators>(() => UserValidators());
   gh.lazySingleton<AuthCubit>(
       () => AuthCubit(authRepository: get<IAuthRepository>()));
+  gh.lazySingleton<FriendCubit>(
+      () => FriendCubit(friendRepository: get<IFriendRepository>()));
   gh.factory<UpdatingCubit>(() => UpdatingCubit(
         authRepository: get<IAuthRepository>(),
         validators: get<UserValidators>(),

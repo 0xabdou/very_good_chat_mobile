@@ -6,7 +6,9 @@ part 'friend.g.dart';
 
 /// A class that hold friend data
 @freezed
-abstract class Friend with _$Friend {
+abstract class Friend implements _$Friend {
+  const Friend._();
+
   /// Constructor
   const factory Friend({
     @requiredNotNull @required String id,
@@ -18,6 +20,14 @@ abstract class Friend with _$Friend {
 
   /// Serializes this object to json
   factory Friend.fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
+
+  /// Is this friend currently online?
+  bool get isOnline {
+    if (lastSeen == null) return false;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final diff = now - lastSeen.millisecondsSinceEpoch;
+    return diff < 6000;
+  }
 }
 
 const _lastSeenJsonKey = JsonKey(

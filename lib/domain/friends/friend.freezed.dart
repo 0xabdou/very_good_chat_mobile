@@ -140,7 +140,7 @@ class __$FriendCopyWithImpl<$Res> extends _$FriendCopyWithImpl<$Res>
 @JsonSerializable()
 
 /// @nodoc
-class _$_Friend implements _Friend {
+class _$_Friend extends _Friend {
   const _$_Friend(
       {@required @requiredNotNull this.id,
       @required @requiredNotNull this.username,
@@ -148,7 +148,8 @@ class _$_Friend implements _Friend {
       @doNotIncludeIfNull this.photoUrl,
       @_lastSeenJsonKey this.lastSeen})
       : assert(id != null),
-        assert(username != null);
+        assert(username != null),
+        super._();
 
   factory _$_Friend.fromJson(Map<String, dynamic> json) =>
       _$_$_FriendFromJson(json);
@@ -212,7 +213,8 @@ class _$_Friend implements _Friend {
   }
 }
 
-abstract class _Friend implements Friend {
+abstract class _Friend extends Friend {
+  const _Friend._() : super._();
   const factory _Friend(
       {@required @requiredNotNull String id,
       @required @requiredNotNull String username,
