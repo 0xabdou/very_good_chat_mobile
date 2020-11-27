@@ -26,7 +26,7 @@ abstract class Friend implements _$Friend {
     if (lastSeen == null) return false;
     final now = DateTime.now().millisecondsSinceEpoch;
     final diff = now - lastSeen.millisecondsSinceEpoch;
-    return diff < 6000;
+    return diff < 60000;
   }
 }
 

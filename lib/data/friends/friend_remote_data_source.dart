@@ -45,25 +45,44 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
     return [];
   }
 
+  List<Friend> _friends;
   @override
   Future<List<Friend>> getFriends() async {
     await Future.delayed(const Duration(milliseconds: 1000));
-    final friends = <Friend>[];
-    for (var i = 0; i < 10; i++) {
-      final picSize = 128 + Random().nextInt(128);
-      final username = 'u${Random().nextInt(10000000)}';
-      final online = Random().nextBool();
-      final lastSeenMS =
-          DateTime.now().millisecondsSinceEpoch - (online ? 0 : 60000);
-      final friend = Friend(
-        id: username,
-        username: username,
-        photoUrl: 'https://picsum.photos/$picSize',
-        lastSeen: DateTime.fromMillisecondsSinceEpoch(lastSeenMS),
-      );
-      friends.add(friend);
+    if (_friends == null) {
+      _friends = [];
+      for (var i = 0; i < 10; i++) {
+        final picSize = 128 + Random().nextInt(128);
+        final username = 'u${Random().nextInt(10000000)}';
+        final online = Random().nextBool();
+        final lastSeenMS = DateTime.now().millisecondsSinceEpoch;
+        final friend = Friend(
+          id: username,
+          username: username,
+          photoUrl: 'https://picsum.photos/$picSize',
+          lastSeen:
+              online ? DateTime.fromMillisecondsSinceEpoch(lastSeenMS) : null,
+        );
+        _friends.add(friend);
+      }
+    } else {
+      _friends = List<Friend>.from(_friends);
+      for (var i = 0; i < _friends.length; i++) {
+        final online = Random().nextBool();
+        _friends[i] = _friends[i].copyWith(
+          lastSeen: online ? DateTime.now() : null,
+        );
+      }
     }
-    return friends;
+    _friends.sort(
+      (a, b) {
+        if (a.lastSeen == null) return 1;
+        if (b.lastSeen == null) return -1;
+        return a.lastSeen.millisecondsSinceEpoch -
+            b.lastSeen.millisecondsSinceEpoch;
+      },
+    );
+    return _friends;
   }
 
   @override

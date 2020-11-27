@@ -58,7 +58,10 @@ class FriendLocalDataSource implements IFriendLocalDataSource {
 
   @override
   Future<List<Friend>> getPersistedFriends() async {
-    final results = await _db.query(friendTable);
+    final results = await _db.query(
+      friendTable,
+      orderBy: '$friendColumnLastSeen DESC',
+    );
     return results.map((result) => Friend.fromJson(result)).toList();
   }
 

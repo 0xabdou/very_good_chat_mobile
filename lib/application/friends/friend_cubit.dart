@@ -7,6 +7,7 @@ import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
+import 'package:very_good_chat/shared/logger.dart';
 
 part 'friend_cubit.freezed.dart';
 part 'friend_state.dart';
@@ -31,6 +32,17 @@ class FriendCubit extends Cubit<FriendState> {
   /// First, the persisted friends are emitted, then live data from backend
   /// is fetched and emitted
   Future<void> fetchFriends() async {
+    await refreshFriends();
+
+    _friendsPollingTimer = Timer.periodic(
+      const Duration(seconds: 5),
+      (_) => refreshFriends(),
+    );
+  }
+
+  /// Fetches friends list from backend and emits a new state
+  @visibleForTesting
+  Future<void> refreshFriends() async {
     // Local friends
     final localFetchResult = await _repository.getFriendsLocally();
     localFetchResult.fold(
@@ -43,17 +55,6 @@ class FriendCubit extends Cubit<FriendState> {
     );
 
     // remote friends
-    await refreshFriends();
-
-    _friendsPollingTimer = Timer.periodic(
-      const Duration(minutes: 1),
-      (_) => refreshFriends(),
-    );
-  }
-
-  /// Fetches friends list from backend and emits a new state
-  @visibleForTesting
-  Future<void> refreshFriends() async {
     final remoteFetchResult = await _repository.getFriendsRemotely();
     remoteFetchResult.fold(
       (failure) {
@@ -63,5 +64,20 @@ class FriendCubit extends Cubit<FriendState> {
         emit(state.copyWith(friends: friends));
       },
     );
+  }
+
+  @override
+  void onChange(Change<FriendState> change) {
+    super.onChange(change);
+    final curFriendsNum = change.currentState.friends.length;
+    final nextFriendsNum = change.nextState.friends.length;
+    logger.d('From: FriendState(friends: $curFriendsNum)\n'
+        'To: FriendState(friends:$nextFriendsNum)');
+  }
+
+  @override
+  Future<void> close() {
+    _friendsPollingTimer?.cancel();
+    return super.close();
   }
 }

@@ -38,7 +38,7 @@ void main() {
       () async {
         // arrange
         final now = DateTime.now().millisecondsSinceEpoch;
-        final lessThanAMinuteAgo = now - 3000;
+        final lessThanAMinuteAgo = now - 50000;
         // act
         final onlineFriend = friend.copyWith(
           lastSeen: DateTime.fromMillisecondsSinceEpoch(lessThanAMinuteAgo),
@@ -49,7 +49,7 @@ void main() {
     );
 
     test(
-      'should return false if the friend was active less than a minute ago',
+      'should return false if the friend was active more than a minute ago',
       () async {
         // arrange
         final now = DateTime.now().millisecondsSinceEpoch;

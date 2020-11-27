@@ -7,7 +7,8 @@ const requiredNotNull = JsonKey(required: true, disallowNullValue: true);
 const doNotIncludeIfNull = JsonKey(includeIfNull: false);
 
 /// Serialize [DateTime] object
-int dateTimeToJson(DateTime d) => d.millisecondsSinceEpoch;
+int dateTimeToJson(DateTime d) => d?.millisecondsSinceEpoch;
 
 /// Deserialize [DateTime] object
-DateTime dateTimeFromJson(int ms) => DateTime.fromMillisecondsSinceEpoch(ms);
+DateTime dateTimeFromJson(int ms) =>
+    ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
