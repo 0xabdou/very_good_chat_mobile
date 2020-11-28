@@ -35,7 +35,7 @@ class FriendCubit extends Cubit<FriendState> {
     await refreshFriends();
 
     _friendsPollingTimer = Timer.periodic(
-      const Duration(seconds: 5),
+      const Duration(seconds: 60),
       (_) => refreshFriends(),
     );
   }

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
@@ -68,7 +67,7 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
         _friends.add(friend);
       }
     } else {
-      throw DioError(type: DioErrorType.RESPONSE);
+      //throw DioError(type: DioErrorType.RESPONSE);
       _friends = List<Friend>.from(_friends);
       for (var i = 0; i < _friends.length; i++) {
         final online = Random().nextBool();
@@ -79,10 +78,9 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
     }
     _friends.sort(
       (a, b) {
-        if (a.lastSeen == null) return 1;
-        if (b.lastSeen == null) return -1;
-        return a.lastSeen.millisecondsSinceEpoch -
-            b.lastSeen.millisecondsSinceEpoch;
+        if (a.isOnline) return -1;
+        if (b.isOnline) return 1;
+        return 0;
       },
     );
     return _friends;
