@@ -17,7 +17,7 @@ import '../presentation/auth/logged_in_screen.dart';
 import '../presentation/auth/login_screen.dart';
 import '../presentation/auth/splash_screen.dart';
 import '../presentation/auth/updating_screen.dart';
-import '../presentation/core/image_cropper.dart';
+import '../presentation/shared/image_cropper.dart';
 
 class Routes {
   static const String splashScreen = '/';
