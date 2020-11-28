@@ -32,7 +32,6 @@ const authProviderInfo = AuthProviderInfo(
 const friend = Friend(
   id: 'id',
   username: 'username',
-  isOnline: true,
 );
 final friendRequest = FriendRequest(
   userId: 'userId',
