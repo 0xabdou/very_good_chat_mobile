@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
@@ -62,10 +63,12 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
           photoUrl: 'https://picsum.photos/$picSize',
           lastSeen:
               online ? DateTime.fromMillisecondsSinceEpoch(lastSeenMS) : null,
+          isOnline: online,
         );
         _friends.add(friend);
       }
     } else {
+      throw DioError(type: DioErrorType.RESPONSE);
       _friends = List<Friend>.from(_friends);
       for (var i = 0; i < _friends.length; i++) {
         final online = Random().nextBool();

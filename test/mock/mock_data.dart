@@ -29,7 +29,11 @@ const authProviderInfo = AuthProviderInfo(
   name: 'name',
 );
 // Friend
-const friend = Friend(id: 'id', username: 'username');
+const friend = Friend(
+  id: 'id',
+  username: 'username',
+  isOnline: true,
+);
 final friendRequest = FriendRequest(
   userId: 'userId',
   sentAt: DateTime.now(),

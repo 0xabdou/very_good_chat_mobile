@@ -13,21 +13,15 @@ abstract class Friend implements _$Friend {
   const factory Friend({
     @requiredNotNull @required String id,
     @requiredNotNull @required String username,
+    @JsonKey(ignore: true) @Default(false) bool isOnline,
     @doNotIncludeIfNull String name,
     @doNotIncludeIfNull String photoUrl,
     @_lastSeenJsonKey DateTime lastSeen,
   }) = _Friend;
 
   /// Serializes this object to json
-  factory Friend.fromJson(Map<String, dynamic> json) => _$FriendFromJson(json);
-
-  /// Is this friend currently online?
-  bool get isOnline {
-    if (lastSeen == null) return false;
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final diff = now - lastSeen.millisecondsSinceEpoch;
-    return diff < 60000;
-  }
+  factory Friend.fromJson(Map<String, dynamic> json) => _$FriendFromJson(json)
+      .copyWith(isOnline: _isOnlineFromInt(json['lastSeen'] as int));
 }
 
 const _lastSeenJsonKey = JsonKey(
@@ -35,3 +29,11 @@ const _lastSeenJsonKey = JsonKey(
   fromJson: dateTimeFromJson,
   includeIfNull: false,
 );
+
+bool _isOnlineFromInt(int ms) {
+  if (ms == null) return false;
+  final lastSeen = DateTime.fromMillisecondsSinceEpoch(ms);
+  final now = DateTime.now().millisecondsSinceEpoch;
+  final diff = now - lastSeen.millisecondsSinceEpoch;
+  return diff < 60000;
+}

@@ -20,12 +20,14 @@ class _$FriendTearOff {
   _Friend call(
       {@required @requiredNotNull String id,
       @required @requiredNotNull String username,
+      @JsonKey(ignore: true) bool isOnline = false,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl,
       @_lastSeenJsonKey DateTime lastSeen}) {
     return _Friend(
       id: id,
       username: username,
+      isOnline: isOnline,
       name: name,
       photoUrl: photoUrl,
       lastSeen: lastSeen,
@@ -48,6 +50,8 @@ mixin _$Friend {
   String get id;
   @requiredNotNull
   String get username;
+  @JsonKey(ignore: true)
+  bool get isOnline;
   @doNotIncludeIfNull
   String get name;
   @doNotIncludeIfNull
@@ -66,6 +70,7 @@ abstract class $FriendCopyWith<$Res> {
   $Res call(
       {@requiredNotNull String id,
       @requiredNotNull String username,
+      @JsonKey(ignore: true) bool isOnline,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl,
       @_lastSeenJsonKey DateTime lastSeen});
@@ -83,6 +88,7 @@ class _$FriendCopyWithImpl<$Res> implements $FriendCopyWith<$Res> {
   $Res call({
     Object id = freezed,
     Object username = freezed,
+    Object isOnline = freezed,
     Object name = freezed,
     Object photoUrl = freezed,
     Object lastSeen = freezed,
@@ -90,6 +96,7 @@ class _$FriendCopyWithImpl<$Res> implements $FriendCopyWith<$Res> {
     return _then(_value.copyWith(
       id: id == freezed ? _value.id : id as String,
       username: username == freezed ? _value.username : username as String,
+      isOnline: isOnline == freezed ? _value.isOnline : isOnline as bool,
       name: name == freezed ? _value.name : name as String,
       photoUrl: photoUrl == freezed ? _value.photoUrl : photoUrl as String,
       lastSeen: lastSeen == freezed ? _value.lastSeen : lastSeen as DateTime,
@@ -105,6 +112,7 @@ abstract class _$FriendCopyWith<$Res> implements $FriendCopyWith<$Res> {
   $Res call(
       {@requiredNotNull String id,
       @requiredNotNull String username,
+      @JsonKey(ignore: true) bool isOnline,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl,
       @_lastSeenJsonKey DateTime lastSeen});
@@ -123,6 +131,7 @@ class __$FriendCopyWithImpl<$Res> extends _$FriendCopyWithImpl<$Res>
   $Res call({
     Object id = freezed,
     Object username = freezed,
+    Object isOnline = freezed,
     Object name = freezed,
     Object photoUrl = freezed,
     Object lastSeen = freezed,
@@ -130,6 +139,7 @@ class __$FriendCopyWithImpl<$Res> extends _$FriendCopyWithImpl<$Res>
     return _then(_Friend(
       id: id == freezed ? _value.id : id as String,
       username: username == freezed ? _value.username : username as String,
+      isOnline: isOnline == freezed ? _value.isOnline : isOnline as bool,
       name: name == freezed ? _value.name : name as String,
       photoUrl: photoUrl == freezed ? _value.photoUrl : photoUrl as String,
       lastSeen: lastSeen == freezed ? _value.lastSeen : lastSeen as DateTime,
@@ -144,11 +154,13 @@ class _$_Friend extends _Friend {
   const _$_Friend(
       {@required @requiredNotNull this.id,
       @required @requiredNotNull this.username,
+      @JsonKey(ignore: true) this.isOnline = false,
       @doNotIncludeIfNull this.name,
       @doNotIncludeIfNull this.photoUrl,
       @_lastSeenJsonKey this.lastSeen})
       : assert(id != null),
         assert(username != null),
+        assert(isOnline != null),
         super._();
 
   factory _$_Friend.fromJson(Map<String, dynamic> json) =>
@@ -161,6 +173,9 @@ class _$_Friend extends _Friend {
   @requiredNotNull
   final String username;
   @override
+  @JsonKey(ignore: true)
+  final bool isOnline;
+  @override
   @doNotIncludeIfNull
   final String name;
   @override
@@ -172,7 +187,7 @@ class _$_Friend extends _Friend {
 
   @override
   String toString() {
-    return 'Friend(id: $id, username: $username, name: $name, photoUrl: $photoUrl, lastSeen: $lastSeen)';
+    return 'Friend(id: $id, username: $username, isOnline: $isOnline, name: $name, photoUrl: $photoUrl, lastSeen: $lastSeen)';
   }
 
   @override
@@ -184,6 +199,9 @@ class _$_Friend extends _Friend {
             (identical(other.username, username) ||
                 const DeepCollectionEquality()
                     .equals(other.username, username)) &&
+            (identical(other.isOnline, isOnline) ||
+                const DeepCollectionEquality()
+                    .equals(other.isOnline, isOnline)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.photoUrl, photoUrl) ||
@@ -199,6 +217,7 @@ class _$_Friend extends _Friend {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(username) ^
+      const DeepCollectionEquality().hash(isOnline) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(photoUrl) ^
       const DeepCollectionEquality().hash(lastSeen);
@@ -218,6 +237,7 @@ abstract class _Friend extends Friend {
   const factory _Friend(
       {@required @requiredNotNull String id,
       @required @requiredNotNull String username,
+      @JsonKey(ignore: true) bool isOnline,
       @doNotIncludeIfNull String name,
       @doNotIncludeIfNull String photoUrl,
       @_lastSeenJsonKey DateTime lastSeen}) = _$_Friend;
@@ -230,6 +250,9 @@ abstract class _Friend extends Friend {
   @override
   @requiredNotNull
   String get username;
+  @override
+  @JsonKey(ignore: true)
+  bool get isOnline;
   @override
   @doNotIncludeIfNull
   String get name;
