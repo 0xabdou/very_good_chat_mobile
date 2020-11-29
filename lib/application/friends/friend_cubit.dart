@@ -35,7 +35,7 @@ class FriendCubit extends Cubit<FriendState> {
     await refreshFriends();
 
     _friendsPollingTimer = Timer.periodic(
-      const Duration(seconds: 60),
+      const Duration(seconds: 10),
       (_) => refreshFriends(),
     );
   }
@@ -49,9 +49,7 @@ class FriendCubit extends Cubit<FriendState> {
       (failure) {
         emit(state.copyWith(failure: failure));
       },
-      (friends) {
-        emit(state.copyWith(friends: friends));
-      },
+      _emitNewFriends,
     );
 
     // remote friends
@@ -60,17 +58,34 @@ class FriendCubit extends Cubit<FriendState> {
       (failure) {
         emit(state.copyWith(failure: failure));
       },
-      (friends) {
-        emit(state.copyWith(friends: friends));
-      },
+      _emitNewFriends,
     );
+  }
+
+  // Determine what friends to remove
+  // Determine what friends to add
+  // Determine where to add them
+  void _emitNewFriends(List<Friend> friends) {
+    final onlineFriends = <Friend>[];
+    final offlineFriends = <Friend>[];
+    for (final friend in friends) {
+      if (friend.isOnline)
+        onlineFriends.add(friend);
+      else
+        offlineFriends.add(friend);
+    }
+    emit(state.copyWith(
+      allFriends: friends,
+      onlineFriends: onlineFriends,
+      offlineFriends: offlineFriends,
+    ));
   }
 
   @override
   void onChange(Change<FriendState> change) {
     super.onChange(change);
-    final curFriendsNum = change.currentState.friends.length;
-    final nextFriendsNum = change.nextState.friends.length;
+    final curFriendsNum = change.currentState.allFriends.length;
+    final nextFriendsNum = change.nextState.allFriends.length;
     logger.d('From: FriendState(friends: $curFriendsNum)\n'
         'To: FriendState(friends:$nextFriendsNum)');
   }

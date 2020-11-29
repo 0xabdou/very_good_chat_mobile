@@ -19,8 +19,14 @@ void main() {
   });
 
   group('fetchFriends()', () {
-    final localFriends = [friend.copyWith(id: 'local')];
-    final remoteFriends = [friend.copyWith(id: 'remote')];
+    final localFriends = [
+      friend.copyWith(id: 'local1', lastSeen: DateTime.now(), isOnline: true),
+      friend.copyWith(id: 'local2'),
+    ];
+    final remoteFriends = [
+      friend.copyWith(id: 'remote1', lastSeen: DateTime.now(), isOnline: true),
+      friend.copyWith(id: 'remote2'),
+    ];
     blocTest<FriendCubit, FriendState>(
       'should emit a state with local friend, then remote friends, '
       'if all went well. It should also kick off polling',
@@ -33,8 +39,16 @@ void main() {
       },
       act: (c) => c.fetchFriends(),
       expect: [
-        FriendState.initial().copyWith(friends: localFriends),
-        FriendState.initial().copyWith(friends: remoteFriends),
+        FriendState.initial().copyWith(
+          allFriends: localFriends,
+          onlineFriends: localFriends.where((f) => f.isOnline).toList(),
+          offlineFriends: localFriends.where((f) => !f.isOnline).toList(),
+        ),
+        FriendState.initial().copyWith(
+          allFriends: remoteFriends,
+          onlineFriends: remoteFriends.where((f) => f.isOnline).toList(),
+          offlineFriends: remoteFriends.where((f) => !f.isOnline).toList(),
+        ),
       ],
       verify: (c) async {
         verify(mockRepo.getFriendsLocally()).called(1);

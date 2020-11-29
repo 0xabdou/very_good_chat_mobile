@@ -5,14 +5,18 @@ part of 'friend_cubit.dart';
 abstract class FriendState with _$FriendState {
   /// Constructor
   const factory FriendState({
-    @required List<Friend> friends,
+    @required List<Friend> allFriends,
+    @required List<Friend> onlineFriends,
+    @required List<Friend> offlineFriends,
     @required List<FriendRequest> friendRequests,
     FriendFailure failure,
   }) = _FriendState;
 
   /// Returns the initial friends state
   factory FriendState.initial() => const FriendState(
-        friends: [],
+        allFriends: [],
+        onlineFriends: [],
+        offlineFriends: [],
         friendRequests: [],
       );
 }

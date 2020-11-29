@@ -15,7 +15,7 @@ class FriendsScreen extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: ListView.separated(
-            itemCount: state.friends.length,
+            itemCount: state.onlineFriends.length,
             separatorBuilder: (context, index) {
               return const Divider(
                 height: 0,
@@ -26,7 +26,7 @@ class FriendsScreen extends StatelessWidget {
               );
             },
             itemBuilder: (context, index) {
-              return FriendsListItem(friend: state.friends[index]);
+              return FriendsListItem(friend: state.onlineFriends[index]);
             },
           ),
         );
