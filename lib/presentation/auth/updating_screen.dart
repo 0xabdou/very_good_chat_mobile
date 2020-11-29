@@ -66,7 +66,12 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
         return WillPopScope(
           onWillPop: () async {
             final result = (await yesNoDialog(context)) ?? false;
-            if (result) context.read<AuthCubit>().logout();
+            if (result) {
+              if (registering)
+                context.read<AuthCubit>().logout();
+              else
+                return true;
+            }
             return false;
           },
           child: Scaffold(

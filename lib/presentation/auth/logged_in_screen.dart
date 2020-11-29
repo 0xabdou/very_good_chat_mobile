@@ -14,6 +14,8 @@ class LoggedInScreen extends StatefulWidget {
 }
 
 class _LoggedInScreenState extends State<LoggedInScreen> {
+  final chatsKey = UniqueKey();
+  final peopleKey = UniqueKey();
   int activeIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -51,8 +53,8 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
         ),
         title: AnimatedSwitcher(
           child: activeIndex == 0
-              ? Text('Chats', key: UniqueKey())
-              : Text('People', key: UniqueKey()),
+              ? Text('Chats', key: chatsKey)
+              : Text('People', key: peopleKey),
           duration: const Duration(milliseconds: 400),
         ),
         centerTitle: true,
