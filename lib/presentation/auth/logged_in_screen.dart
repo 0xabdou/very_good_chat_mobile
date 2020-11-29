@@ -49,7 +49,12 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
             ),
           ),
         ),
-        title: const Text('Chats'),
+        title: AnimatedSwitcher(
+          child: activeIndex == 0
+              ? Text('Chats', key: UniqueKey())
+              : Text('People', key: UniqueKey()),
+          duration: const Duration(milliseconds: 400),
+        ),
         centerTitle: true,
       ),
       backgroundColor: Theme.of(context).primaryColor,
@@ -68,6 +73,10 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
           });
         },
         currentIndex: activeIndex,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(0.5),
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
         items: [
           const BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble),

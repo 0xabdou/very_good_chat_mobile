@@ -250,7 +250,6 @@ class LastSeenBadge extends StatelessWidget {
 
   String get _duration {
     if (lastSeen == null) return null;
-    logger.w('Hello');
     final now = DateTime.now().millisecondsSinceEpoch;
     final then = lastSeen.millisecondsSinceEpoch;
     final diff = now - then;
