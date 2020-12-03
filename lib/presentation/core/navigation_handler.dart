@@ -65,8 +65,7 @@ void _maybeNavigate(AuthState state) {
       ExtendedNavigator.root.push(
         Routes.updatingScreen,
         arguments: UpdatingScreenArguments(
-          cubit: getIt(),
-          authProviderInfo: r.authInfo,
+          cubit: getIt()..registering(r.authInfo),
         ),
       );
     },

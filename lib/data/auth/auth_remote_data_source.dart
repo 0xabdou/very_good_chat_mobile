@@ -59,7 +59,7 @@ class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
     await Future.delayed(const Duration(seconds: 3));
     return User(
       id: _user.id,
-      username: 'outroverted',
+      username: _user.username,
       name: _user.name,
       photoUrl: _user.photoUrl,
     );

@@ -7,7 +7,6 @@ import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
-import 'package:very_good_chat/shared/logger.dart';
 
 part 'friend_cubit.freezed.dart';
 part 'friend_state.dart';
@@ -84,10 +83,10 @@ class FriendCubit extends Cubit<FriendState> {
   @override
   void onChange(Change<FriendState> change) {
     super.onChange(change);
-    final curFriendsNum = change.currentState.allFriends.length;
-    final nextFriendsNum = change.nextState.allFriends.length;
-    logger.d('From: FriendState(friends: $curFriendsNum)\n'
-        'To: FriendState(friends:$nextFriendsNum)');
+    //final curFriendsNum = change.currentState.allFriends.length;
+    //final nextFriendsNum = change.nextState.allFriends.length;
+    //logger.d('From: FriendState(friends: $curFriendsNum)\n'
+    //    'To: FriendState(friends:$nextFriendsNum)');
   }
 
   @override

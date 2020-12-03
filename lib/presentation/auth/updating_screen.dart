@@ -4,55 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
-import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
-import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 /// The screen that's shown when registering/updating profile
-class UpdatingScreen extends StatefulWidget {
+class UpdatingScreen extends StatelessWidget {
   ///  Constructor
-  /// If [authProviderInfo] is provided, it's a registration page
-  /// If [currentUser] is provided, it's a profile updating page
   const UpdatingScreen({
     Key key,
     @required UpdatingCubit cubit,
-    AuthProviderInfo authProviderInfo,
-    User currentUser,
-  })  : assert(authProviderInfo != null || currentUser != null),
-        _cubit = cubit,
-        _currentUser = currentUser,
-        _authProviderInfo = authProviderInfo,
+  })  : _cubit = cubit,
         super(key: key);
 
   final UpdatingCubit _cubit;
-  final AuthProviderInfo _authProviderInfo;
-  final User _currentUser;
-
-  @override
-  _UpdatingScreenState createState() => _UpdatingScreenState();
-}
-
-class _UpdatingScreenState extends State<UpdatingScreen> {
-  UpdatingCubit cubit;
-  bool registering;
-
-  @override
-  void initState() {
-    cubit = widget._cubit;
-    if (widget._authProviderInfo != null) {
-      registering = true;
-      cubit.registering(widget._authProviderInfo);
-    } else {
-      registering = false;
-      cubit.updating(widget._currentUser);
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UpdatingCubit, UpdatingState>(
-      cubit: cubit,
+      cubit: _cubit,
       listener: (context, state) {
         if (state.done) {
           ExtendedNavigator.root.pop();
@@ -67,7 +35,7 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
           onWillPop: () async {
             final result = (await yesNoDialog(context)) ?? false;
             if (result) {
-              if (registering)
+              if (state.registering)
                 context.read<AuthCubit>().logout();
               else
                 return true;
@@ -75,7 +43,7 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
             return false;
           },
           child: Scaffold(
-            appBar: registering
+            appBar: state.registering
                 ? null
                 : _getAppBar(
                     submitDisabled: submitDisabled,
@@ -90,10 +58,10 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
                     children: [
                       UpdatingProfilePicture(
                         state: state,
-                        onEditPressed: () => cubit.pickPhoto(context),
+                        onEditPressed: () => _cubit.pickPhoto(context),
                       ),
                       TextFormField(
-                        onChanged: (s) => cubit.usernameChanged(s),
+                        onChanged: _cubit.usernameChanged,
                         validator: (_) => state.usernameError,
                         initialValue: state.username,
                         decoration: const InputDecoration(
@@ -103,7 +71,7 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
                         enabled: !othersDisabled,
                       ),
                       TextFormField(
-                        onChanged: (s) => cubit.nameChanged(s),
+                        onChanged: _cubit.nameChanged,
                         initialValue: state.name,
                         decoration: const InputDecoration(
                           labelText: 'Name',
@@ -111,10 +79,9 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
                         enabled: !othersDisabled,
                       ),
                       const SizedBox(height: 16),
-                      if (registering)
+                      if (state.registering)
                         RegistrationSubmitButton(
-                          onPressed:
-                              submitDisabled ? null : () => cubit.submit(),
+                          onPressed: submitDisabled ? null : _cubit.submit,
                           loading: state.callingApi,
                         ),
                     ],
@@ -142,7 +109,7 @@ class _UpdatingScreenState extends State<UpdatingScreen> {
       title: const Text('Edit profile'),
       actions: [
         IconButton(
-          onPressed: submitDisabled ? null : () => cubit.submit(),
+          onPressed: submitDisabled ? null : _cubit.submit,
           icon: SizedBox(
             width: 25,
             height: 25,

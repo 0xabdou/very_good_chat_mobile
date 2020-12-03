@@ -12,23 +12,24 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../application/auth/updating/updating_cubit.dart';
-import '../domain/auth/auth_provider_info.dart';
-import '../domain/auth/user.dart';
 import '../presentation/auth/logged_in_screen.dart';
 import '../presentation/auth/login_screen.dart';
 import '../presentation/auth/splash_screen.dart';
 import '../presentation/auth/updating_screen.dart';
+import '../presentation/profile/current_user_profile.dart';
 import '../presentation/shared/image_cropper.dart';
 
 class Routes {
   static const String splashScreen = '/';
   static const String loginScreen = '/login-screen';
+  static const String profileScreen = '/profile-screen';
   static const String updatingScreen = '/updating-screen';
   static const String loggedInScreen = '/logged-in-screen';
   static const String imageCropper = '/image-cropper';
   static const all = <String>{
     splashScreen,
     loginScreen,
+    profileScreen,
     updatingScreen,
     loggedInScreen,
     imageCropper,
@@ -41,6 +42,7 @@ class AppRouter extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.splashScreen, page: SplashScreen),
     RouteDef(Routes.loginScreen, page: LoginScreen),
+    RouteDef(Routes.profileScreen, page: ProfileScreen),
     RouteDef(Routes.updatingScreen, page: UpdatingScreen),
     RouteDef(Routes.loggedInScreen, page: LoggedInScreen),
     RouteDef(Routes.imageCropper, page: ImageCropper),
@@ -60,14 +62,18 @@ class AppRouter extends RouterBase {
         settings: data,
       );
     },
+    ProfileScreen: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => ProfileScreen(),
+        settings: data,
+      );
+    },
     UpdatingScreen: (data) {
       final args = data.getArgs<UpdatingScreenArguments>(nullOk: false);
       return MaterialPageRoute<dynamic>(
         builder: (context) => UpdatingScreen(
           key: args.key,
           cubit: args.cubit,
-          authProviderInfo: args.authProviderInfo,
-          currentUser: args.currentUser,
         ),
         settings: data,
       );
@@ -100,13 +106,7 @@ class AppRouter extends RouterBase {
 class UpdatingScreenArguments {
   final Key key;
   final UpdatingCubit cubit;
-  final AuthProviderInfo authProviderInfo;
-  final User currentUser;
-  UpdatingScreenArguments(
-      {this.key,
-      @required this.cubit,
-      this.authProviderInfo,
-      this.currentUser});
+  UpdatingScreenArguments({this.key, @required this.cubit});
 }
 
 /// ImageCropper arguments holder class

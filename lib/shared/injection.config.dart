@@ -21,6 +21,7 @@ import '../domain/auth/i_auth_repository.dart';
 import '../data/friends/friend_local_data_source.dart';
 import '../data/friends/friend_remote_data_source.dart';
 import '../domain/friends/i_friend_repository.dart';
+import '../application/profile/profile_cubit.dart';
 import 'third_party_injectable.dart';
 import '../application/auth/updating/updating_cubit.dart';
 import '../application/auth/user_validators.dart';
@@ -59,6 +60,8 @@ Future<GetIt> $initGetIt(
       () => AuthCubit(authRepository: get<IAuthRepository>()));
   gh.lazySingleton<FriendCubit>(
       () => FriendCubit(friendRepository: get<IFriendRepository>()));
+  gh.factory<ProfileCubit>(() => ProfileCubit(
+      authCubit: get<AuthCubit>(), friendCubit: get<FriendCubit>()));
   gh.factory<UpdatingCubit>(() => UpdatingCubit(
         authRepository: get<IAuthRepository>(),
         validators: get<UserValidators>(),

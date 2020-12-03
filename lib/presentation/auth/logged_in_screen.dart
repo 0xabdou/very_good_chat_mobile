@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/presentation/friends/friends_screen.dart';
-import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/logger.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
 
@@ -34,13 +33,7 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
           padding: const EdgeInsets.all(8),
           child: InkWell(
             onTap: () {
-              ExtendedNavigator.root.push(
-                Routes.updatingScreen,
-                arguments: UpdatingScreenArguments(
-                  cubit: getIt(),
-                  currentUser: user,
-                ),
-              );
+              ExtendedNavigator.root.push(Routes.profileScreen);
             },
             borderRadius: BorderRadius.circular(100),
             child: ClipRRect(

@@ -5,8 +5,6 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
 import 'package:very_good_chat/presentation/auth/updating_screen.dart';
 
-import '../../mock/mock_data.dart';
-
 class MockUpdatingCubit extends Mock implements UpdatingCubit {}
 
 void main() {
@@ -23,24 +21,25 @@ void main() {
     return MaterialApp(home: widget);
   }
 
-  Widget _registrationScreen() {
+  Widget _getWidget() {
     return _materialApp(
-      UpdatingScreen(cubit: mockCubit, authProviderInfo: authProviderInfo),
+      UpdatingScreen(cubit: mockCubit),
     );
   }
 
-  Widget _updatingScreen() {
-    return _materialApp(
-      UpdatingScreen(cubit: mockCubit, currentUser: user),
-    );
-  }
+  final registrationState = UpdatingState.initial().copyWith(registering: true);
+  final updatingState = UpdatingState.initial().copyWith(
+    username: 'username',
+    name: 'name',
+  );
 
   group('UpdatingScreen always has 1 ProfileImage and 2 TextFormFields', () {
     testWidgets(
       'While registering',
       (tester) async {
         // arrange
-        final widget = _registrationScreen();
+        when(mockCubit.state).thenReturn(registrationState);
+        final widget = _getWidget();
         // render
         await tester.pumpWidget(widget);
         // assert
@@ -53,7 +52,8 @@ void main() {
       'While updating',
       (tester) async {
         // arrange
-        final widget = _updatingScreen();
+        when(mockCubit.state).thenReturn(updatingState);
+        final widget = _getWidget();
         // render
         await tester.pumpWidget(widget);
         // assert
@@ -72,7 +72,7 @@ void main() {
       when(mockCubit.state).thenReturn(
         const UpdatingState(username: username, name: name),
       );
-      final widget = _registrationScreen();
+      final widget = _getWidget();
       // render
       await tester.pumpWidget(widget);
       // assert
@@ -85,7 +85,8 @@ void main() {
     'While registering, the page must have a submit button and no app bar',
     (tester) async {
       // arrange
-      final widget = _registrationScreen();
+      when(mockCubit.state).thenReturn(registrationState);
+      final widget = _getWidget();
       // render
       await tester.pumpWidget(widget);
       // assert
@@ -95,11 +96,15 @@ void main() {
   );
 
   group('While updating', () {
+    setUp(() {
+      when(mockCubit.state).thenReturn(updatingState);
+    });
+
     testWidgets(
       'The page must have an app bar and no submit button',
       (tester) async {
         // arrange
-        final widget = _updatingScreen();
+        final widget = _getWidget();
         // render
         await tester.pumpWidget(widget);
         // assert
@@ -113,7 +118,7 @@ void main() {
       'mark icon, ant not a spinner',
       (tester) async {
         // arrange
-        final widget = _updatingScreen();
+        final widget = _getWidget();
         // render
         await tester.pumpWidget(widget);
         // assert
@@ -128,9 +133,9 @@ void main() {
       (tester) async {
         // arrange
         when(mockCubit.state).thenReturn(
-          UpdatingState.initial().copyWith(callingApi: true),
+          updatingState.copyWith(callingApi: true),
         );
-        final widget = _updatingScreen();
+        final widget = _getWidget();
         // render
         await tester.pumpWidget(widget);
         // assert
