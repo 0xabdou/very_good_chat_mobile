@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 /// A place holder to display when loading photos
-class PhotoPlaceholder extends StatefulWidget {
+class LoadingPhotoPlaceholder extends StatefulWidget {
   @override
-  _PhotoPlaceholderState createState() => _PhotoPlaceholderState();
+  _LoadingPhotoPlaceholderState createState() =>
+      _LoadingPhotoPlaceholderState();
 }
 
-class _PhotoPlaceholderState extends State<PhotoPlaceholder>
+class _LoadingPhotoPlaceholderState extends State<LoadingPhotoPlaceholder>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Animation<Color> _animation;

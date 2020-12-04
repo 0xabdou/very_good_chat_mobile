@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
-import 'package:very_good_chat/presentation/shared/widgets/photo_placeholder.dart';
+import 'package:very_good_chat/presentation/shared/widgets/loading_photo_placeholder.dart';
 import 'package:very_good_chat/shared/logger.dart';
 
 /// Friends screen
@@ -167,7 +167,7 @@ class FriendsListItem extends StatelessWidget {
               },
               placeholder: (_, __) => ClipRRect(
                 borderRadius: BorderRadius.circular(100),
-                child: PhotoPlaceholder(),
+                child: LoadingPhotoPlaceholder(),
               ),
             ),
             if (friend.isOnline)
@@ -194,7 +194,7 @@ class FriendsListItem extends StatelessWidget {
               Positioned(
                 bottom: 0,
                 right: 0,
-                child: LastSeenBadge(lastSeen: friend.lastSeen),
+                child: LastSeenBadgeToBeDeprecated(lastSeen: friend.lastSeen),
               ),
           ],
         ),
@@ -207,9 +207,9 @@ class FriendsListItem extends StatelessWidget {
 
 /// Used by [FriendsListItem] to display how long was the user offline
 @visibleForTesting
-class LastSeenBadge extends StatelessWidget {
+class LastSeenBadgeToBeDeprecated extends StatelessWidget {
   /// Constructor
-  const LastSeenBadge({
+  const LastSeenBadgeToBeDeprecated({
     Key key,
     @required this.lastSeen,
   }) : super(key: key);

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
+import 'package:very_good_chat/presentation/shared/widgets/default_photo.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 /// The screen that's shown when registering/updating profile
@@ -210,7 +211,7 @@ class UpdatingProfilePicture extends StatelessWidget {
         state.photoUrl,
       );
     }
-    return Image.asset('assets/images/profile_photo.png');
+    return DefaultPhoto() as Image;
   }
 }
 
