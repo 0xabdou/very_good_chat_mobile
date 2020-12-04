@@ -6,6 +6,7 @@ import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/presentation/core/navigation_handler.dart';
 import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
+import 'package:very_good_chat/shared/size_config.dart';
 
 /// The root widget of the app
 class AppWidget extends StatelessWidget {
@@ -26,13 +27,16 @@ class AppWidget extends StatelessWidget {
           builder: ExtendedNavigator.builder(
             router: AppRouter(),
             builder: (context, extendedNav) {
-              return Theme(
-                data: ThemeData(
-                  brightness: Brightness.dark,
-                  primaryColor: Colors.black,
-                  canvasColor: Colors.black,
+              return SizeConfig(
+                data: SizeConfigData.fromContext(context),
+                child: Theme(
+                  data: ThemeData(
+                    brightness: Brightness.dark,
+                    primaryColor: Colors.black,
+                    canvasColor: Colors.black,
+                  ),
+                  child: extendedNav,
                 ),
-                child: extendedNav,
               );
             },
           ),
