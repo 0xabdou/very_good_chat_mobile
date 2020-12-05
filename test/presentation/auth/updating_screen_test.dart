@@ -5,6 +5,8 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
 import 'package:very_good_chat/presentation/auth/updating_screen.dart';
 
+import '../wrappers.dart';
+
 class MockUpdatingCubit extends Mock implements UpdatingCubit {}
 
 void main() {
@@ -17,14 +19,8 @@ void main() {
     );
   });
 
-  Widget _materialApp(Widget widget) {
-    return MaterialApp(home: widget);
-  }
-
   Widget _getWidget() {
-    return _materialApp(
-      UpdatingScreen(cubit: mockCubit),
-    );
+    return wrapInMaterialSizeConfigApp(UpdatingScreen(cubit: mockCubit));
   }
 
   final registrationState = UpdatingState.initial().copyWith(registering: true);
@@ -151,7 +147,7 @@ void main() {
       (tester) async {
         // arrange
         final state = UpdatingState.initial();
-        final widget = _materialApp(
+        final widget = wrapInMaterialSizeConfigApp(
           UpdatingProfilePicture(state: state, onEditPressed: () {}),
         );
         // render
@@ -167,7 +163,7 @@ void main() {
       (tester) async {
         // arrange
         final state = UpdatingState.initial();
-        final widget = _materialApp(
+        final widget = wrapInMaterialSizeConfigApp(
           UpdatingProfilePicture(state: state, onEditPressed: () {}),
         );
         // render
@@ -182,7 +178,7 @@ void main() {
       (tester) async {
         // arrange
         final state = UpdatingState.initial().copyWith(uploadingPhoto: true);
-        final widget = _materialApp(
+        final widget = wrapInMaterialSizeConfigApp(
           UpdatingProfilePicture(state: state, onEditPressed: () {}),
         );
         // render
@@ -198,7 +194,7 @@ void main() {
       'Should have a check mark icon if not loading',
       (tester) async {
         // arrange
-        final widget = _materialApp(
+        final widget = wrapInMaterialSizeConfigApp(
           RegistrationSubmitButton(onPressed: () {}, loading: false),
         );
         // render
@@ -213,7 +209,7 @@ void main() {
       'Should have a spinner if loading',
       (tester) async {
         // arrange
-        final widget = _materialApp(
+        final widget = wrapInMaterialSizeConfigApp(
           RegistrationSubmitButton(onPressed: () {}, loading: true),
         );
         // render

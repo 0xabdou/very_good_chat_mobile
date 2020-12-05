@@ -6,11 +6,13 @@ import 'package:very_good_chat/application/profile/relationship.dart';
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_button.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
+import 'package:very_good_chat/shared/size_config.dart';
 
 /// Profile UI, can be used for the current user or his friends
 class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final sc = SizeConfig.of(context);
     final cubit = context.watch<ProfileCubit>();
     final state = cubit.state;
     if (!state.initialized) return Container();
@@ -37,28 +39,31 @@ class Profile extends StatelessWidget {
             photoUrl: user.photoUrl,
             isOnline: isOnline,
             lastSeen: lastSeen,
+            radius: sc.width(40),
+            dotAlignment: const Alignment(0.85, 0.85),
+            badgeAlignment: const Alignment(0.85, 0.85),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: sc.height(2)),
           Text('@${user.username}'),
           if (user.name != null)
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 16),
+                SizedBox(height: sc.height(2)),
                 Text(
                   user.name,
-                  style: const TextStyle(
-                    fontSize: 22,
-                  ),
+                  style: TextStyle(fontSize: sc.width(6)),
                 ),
               ],
             ),
-          const SizedBox(height: 16),
+          SizedBox(height: sc.height(2)),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              const Spacer(),
               _buildFriendshipButton(context, relationship),
+              const Spacer(),
               _buildMessagingButton(),
+              const Spacer(),
             ],
           ),
         ],
@@ -74,10 +79,11 @@ class Profile extends StatelessWidget {
           barrierDismissible: true,
           barrierLabel: 'Dismiss',
           transitionDuration: const Duration(milliseconds: 250),
-          pageBuilder: (context, animation, _) {
+          pageBuilder: (_, animation, __) {
             return FriendshipMenu(
               animation: animation,
               relationship: rs,
+              sc: SizeConfig.of(context),
             );
           },
         );

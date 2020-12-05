@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_good_chat/application/profile/relationship.dart';
+import 'package:very_good_chat/shared/size_config.dart';
 
 import 'profile_button.dart';
 
@@ -11,6 +12,7 @@ class FriendshipMenu extends StatefulWidget {
     Key key,
     @required this.animation,
     @required this.relationship,
+    @required this.sc,
   }) : super(key: key);
 
   /// This is provided by the [RoutePageBuilder] of [showGeneralDialog]
@@ -18,6 +20,9 @@ class FriendshipMenu extends StatefulWidget {
 
   /// The relationship
   final Relationship relationship;
+
+  /// Size config
+  final SizeConfigData sc;
 
   @override
   _FriendshipMenuState createState() => _FriendshipMenuState();
@@ -57,6 +62,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
 
   @override
   Widget build(BuildContext context) {
+    final sc = widget.sc;
     return AnimatedBuilder(
       animation: widget.animation,
       builder: (context, child) {
@@ -76,20 +82,19 @@ class _FriendshipMenuState extends State<FriendshipMenu>
                     child: Text(
                       message,
                       textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: sc.width(4)),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: sc.height(0.5)),
                   Container(
-                    height: 60,
+                    height: sc.height(8),
                     clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(50),
+                        top: Radius.circular(sc.height(8)),
                       ),
                     ),
-                    child: Row(
-                      children: _buildActions(),
-                    ),
+                    child: Row(children: _buildActions(sc)),
                   ),
                 ],
               ),
@@ -100,10 +105,10 @@ class _FriendshipMenuState extends State<FriendshipMenu>
     );
   }
 
-  List<Widget> _buildActions() {
+  List<Widget> _buildActions(SizeConfigData sc) {
     return widget.relationship.map(
-      self: (_) => _buildFriendActions(self: true),
-      friend: (_) => _buildFriendActions(),
+      self: (_) => _buildFriendActions(sc: sc, self: true),
+      friend: (_) => _buildFriendActions(sc: sc),
       requestSent: (_) => [],
       requestReceived: (_) => [],
       blocked: (_) => [],
@@ -111,7 +116,10 @@ class _FriendshipMenuState extends State<FriendshipMenu>
     );
   }
 
-  List<Widget> _buildFriendActions({bool self = false}) {
+  List<Widget> _buildFriendActions({
+    @required SizeConfigData sc,
+    bool self = false,
+  }) {
     return [
       Expanded(
         child: FriendshipSheetButton(
@@ -124,6 +132,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
           label: 'Unfriend',
           textColor: Colors.white,
           backgroundColor: Colors.red,
+          sc: sc,
         ),
       ),
       Expanded(
@@ -137,6 +146,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
           label: 'Block',
           textColor: Colors.white,
           backgroundColor: Colors.red,
+          sc: sc,
         ),
       ),
     ];
@@ -153,6 +163,7 @@ class FriendshipSheetButton extends StatelessWidget {
     @required this.icon,
     @required this.textColor,
     @required this.backgroundColor,
+    @required this.sc,
   }) : super(key: key);
 
   /// The on pressed callback
@@ -170,6 +181,9 @@ class FriendshipSheetButton extends StatelessWidget {
   /// The button's background color
   final Color backgroundColor;
 
+  /// Size config
+  final SizeConfigData sc;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -180,11 +194,11 @@ class FriendshipSheetButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon),
-              const SizedBox(width: 8),
+              Icon(icon, size: sc.width(7)),
+              SizedBox(width: sc.width(2)),
               Text(
                 label,
-                style: const TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: sc.width(5)),
               ),
             ],
           ),

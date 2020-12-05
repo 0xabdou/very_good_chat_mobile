@@ -78,6 +78,8 @@ class FakeAuthRemoteDataSource implements IAuthRemoteDataSource {
   @override
   Future<String> updateUserPhoto(Uint8List photoBytes) async {
     await Future.delayed(const Duration(seconds: 3));
-    return 'https://picsum.photos/512';
+    const url = 'https://picsum.photos/512';
+    _user = _user.copyWith(photoUrl: url);
+    return url;
   }
 }

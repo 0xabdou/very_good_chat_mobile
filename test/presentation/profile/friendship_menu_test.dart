@@ -3,6 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_good_chat/application/profile/relationship.dart';
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
+import 'package:very_good_chat/shared/size_config.dart';
+
+import '../wrappers.dart';
 
 void main() {
   AnimationController controller;
@@ -18,10 +21,14 @@ void main() {
   });
 
   Widget _getWidget(Relationship relationship) {
-    return MaterialApp(
-      home: Scaffold(
-        body: FriendshipMenu(animation: controller, relationship: relationship),
-      ),
+    return wrapInMaterialSizeConfigApp(
+      Builder(builder: (context) {
+        return FriendshipMenu(
+          animation: controller,
+          relationship: relationship,
+          sc: SizeConfig.of(context),
+        );
+      }),
     );
   }
 

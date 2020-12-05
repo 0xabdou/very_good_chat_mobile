@@ -12,7 +12,11 @@ class ProfilePicture extends StatelessWidget {
     @required this.photoUrl,
     this.isOnline = false,
     this.lastSeen,
-    this.size = 150,
+    this.radius = 150,
+    this.onlineDotRadius,
+    this.lastSeenBadgeSize,
+    this.dotAlignment = Alignment.bottomRight,
+    this.badgeAlignment = Alignment.bottomRight,
   }) : super(key: key);
 
   /// The photo url
@@ -28,53 +32,65 @@ class ProfilePicture extends StatelessWidget {
   /// instead of the green dot, representing how long the user has been offline
   final DateTime lastSeen;
 
-  /// The size of the widget
-  final double size;
+  /// The radius of the widget
+  final double radius;
+
+  /// The radius of the green dot
+  final double onlineDotRadius;
+
+  /// The size of the last seen badge
+  final double lastSeenBadgeSize;
+
+  final Alignment dotAlignment;
+
+  final Alignment badgeAlignment;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      child: SizedBox(
-        height: size,
-        width: size,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Material(
-              clipBehavior: Clip.antiAlias,
-              shape: const CircleBorder(),
-              child: photoUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: photoUrl, //photoUrl,
-                      imageBuilder: (context, imageProvider) {
-                        return Ink.image(
-                          image: imageProvider,
-                          child: InkWell(
-                            onTap: onPressed,
-                          ),
-                        );
-                      },
-                      placeholder: (_, __) => LoadingPhotoPlaceholder(),
-                    )
-                  : DefaultPhoto(),
-            ),
-            if (isOnline)
-              const Positioned(
-                bottom: 10,
-                right: 10,
-                child: OnlineDot(radius: 20),
+    final dotRadius = onlineDotRadius ?? radius / 7;
+    final badgeSize = lastSeenBadgeSize ?? radius / 10;
+    return SizedBox(
+      height: radius,
+      width: radius,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Material(
+            clipBehavior: Clip.antiAlias,
+            shape: const CircleBorder(),
+            child: photoUrl != null
+                ? CachedNetworkImage(
+                    imageUrl: photoUrl, //photoUrl,
+                    imageBuilder: (context, imageProvider) {
+                      return Ink.image(
+                        image: imageProvider,
+                        child: InkWell(
+                          onTap: onPressed,
+                        ),
+                      );
+                    },
+                    placeholder: (_, __) => LoadingPhotoPlaceholder(),
+                  )
+                : DefaultPhoto(),
+          ),
+          if (isOnline)
+            Positioned.fill(
+              child: Align(
+                alignment: dotAlignment,
+                child: OnlineDot(radius: dotRadius),
               ),
-            if (!isOnline && lastSeen != null)
-              Positioned(
-                bottom: 10,
-                right: 10,
+            ),
+          if (!isOnline && lastSeen != null)
+            Positioned.fill(
+              child: Align(
+                alignment: badgeAlignment,
                 child: LastSeenBadge(
                   lastSeen: lastSeen,
-                  size: 14,
+                  size: badgeSize,
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
@@ -98,10 +114,10 @@ class OnlineDot extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(radius),
       ),
-      padding: const EdgeInsets.all(4),
+      padding: EdgeInsets.all(radius / 10),
       child: Container(
-        width: radius,
-        height: radius,
+        width: radius - radius / 10,
+        height: radius - radius / 10,
         decoration: BoxDecoration(
           color: Colors.green,
           borderRadius: BorderRadius.circular(radius),
@@ -132,18 +148,17 @@ class LastSeenBadge extends StatelessWidget {
     if (duration == null) return Container();
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(size),
         color: Theme.of(context).primaryColor,
       ),
-      padding: const EdgeInsets.all(2),
+      padding: EdgeInsets.all(size / 10),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(size),
           color: Colors.green.shade700.withOpacity(0.2),
         ),
-        padding: const EdgeInsets.symmetric(
-          vertical: 1,
-          horizontal: 2,
+        padding: EdgeInsets.symmetric(
+          horizontal: size / 2,
         ),
         child: Text(
           duration,

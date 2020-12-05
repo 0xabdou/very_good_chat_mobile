@@ -91,7 +91,7 @@ class LoginButton extends StatelessWidget {
         ),
         padding: EdgeInsets.symmetric(
           vertical: sc.height(1.2),
-          horizontal: sc.width(5),
+          horizontal: sc.width(3),
         ),
         child: Stack(
           children: [
@@ -102,9 +102,16 @@ class LoginButton extends StatelessWidget {
                 children: [
                   Icon(FontAwesomeIcons.google, size: sc.width(7)),
                   SizedBox(width: sc.width(2)),
-                  Text(
-                    'Login with Google',
-                    style: TextStyle(fontSize: sc.width(6)),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: sc.width(80),
+                    ),
+                    child: Text(
+                      'Login with Google',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: sc.width(5.5)),
+                    ),
                   ),
                 ],
               ),
@@ -114,7 +121,7 @@ class LoginButton extends StatelessWidget {
                 opacity: loggingIn ? 1 : 0,
                 child: SpinKitThreeBounce(
                   color: Colors.white,
-                  size: sc.height(3),
+                  size: sc.width(5),
                 ),
               ),
             ),

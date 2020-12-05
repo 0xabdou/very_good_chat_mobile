@@ -6,6 +6,8 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/presentation/auth/login_screen.dart';
 
+import '../wrappers.dart';
+
 class MockAuthCubit extends Mock implements AuthCubit {}
 
 void main() {
@@ -19,16 +21,7 @@ void main() {
   Widget _provideCubit(Widget widget) {
     return BlocProvider(
       create: (_) => mockCubit,
-      child: MaterialApp(home: widget),
-    );
-  }
-
-  Widget _materialDirectionality(Widget child) {
-    return Material(
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: child,
-      ),
+      child: wrapInMaterialSizeConfigApp(widget),
     );
   }
 
@@ -48,10 +41,12 @@ void main() {
     'if loggingIn is false',
     (tester) async {
       // arrange
-      final widget = _materialDirectionality(
-        LoginButton(
-          loggingIn: false,
-          onPressed: () {},
+      final widget = wrapInMaterialSizeConfigApp(
+        Material(
+          child: LoginButton(
+            loggingIn: false,
+            onPressed: () {},
+          ),
         ),
       );
       // render
@@ -81,10 +76,12 @@ void main() {
     'if loggingIn is true ',
     (tester) async {
       // arrange
-      final widget = _materialDirectionality(
-        LoginButton(
-          loggingIn: true,
-          onPressed: () {},
+      final widget = wrapInMaterialSizeConfigApp(
+        Material(
+          child: LoginButton(
+            loggingIn: true,
+            onPressed: () {},
+          ),
         ),
       );
       // render
