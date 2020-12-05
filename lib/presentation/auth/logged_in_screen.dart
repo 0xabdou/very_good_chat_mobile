@@ -37,7 +37,10 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
           padding: EdgeInsets.all(sc.width(2.5)),
           child: ProfilePicture(
             onPressed: () {
-              ExtendedNavigator.root.push(Routes.profileScreen);
+              ExtendedNavigator.root.push(
+                Routes.profileScreen,
+                arguments: ProfileScreenArguments(user: user),
+              );
             },
             photoUrl: user.photoUrl,
             isOnline: false,

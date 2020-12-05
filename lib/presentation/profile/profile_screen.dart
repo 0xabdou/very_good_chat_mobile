@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/application/profile/profile_cubit.dart';
+import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/presentation/profile/profile.dart';
 import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/logger.dart';
@@ -12,6 +13,16 @@ import 'package:very_good_chat/shared/utils/other_utils.dart';
 
 /// Profile screen duh
 class ProfileScreen extends StatefulWidget {
+  /// Constructor
+  const ProfileScreen({
+    Key key,
+    @required this.user,
+  })  : assert(user != null),
+        super(key: key);
+
+  /// The user of this profile
+  final User user;
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -28,21 +39,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     profileCubit = ProfileCubit(
       authCubit: authCubit,
       friendCubit: friendCubit,
-    );
-    final user = userFromState(authCubit.state);
-    if (user != null) {
-      profileCubit.init(user);
-    }
+    )..init(widget.user);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      cubit: profileCubit,
+      builder: (context, state) {
+        return BlocProvider<ProfileCubit>(
+          create: (_) => profileCubit,
+          child: state.relationship.maybeMap(
+            self: (_) => CurrentUserScaffold(),
+            orElse: () => OtherUserScaffold(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Current user scaffold
+class CurrentUserScaffold extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
-      cubit: authCubit,
       listener: (context, state) {
         state.maybeMap(
-          loggedIn: (li) => profileCubit.init(li.user),
+          loggedIn: (li) => context.read<ProfileCubit>().init(li.user),
           orElse: () {},
         );
       },
@@ -69,12 +94,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ],
           ),
-          body: BlocProvider<ProfileCubit>(
-            create: (_) => profileCubit,
-            child: Profile(),
-          ),
+          body: Profile(),
         );
       },
+    );
+  }
+}
+
+/// Other user scaffold
+class OtherUserScaffold extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final profileCubit = context.watch<ProfileCubit>();
+    final user = profileCubit.state.user;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(user.name ?? user.username),
+      ),
+      body: Profile(),
     );
   }
 }

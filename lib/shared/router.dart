@@ -3,7 +3,7 @@ import 'package:very_good_chat/presentation/auth/logged_in_screen.dart';
 import 'package:very_good_chat/presentation/auth/login_screen.dart';
 import 'package:very_good_chat/presentation/auth/splash_screen.dart';
 import 'package:very_good_chat/presentation/auth/updating_screen.dart';
-import 'package:very_good_chat/presentation/profile/current_user_profile.dart';
+import 'package:very_good_chat/presentation/profile/profile_screen.dart';
 import 'package:very_good_chat/presentation/shared/image_cropper.dart';
 
 @MaterialAutoRouter(

@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
 import 'package:very_good_chat/shared/logger.dart';
+import 'package:very_good_chat/shared/router.gr.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
 /// Friends screen
@@ -150,7 +152,10 @@ class FriendsListItem extends StatelessWidget {
       },
       leading: ProfilePicture(
         onPressed: () {
-          logger.wtf(friend);
+          ExtendedNavigator.root.push(
+            Routes.profileScreen,
+            arguments: ProfileScreenArguments(user: friend.toUser()),
+          );
         },
         photoUrl: friend.photoUrl,
         isOnline: friend.isOnline,

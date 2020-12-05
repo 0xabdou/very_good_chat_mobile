@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/shared/utils/serialization_utils.dart';
 
 part 'friend.freezed.dart';
@@ -22,6 +23,16 @@ abstract class Friend implements _$Friend {
   /// Serializes this object to json
   factory Friend.fromJson(Map<String, dynamic> json) => _$FriendFromJson(json)
       .copyWith(isOnline: _isOnlineFromInt(json['lastSeen'] as int));
+
+  /// Returns the user equivalent of this friend
+  User toUser() {
+    return User(
+      id: id,
+      username: username,
+      name: name,
+      photoUrl: photoUrl,
+    );
+  }
 }
 
 const _lastSeenJsonKey = JsonKey(
