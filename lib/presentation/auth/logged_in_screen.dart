@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/presentation/friends/friends_screen.dart';
+import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
 import 'package:very_good_chat/shared/logger.dart';
 import 'package:very_good_chat/shared/router.gr.dart';
+import 'package:very_good_chat/shared/size_config.dart';
 
 /// The screen that's shown if the user is logged in
 class LoggedInScreen extends StatefulWidget {
@@ -16,8 +18,10 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
   final chatsKey = UniqueKey();
   final peopleKey = UniqueKey();
   int activeIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    final sc = SizeConfig.of(context);
     final authCubit = context.watch<AuthCubit>();
     final user = authCubit.state.maybeWhen(
       loggedIn: (u) => u,
@@ -30,24 +34,27 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.all(8),
-          child: InkWell(
-            onTap: () {
+          padding: EdgeInsets.all(sc.width(2.5)),
+          child: ProfilePicture(
+            onPressed: () {
               ExtendedNavigator.root.push(Routes.profileScreen);
             },
-            borderRadius: BorderRadius.circular(100),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.network(
-                user.photoUrl,
-              ),
-            ),
+            photoUrl: user.photoUrl,
+            isOnline: false,
           ),
         ),
         title: AnimatedSwitcher(
           child: activeIndex == 0
-              ? Text('Chats', key: chatsKey)
-              : Text('People', key: peopleKey),
+              ? Text(
+                  'Chats',
+                  key: chatsKey,
+                  style: TextStyle(fontSize: sc.width(6)),
+                )
+              : Text(
+                  'People',
+                  key: peopleKey,
+                  style: TextStyle(fontSize: sc.width(6)),
+                ),
           duration: const Duration(milliseconds: 400),
         ),
         centerTitle: true,
@@ -70,15 +77,20 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
         currentIndex: activeIndex,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white.withOpacity(0.5),
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
+        selectedFontSize: sc.width(4),
+        unselectedFontSize: sc.width(4),
+        iconSize: sc.width(8),
         items: [
           const BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
+            icon: Icon(
+              Icons.chat_bubble,
+            ),
             label: 'Chats',
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.people),
+            icon: Icon(
+              Icons.people,
+            ),
             label: 'Friends',
           ),
         ],

@@ -12,8 +12,8 @@ class SizeConfig extends InheritedWidget {
         super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(SizeConfig old) {
-    return data != old.data;
+  bool updateShouldNotify(SizeConfig oldWidget) {
+    return data != oldWidget.data;
   }
 
   /// This is where the magic happens

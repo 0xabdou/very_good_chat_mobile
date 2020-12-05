@@ -4,12 +4,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/shared/logger.dart';
+import 'package:very_good_chat/shared/size_config.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 /// The screen that's shown if the user is logged out
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final sc = SizeConfig.of(context);
     final authCubit = context.watch<AuthCubit>();
     final loggingIn = authCubit.state.maybeMap(
       loggedOut: (lo) => lo.loggingIn,
@@ -44,9 +46,9 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/images/logo/vgc_transparent_white.png',
-                  height: 200,
+                  width: sc.width(60),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: sc.height(3)),
                 LoginButton(
                   onPressed: loggingIn ? null : authCubit.loginWithGoogle,
                   loggingIn: loggingIn,
@@ -79,31 +81,41 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sc = SizeConfig.of(context);
     return InkWell(
       onTap: onPressed,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white, width: 2),
-          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.white, width: sc.width(0.5)),
+          borderRadius: BorderRadius.circular(sc.height(1)),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: EdgeInsets.symmetric(
+          vertical: sc.height(1.2),
+          horizontal: sc.width(5),
+        ),
         child: Stack(
           children: [
             Opacity(
               opacity: loggingIn ? 0 : 1,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(FontAwesomeIcons.google, size: 26),
-                  SizedBox(width: 8),
-                  Text('Login with Google', style: TextStyle(fontSize: 20)),
+                children: [
+                  Icon(FontAwesomeIcons.google, size: sc.width(7)),
+                  SizedBox(width: sc.width(2)),
+                  Text(
+                    'Login with Google',
+                    style: TextStyle(fontSize: sc.width(6)),
+                  ),
                 ],
               ),
             ),
             Positioned.fill(
               child: Opacity(
                 opacity: loggingIn ? 1 : 0,
-                child: const SpinKitThreeBounce(color: Colors.white, size: 20),
+                child: SpinKitThreeBounce(
+                  color: Colors.white,
+                  size: sc.height(3),
+                ),
               ),
             ),
           ],

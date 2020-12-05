@@ -12,6 +12,7 @@ class ProfilePicture extends StatelessWidget {
     @required this.photoUrl,
     this.isOnline = false,
     this.lastSeen,
+    this.size = 150,
   }) : super(key: key);
 
   /// The photo url
@@ -27,12 +28,15 @@ class ProfilePicture extends StatelessWidget {
   /// instead of the green dot, representing how long the user has been offline
   final DateTime lastSeen;
 
+  /// The size of the widget
+  final double size;
+
   @override
   Widget build(BuildContext context) {
     return Align(
       child: SizedBox(
-        height: 150,
-        width: 150,
+        height: size,
+        width: size,
         child: Stack(
           fit: StackFit.expand,
           children: [

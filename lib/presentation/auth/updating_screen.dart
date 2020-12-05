@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
 import 'package:very_good_chat/presentation/shared/widgets/default_photo.dart';
+import 'package:very_good_chat/presentation/shared/widgets/loading_photo_placeholder.dart';
+import 'package:very_good_chat/shared/size_config.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 /// The screen that's shown when registering/updating profile
@@ -20,6 +23,7 @@ class UpdatingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sc = SizeConfig.of(context);
     return BlocConsumer<UpdatingCubit, UpdatingState>(
       cubit: _cubit,
       listener: (context, state) {
@@ -49,11 +53,12 @@ class UpdatingScreen extends StatelessWidget {
                 : _getAppBar(
                     submitDisabled: submitDisabled,
                     loading: state.callingApi,
+                    sc: sc,
                   ),
             body: SafeArea(
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 56),
+                  padding: EdgeInsets.symmetric(horizontal: sc.width(18)),
                   child: ListView(
                     shrinkWrap: true,
                     children: [
@@ -65,8 +70,11 @@ class UpdatingScreen extends StatelessWidget {
                         onChanged: _cubit.usernameChanged,
                         validator: (_) => state.usernameError,
                         initialValue: state.username,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Username',
+                          labelStyle: TextStyle(
+                            fontSize: sc.width(4.5),
+                          ),
                         ),
                         autovalidateMode: AutovalidateMode.always,
                         enabled: !othersDisabled,
@@ -74,12 +82,15 @@ class UpdatingScreen extends StatelessWidget {
                       TextFormField(
                         onChanged: _cubit.nameChanged,
                         initialValue: state.name,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Name',
+                          labelStyle: TextStyle(
+                            fontSize: sc.width(4.5),
+                          ),
                         ),
                         enabled: !othersDisabled,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: sc.height(3)),
                       if (state.registering)
                         RegistrationSubmitButton(
                           onPressed: submitDisabled ? null : _cubit.submit,
@@ -99,6 +110,7 @@ class UpdatingScreen extends StatelessWidget {
   AppBar _getAppBar({
     @required bool submitDisabled,
     @required bool loading,
+    @required SizeConfigData sc,
   }) {
     return AppBar(
       leading: IconButton(
@@ -111,13 +123,15 @@ class UpdatingScreen extends StatelessWidget {
       actions: [
         IconButton(
           onPressed: submitDisabled ? null : _cubit.submit,
-          icon: SizedBox(
-            width: 25,
-            height: 25,
-            child: loading
-                ? const CircularProgressIndicator(strokeWidth: 2)
-                : const Icon(Icons.check),
-          ),
+          icon: loading
+              ? SizedBox(
+                  width: sc.height(4),
+                  height: sc.height(4),
+                  child: CircularProgressIndicator(
+                    strokeWidth: sc.width(0.5),
+                  ),
+                )
+              : const Icon(Icons.check),
         ),
       ],
     );
@@ -142,7 +156,8 @@ class UpdatingProfilePicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const profilePhotoSize = 150.0;
+    final sc = SizeConfig.of(context);
+    final profilePhotoSize = sc.width(40);
     final disabled = state.uploadingPhoto || state.callingApi;
     return Align(
       child: SizedBox(
@@ -172,8 +187,8 @@ class UpdatingProfilePicture extends StatelessWidget {
               ),
             // An edit button
             Positioned(
-              bottom: 10,
-              right: 10,
+              bottom: sc.height(2),
+              right: sc.width(2),
               child: Material(
                 elevation: 5,
                 shape: const CircleBorder(),
@@ -181,13 +196,13 @@ class UpdatingProfilePicture extends StatelessWidget {
                     .accentColor
                     .withOpacity(disabled ? 0.3 : 1),
                 child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: EdgeInsets.all(sc.width(1)),
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(sc.width(6)),
                     onTap: disabled ? null : onEditPressed,
                     child: Icon(
                       Icons.edit,
-                      size: 20,
+                      size: sc.width(6),
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
@@ -200,18 +215,19 @@ class UpdatingProfilePicture extends StatelessWidget {
     );
   }
 
-  Image _getImage(UpdatingState state) {
+  Widget _getImage(UpdatingState state) {
     if (state.photoBytes != null) {
       return Image.memory(
         state.photoBytes,
       );
     }
     if (state.photoUrl != null) {
-      return Image.network(
-        state.photoUrl,
+      return CachedNetworkImage(
+        imageUrl: state.photoUrl,
+        placeholder: (_, __) => LoadingPhotoPlaceholder(),
       );
     }
-    return DefaultPhoto() as Image;
+    return DefaultPhoto();
   }
 }
 
@@ -234,19 +250,29 @@ class RegistrationSubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: onPressed,
+    final sc = SizeConfig.of(context);
+    return Material(
       shape: const CircleBorder(),
-      color: Theme.of(context).accentColor,
-      disabledColor: Theme.of(context).accentColor.withOpacity(0.3),
-      padding: const EdgeInsets.all(16),
-      child: SizedBox(
-        width: 24,
-        height: 24,
-        child: Center(
-          child: loading
-              ? const SpinKitThreeBounce(color: Colors.white, size: 16)
-              : Icon(Icons.check, color: Theme.of(context).primaryColor),
+      color: Theme.of(context).accentColor.withOpacity(
+            onPressed == null ? 0.3 : 1,
+          ),
+      clipBehavior: Clip.hardEdge,
+      child: InkWell(
+        onTap: onPressed,
+        child: Padding(
+          padding: EdgeInsets.all(sc.width(4)),
+          child: SizedBox(
+            width: sc.width(8),
+            height: sc.width(8),
+            child: Center(
+              child: loading
+                  ? SpinKitThreeBounce(
+                      color: Colors.white,
+                      size: sc.height(2.5),
+                    )
+                  : Icon(Icons.check, color: Theme.of(context).primaryColor),
+            ),
+          ),
         ),
       ),
     );
