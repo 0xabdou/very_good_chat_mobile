@@ -31,19 +31,23 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
       logger.w('Building LoggedInPage without a logged in user');
       return Container();
     }
+    final tag = '$kTagProfilePhoto${user.id}';
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
           padding: EdgeInsets.all(sc.width(2.5)),
-          child: ProfilePicture(
-            onPressed: () {
-              ExtendedNavigator.root.push(
-                Routes.profileScreen,
-                arguments: ProfileScreenArguments(user: user),
-              );
-            },
-            photoUrl: user.photoUrl,
-            isOnline: false,
+          child: Hero(
+            tag: tag,
+            child: ProfilePicture(
+              onPressed: () {
+                ExtendedNavigator.root.push(
+                  Routes.profileScreen,
+                  arguments: ProfileScreenArguments(user: user),
+                );
+              },
+              photoUrl: user.photoUrl,
+              isOnline: false,
+            ),
           ),
         ),
         title: AnimatedSwitcher(

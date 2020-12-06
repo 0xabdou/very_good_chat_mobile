@@ -4,6 +4,7 @@ import 'package:very_good_chat/presentation/auth/login_screen.dart';
 import 'package:very_good_chat/presentation/auth/splash_screen.dart';
 import 'package:very_good_chat/presentation/auth/updating_screen.dart';
 import 'package:very_good_chat/presentation/profile/profile_screen.dart';
+import 'package:very_good_chat/presentation/shared/full_image.dart';
 import 'package:very_good_chat/presentation/shared/image_cropper.dart';
 
 @MaterialAutoRouter(
@@ -14,6 +15,7 @@ import 'package:very_good_chat/presentation/shared/image_cropper.dart';
     MaterialRoute(page: UpdatingScreen),
     MaterialRoute(page: LoggedInScreen),
     MaterialRoute(page: ImageCropper),
+    MaterialRoute(page: FullImage),
   ],
 )
 

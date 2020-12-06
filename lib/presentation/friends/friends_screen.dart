@@ -146,23 +146,29 @@ class FriendsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tag = '$kTagProfilePhoto${friend.id}';
     return ListTile(
       onTap: () {
         logger.wtf('Go to conversation');
       },
-      leading: ProfilePicture(
-        onPressed: () {
-          ExtendedNavigator.root.push(
-            Routes.profileScreen,
-            arguments: ProfileScreenArguments(user: friend.toUser()),
-          );
-        },
-        photoUrl: friend.photoUrl,
-        isOnline: friend.isOnline,
-        lastSeen: friend.lastSeen,
-        radius: sc.width(10),
-        onlineDotRadius: sc.width(3),
-        lastSeenBadgeSize: sc.width(2.5),
+      leading: Hero(
+        tag: tag,
+        child: ProfilePicture(
+          onPressed: () {
+            ExtendedNavigator.root.push(
+              Routes.profileScreen,
+              arguments: ProfileScreenArguments(
+                user: friend.toUser(),
+              ),
+            );
+          },
+          photoUrl: friend.photoUrl,
+          isOnline: friend.isOnline,
+          lastSeen: friend.lastSeen,
+          radius: sc.width(10),
+          onlineDotRadius: sc.width(3),
+          lastSeenBadgeSize: sc.width(2.5),
+        ),
       ),
       title: Text(
         friend.name ?? friend.username,

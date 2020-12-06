@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:very_good_chat/application/profile/relationship.dart';
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_button.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
+import 'package:very_good_chat/shared/router.gr.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
 /// Profile UI, can be used for the current user or his friends
@@ -28,20 +30,30 @@ class Profile extends StatelessWidget {
       },
       orElse: () {},
     );
+    final tag = '$kTagProfilePhoto${user.id}';
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ProfilePicture(
-            onPressed: () {
-              // TODO: Show fullscreen photo
-            },
-            photoUrl: user.photoUrl,
-            isOnline: isOnline,
-            lastSeen: lastSeen,
-            radius: sc.width(40),
-            dotAlignment: const Alignment(0.85, 0.85),
-            badgeAlignment: const Alignment(0.85, 0.85),
+          Hero(
+            tag: tag,
+            child: ProfilePicture(
+              onPressed: () {
+                ExtendedNavigator.root.push(
+                  Routes.fullImage,
+                  arguments: FullImageArguments(
+                    imageUrl: user.photoUrl,
+                    tag: tag,
+                  ),
+                );
+              },
+              photoUrl: user.photoUrl,
+              isOnline: isOnline,
+              lastSeen: lastSeen,
+              radius: sc.width(40),
+              dotAlignment: const Alignment(0.85, 0.85),
+              badgeAlignment: const Alignment(0.85, 0.85),
+            ),
           ),
           SizedBox(height: sc.height(2)),
           Text('@${user.username}'),

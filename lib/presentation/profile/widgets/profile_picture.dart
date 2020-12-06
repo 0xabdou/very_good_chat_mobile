@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:very_good_chat/presentation/shared/widgets/default_photo.dart';
 import 'package:very_good_chat/presentation/shared/widgets/loading_photo_placeholder.dart';
 
+/// Used by hero widgets
+const kTagProfilePhoto = 'profilePhoto';
+
 /// Profile picture duh
 class ProfilePicture extends StatelessWidget {
   /// Constructor
