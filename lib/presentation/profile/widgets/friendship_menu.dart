@@ -12,7 +12,6 @@ class FriendshipMenu extends StatefulWidget {
     Key key,
     @required this.animation,
     @required this.relationship,
-    @required this.sc,
   }) : super(key: key);
 
   /// This is provided by the [RoutePageBuilder] of [showGeneralDialog]
@@ -20,9 +19,6 @@ class FriendshipMenu extends StatefulWidget {
 
   /// The relationship
   final Relationship relationship;
-
-  /// Size config
-  final SizeConfigData sc;
 
   @override
   _FriendshipMenuState createState() => _FriendshipMenuState();
@@ -62,7 +58,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
 
   @override
   Widget build(BuildContext context) {
-    final sc = widget.sc;
+    final sc = SizeConfig(context);
     return AnimatedBuilder(
       animation: widget.animation,
       builder: (context, child) {
@@ -94,7 +90,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
                         top: Radius.circular(sc.height(8)),
                       ),
                     ),
-                    child: Row(children: _buildActions(sc)),
+                    child: Row(children: _buildActions()),
                   ),
                 ],
               ),
@@ -105,10 +101,10 @@ class _FriendshipMenuState extends State<FriendshipMenu>
     );
   }
 
-  List<Widget> _buildActions(SizeConfigData sc) {
+  List<Widget> _buildActions() {
     return widget.relationship.map(
-      self: (_) => _buildFriendActions(sc: sc, self: true),
-      friend: (_) => _buildFriendActions(sc: sc),
+      self: (_) => _buildFriendActions(self: true),
+      friend: (_) => _buildFriendActions(),
       requestSent: (_) => [],
       requestReceived: (_) => [],
       blocked: (_) => [],
@@ -116,10 +112,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
     );
   }
 
-  List<Widget> _buildFriendActions({
-    @required SizeConfigData sc,
-    bool self = false,
-  }) {
+  List<Widget> _buildFriendActions({bool self = false}) {
     return [
       Expanded(
         child: FriendshipSheetButton(
@@ -132,7 +125,6 @@ class _FriendshipMenuState extends State<FriendshipMenu>
           label: 'Unfriend',
           textColor: Colors.white,
           backgroundColor: Colors.red,
-          sc: sc,
         ),
       ),
       Expanded(
@@ -146,7 +138,6 @@ class _FriendshipMenuState extends State<FriendshipMenu>
           label: 'Block',
           textColor: Colors.white,
           backgroundColor: Colors.red,
-          sc: sc,
         ),
       ),
     ];
@@ -163,7 +154,6 @@ class FriendshipSheetButton extends StatelessWidget {
     @required this.icon,
     @required this.textColor,
     @required this.backgroundColor,
-    @required this.sc,
   }) : super(key: key);
 
   /// The on pressed callback
@@ -181,11 +171,9 @@ class FriendshipSheetButton extends StatelessWidget {
   /// The button's background color
   final Color backgroundColor;
 
-  /// Size config
-  final SizeConfigData sc;
-
   @override
   Widget build(BuildContext context) {
+    final sc = SizeConfig(context);
     return Material(
       color: backgroundColor,
       child: InkWell(

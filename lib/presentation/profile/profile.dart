@@ -14,7 +14,7 @@ import 'package:very_good_chat/shared/size_config.dart';
 class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     final cubit = context.watch<ProfileCubit>();
     final state = cubit.state;
     if (!state.initialized) return Container();
@@ -92,11 +92,7 @@ class Profile extends StatelessWidget {
           barrierLabel: 'Dismiss',
           transitionDuration: const Duration(milliseconds: 250),
           pageBuilder: (_, animation, __) {
-            return FriendshipMenu(
-              animation: animation,
-              relationship: rs,
-              sc: SizeConfig.of(context),
-            );
+            return FriendshipMenu(animation: animation, relationship: rs);
           },
         );
         return;

@@ -5,7 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
 import 'package:very_good_chat/presentation/auth/updating_screen.dart';
 
-import '../wrappers.dart';
+import '../widget_wrappers.dart';
 
 class MockUpdatingCubit extends Mock implements UpdatingCubit {}
 
@@ -20,7 +20,7 @@ void main() {
   });
 
   Widget _getWidget() {
-    return wrapInMaterialSizeConfigApp(UpdatingScreen(cubit: mockCubit));
+    return wrapInMaterialApp(UpdatingScreen(cubit: mockCubit));
   }
 
   final registrationState = UpdatingState.initial().copyWith(registering: true);
@@ -147,7 +147,7 @@ void main() {
       (tester) async {
         // arrange
         final state = UpdatingState.initial();
-        final widget = wrapInMaterialSizeConfigApp(
+        final widget = wrapInMaterialApp(
           UpdatingProfilePicture(state: state, onEditPressed: () {}),
         );
         // render
@@ -163,7 +163,7 @@ void main() {
       (tester) async {
         // arrange
         final state = UpdatingState.initial();
-        final widget = wrapInMaterialSizeConfigApp(
+        final widget = wrapInMaterialApp(
           UpdatingProfilePicture(state: state, onEditPressed: () {}),
         );
         // render
@@ -178,7 +178,7 @@ void main() {
       (tester) async {
         // arrange
         final state = UpdatingState.initial().copyWith(uploadingPhoto: true);
-        final widget = wrapInMaterialSizeConfigApp(
+        final widget = wrapInMaterialApp(
           UpdatingProfilePicture(state: state, onEditPressed: () {}),
         );
         // render
@@ -194,7 +194,7 @@ void main() {
       'Should have a check mark icon if not loading',
       (tester) async {
         // arrange
-        final widget = wrapInMaterialSizeConfigApp(
+        final widget = wrapInMaterialApp(
           RegistrationSubmitButton(onPressed: () {}, loading: false),
         );
         // render
@@ -209,7 +209,7 @@ void main() {
       'Should have a spinner if loading',
       (tester) async {
         // arrange
-        final widget = wrapInMaterialSizeConfigApp(
+        final widget = wrapInMaterialApp(
           RegistrationSubmitButton(onPressed: () {}, loading: true),
         );
         // render

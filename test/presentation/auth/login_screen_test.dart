@@ -6,7 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/presentation/auth/login_screen.dart';
 
-import '../wrappers.dart';
+import '../widget_wrappers.dart';
 
 class MockAuthCubit extends Mock implements AuthCubit {}
 
@@ -21,7 +21,7 @@ void main() {
   Widget _provideCubit(Widget widget) {
     return BlocProvider(
       create: (_) => mockCubit,
-      child: wrapInMaterialSizeConfigApp(widget),
+      child: wrapInMaterialApp(widget),
     );
   }
 
@@ -41,13 +41,11 @@ void main() {
     'if loggingIn is false',
     (tester) async {
       // arrange
-      final widget = wrapInMaterialSizeConfigApp(
-        Material(
-          child: LoginButton(
-            loggingIn: false,
-            onPressed: () {},
-          ),
-        ),
+      final widget = wrapInMaterialApp(
+        wrapInMaterial(LoginButton(
+          loggingIn: false,
+          onPressed: () {},
+        )),
       );
       // render
       await tester.pumpWidget(widget);
@@ -76,9 +74,9 @@ void main() {
     'if loggingIn is true ',
     (tester) async {
       // arrange
-      final widget = wrapInMaterialSizeConfigApp(
-        Material(
-          child: LoginButton(
+      final widget = wrapInMaterialApp(
+        wrapInMaterial(
+          LoginButton(
             loggingIn: true,
             onPressed: () {},
           ),

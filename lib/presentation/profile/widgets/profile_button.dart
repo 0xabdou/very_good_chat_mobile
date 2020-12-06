@@ -26,7 +26,7 @@ class ProfileButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

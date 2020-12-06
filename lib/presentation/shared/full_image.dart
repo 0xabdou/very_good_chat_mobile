@@ -22,7 +22,7 @@ class FullImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     final tag = this.tag ?? kTagProfilePhoto;
     return Container(
       color: Colors.black,

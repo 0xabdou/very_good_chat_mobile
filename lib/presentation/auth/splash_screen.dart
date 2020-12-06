@@ -5,7 +5,7 @@ import 'package:very_good_chat/shared/size_config.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     return Material(
       child: Center(
         child: Image.asset(

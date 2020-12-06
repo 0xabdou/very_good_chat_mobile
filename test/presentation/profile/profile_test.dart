@@ -10,7 +10,7 @@ import 'package:very_good_chat/presentation/profile/profile.dart';
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
 
-import '../wrappers.dart';
+import '../widget_wrappers.dart';
 
 class MockProfileCubit extends Mock implements ProfileCubit {}
 
@@ -30,7 +30,7 @@ void main() {
   Widget _getWidget() {
     return BlocProvider<ProfileCubit>(
       create: (_) => mockCubit,
-      child: wrapInMaterialSizeConfigApp(Profile()),
+      child: wrapInMaterialApp(wrapInMaterial(Profile())),
     );
   }
 

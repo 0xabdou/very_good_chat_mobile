@@ -23,7 +23,7 @@ class UpdatingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     return BlocConsumer<UpdatingCubit, UpdatingState>(
       cubit: _cubit,
       listener: (context, state) {
@@ -110,7 +110,7 @@ class UpdatingScreen extends StatelessWidget {
   AppBar _getAppBar({
     @required bool submitDisabled,
     @required bool loading,
-    @required SizeConfigData sc,
+    @required SizeConfig sc,
   }) {
     return AppBar(
       leading: IconButton(
@@ -156,7 +156,7 @@ class UpdatingProfilePicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     final profilePhotoSize = sc.width(40);
     final disabled = state.uploadingPhoto || state.callingApi;
     return Align(
@@ -250,7 +250,7 @@ class RegistrationSubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     return Material(
       shape: const CircleBorder(),
       color: Theme.of(context).accentColor.withOpacity(

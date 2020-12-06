@@ -18,7 +18,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
   int active = 0;
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     return BlocBuilder<FriendCubit, FriendState>(
       builder: (context, state) {
         return Column(
@@ -64,7 +64,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
     );
   }
 
-  Widget _buildFriendsList(List<Friend> friends, SizeConfigData sc) {
+  Widget _buildFriendsList(List<Friend> friends, SizeConfig sc) {
     return ListView.separated(
       itemCount: friends.length,
       separatorBuilder: (context, index) {
@@ -142,7 +142,7 @@ class FriendsListItem extends StatelessWidget {
   final Friend friend;
 
   /// Size config data
-  final SizeConfigData sc;
+  final SizeConfig sc;
 
   @override
   Widget build(BuildContext context) {

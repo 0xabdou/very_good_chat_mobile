@@ -21,7 +21,7 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     final authCubit = context.watch<AuthCubit>();
     final user = authCubit.state.maybeWhen(
       loggedIn: (u) => u,

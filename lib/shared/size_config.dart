@@ -1,43 +1,18 @@
 import 'package:flutter/material.dart';
 
-/// A widget that provides size config data
-class SizeConfig extends InheritedWidget {
-  /// constructor
-  SizeConfig({
-    Key key,
-    @required this.data,
-    @required Widget child,
-  })  : assert(data != null),
-        assert(child != null),
-        super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(SizeConfig oldWidget) {
-    return data != oldWidget.data;
-  }
-
-  /// This is where the magic happens
-  static SizeConfigData of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<SizeConfig>().data;
-  }
-
-  /// The size config data
-  final SizeConfigData data;
-}
-
 /// A class that holds screen size configs and helps with responsiveness
-class SizeConfigData {
+class SizeConfig {
   /// Private constructor
-  SizeConfigData._(
+  SizeConfig._(
     this._screenSize,
     this._heightUnit,
     this._widthUnit,
   );
 
   /// Public factory
-  factory SizeConfigData.fromContext(BuildContext context) {
+  factory SizeConfig(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SizeConfigData._(
+    return SizeConfig._(
       size,
       size.height / 100,
       size.width / 100,
@@ -68,7 +43,7 @@ class SizeConfigData {
 
   @override
   bool operator ==(Object other) {
-    return other is SizeConfigData && other._screenSize == _screenSize;
+    return other is SizeConfig && other._screenSize == _screenSize;
   }
 
   @override

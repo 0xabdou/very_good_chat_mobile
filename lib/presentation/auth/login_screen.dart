@@ -11,7 +11,7 @@ import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     final authCubit = context.watch<AuthCubit>();
     final loggingIn = authCubit.state.maybeMap(
       loggedOut: (lo) => lo.loggingIn,
@@ -81,7 +81,7 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sc = SizeConfig.of(context);
+    final sc = SizeConfig(context);
     return InkWell(
       onTap: onPressed,
       child: Container(
