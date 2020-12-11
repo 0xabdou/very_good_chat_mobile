@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
 import 'package:very_good_chat/presentation/shared/widgets/default_photo.dart';
 import 'package:very_good_chat/presentation/shared/widgets/loading_photo_placeholder.dart';
@@ -12,103 +12,85 @@ import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 /// The screen that's shown when registering/updating profile
 class UpdatingScreen extends StatelessWidget {
-  ///  Constructor
-  const UpdatingScreen({
-    Key key,
-    @required UpdatingCubit cubit,
-  })  : _cubit = cubit,
-        super(key: key);
-
-  final UpdatingCubit _cubit;
-
   @override
   Widget build(BuildContext context) {
     final sc = SizeConfig(context);
-    return BlocConsumer<UpdatingCubit, UpdatingState>(
+    final _cubit = context.watch<UpdatingCubit>();
+    final state = _cubit.state;
+    final submitDisabled = state.username.isEmpty ||
+        state.usernameError != null ||
+        state.callingApi;
+    final othersDisabled = state.callingApi;
+    return BlocListener<UpdatingCubit, UpdatingState>(
       cubit: _cubit,
       listener: (context, state) {
         if (state.done) {
           ExtendedNavigator.root.pop();
         }
       },
-      builder: (context, state) {
-        final submitDisabled = state.username.isEmpty ||
-            state.usernameError != null ||
-            state.callingApi;
-        final othersDisabled = state.callingApi;
-        return WillPopScope(
-          onWillPop: () async {
-            final result = (await yesNoDialog(context)) ?? false;
-            if (result) {
-              if (state.registering)
-                context.read<AuthCubit>().logout();
-              else
-                return true;
-            }
-            return false;
-          },
-          child: Scaffold(
-            appBar: state.registering
-                ? null
-                : _getAppBar(
-                    submitDisabled: submitDisabled,
-                    loading: state.callingApi,
-                    sc: sc,
-                  ),
-            body: SafeArea(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: sc.width(18)),
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      UpdatingProfilePicture(
-                        state: state,
-                        onEditPressed: () => _cubit.pickPhoto(context),
-                      ),
-                      TextFormField(
-                        onChanged: _cubit.usernameChanged,
-                        validator: (_) => state.usernameError,
-                        initialValue: state.username,
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          labelStyle: TextStyle(
-                            fontSize: sc.width(4.5),
-                          ),
+      child: WillPopScope(
+        onWillPop: () => yesNoDialog(context),
+        child: Scaffold(
+          appBar: state.registering
+              ? null
+              : _getAppBar(
+                  submit: _cubit.submit,
+                  loading: state.callingApi,
+                  sc: sc,
+                ),
+          body: SafeArea(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: sc.width(18)),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    UpdatingProfilePicture(
+                      state: state,
+                      onEditPressed: () => _cubit.pickPhoto(context),
+                    ),
+                    TextFormField(
+                      onChanged: _cubit.usernameChanged,
+                      validator: (_) => state.usernameError,
+                      initialValue: state.username,
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                        labelStyle: TextStyle(
+                          fontSize: sc.width(4.5),
                         ),
-                        autovalidateMode: AutovalidateMode.always,
-                        enabled: !othersDisabled,
                       ),
-                      TextFormField(
-                        onChanged: _cubit.nameChanged,
-                        initialValue: state.name,
-                        decoration: InputDecoration(
-                          labelText: 'Name',
-                          labelStyle: TextStyle(
-                            fontSize: sc.width(4.5),
-                          ),
+                      autovalidateMode: AutovalidateMode.always,
+                      enabled: !othersDisabled,
+                    ),
+                    TextFormField(
+                      onChanged: _cubit.nameChanged,
+                      initialValue: state.name,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                        labelStyle: TextStyle(
+                          fontSize: sc.width(4.5),
                         ),
-                        enabled: !othersDisabled,
                       ),
-                      SizedBox(height: sc.height(3)),
-                      if (state.registering)
-                        RegistrationSubmitButton(
-                          onPressed: submitDisabled ? null : _cubit.submit,
-                          loading: state.callingApi,
-                        ),
-                    ],
-                  ),
+                      enabled: !othersDisabled,
+                    ),
+                    SizedBox(height: sc.height(3)),
+                    if (state.registering)
+                      RegistrationSubmitButton(
+                        onPressed: submitDisabled ? null : _cubit.submit,
+                        loading: state.callingApi,
+                      ),
+                  ],
                 ),
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
   AppBar _getAppBar({
-    @required bool submitDisabled,
+    @required void Function() submit,
     @required bool loading,
     @required SizeConfig sc,
   }) {
@@ -122,7 +104,7 @@ class UpdatingScreen extends StatelessWidget {
       title: const Text('Edit profile'),
       actions: [
         IconButton(
-          onPressed: submitDisabled ? null : _cubit.submit,
+          onPressed: submit,
           icon: loading
               ? SizedBox(
                   width: sc.height(4),

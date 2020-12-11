@@ -1,11 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
-import 'package:very_good_chat/presentation/core/navigation_handler.dart';
+import 'package:very_good_chat/presentation/core/navigation/app_router.dart';
+import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/shared/injection.dart';
-import 'package:very_good_chat/shared/router.gr.dart';
 
 /// The root widget of the app
 class AppWidget extends StatelessWidget {
@@ -15,28 +14,28 @@ class AppWidget extends StatelessWidget {
       providers: [
         BlocProvider<AuthCubit>(
           create: (_) => getIt()..checkAuthStatus(),
+          lazy: false,
         ),
         BlocProvider<FriendCubit>(
           create: (_) => getIt(),
         ),
-      ],
-      child: NavigationHandler(
-        child: MaterialApp(
-          title: 'Very Good Chat',
-          builder: ExtendedNavigator.builder(
-            router: AppRouter(),
-            builder: (context, extendedNav) {
-              return Theme(
-                data: ThemeData(
-                  brightness: Brightness.dark,
-                  primaryColor: Colors.black,
-                  canvasColor: Colors.black,
-                ),
-                child: extendedNav,
-              );
-            },
-          ),
+        BlocProvider<NavigationCubit>(
+          create: (_) => NavigationCubit(getIt()),
         ),
+      ],
+      child: Builder(
+        builder: (context) {
+          return MaterialApp.router(
+            title: 'Very Good Chat',
+            theme: ThemeData(
+              brightness: Brightness.dark,
+              primaryColor: Colors.black,
+              canvasColor: Colors.black,
+            ),
+            routeInformationParser: AppRouteInformationParser(),
+            routerDelegate: AppRouterDelegate(BlocProvider.of(context)),
+          );
+        },
       ),
     );
   }

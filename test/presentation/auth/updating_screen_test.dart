@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -20,7 +21,10 @@ void main() {
   });
 
   Widget _getWidget() {
-    return wrapInMaterialApp(UpdatingScreen(cubit: mockCubit));
+    return BlocProvider(
+      create: (_) => mockCubit,
+      child: wrapInMaterialApp(UpdatingScreen()),
+    );
   }
 
   final registrationState = UpdatingState.initial().copyWith(registering: true);

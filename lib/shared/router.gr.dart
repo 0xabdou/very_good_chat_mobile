@@ -10,7 +10,6 @@ import 'dart:typed_data';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../application/auth/updating/updating_cubit.dart';
 import '../domain/auth/user.dart';
 import '../presentation/auth/logged_in_screen.dart';
 import '../presentation/auth/login_screen.dart';
@@ -77,12 +76,8 @@ class AppRouter extends RouterBase {
       );
     },
     UpdatingScreen: (data) {
-      final args = data.getArgs<UpdatingScreenArguments>(nullOk: false);
       return MaterialPageRoute<dynamic>(
-        builder: (context) => UpdatingScreen(
-          key: args.key,
-          cubit: args.cubit,
-        ),
+        builder: (context) => UpdatingScreen(),
         settings: data,
       );
     },
@@ -126,13 +121,6 @@ class ProfileScreenArguments {
   final Key key;
   final User user;
   ProfileScreenArguments({this.key, @required this.user});
-}
-
-/// UpdatingScreen arguments holder class
-class UpdatingScreenArguments {
-  final Key key;
-  final UpdatingCubit cubit;
-  UpdatingScreenArguments({this.key, @required this.cubit});
 }
 
 /// ImageCropper arguments holder class

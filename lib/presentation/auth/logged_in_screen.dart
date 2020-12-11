@@ -1,11 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
+import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/presentation/friends/friends_screen.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
 import 'package:very_good_chat/shared/logger.dart';
-import 'package:very_good_chat/shared/router.gr.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
 /// The screen that's shown if the user is logged in
@@ -40,10 +39,7 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
             tag: tag,
             child: ProfilePicture(
               onPressed: () {
-                ExtendedNavigator.root.push(
-                  Routes.profileScreen,
-                  arguments: ProfileScreenArguments(user: user),
-                );
+                context.read<NavigationCubit>().viewOwnProfile();
               },
               photoUrl: user.photoUrl,
               isOnline: false,
