@@ -20,6 +20,7 @@ void main() {
   IFriendRepository mockRepo;
   AuthCubit mockAuthCubit;
   StreamSubscription<AuthState> mockSub;
+  // ignore: unused_local_variable
   FriendCubit cubit;
 
   setUp(() {
@@ -27,6 +28,7 @@ void main() {
     mockAuthCubit = MockAuthCubit();
     mockSub = MockStreamSubscription<AuthState>();
     when(mockAuthCubit.listen(any)).thenReturn(mockSub);
+    cubit = FriendCubit(friendRepository: mockRepo, authCubit: mockAuthCubit);
   });
 
   group('initialization', () {
@@ -96,5 +98,9 @@ void main() {
         expect(c.friendsPollingTimer, isNull);
       },
     );
+  });
+
+  group('update()', () {
+    // Not much to test here
   });
 }

@@ -61,7 +61,10 @@ Future<GetIt> $initGetIt(
   gh.lazySingleton<FriendCubit>(() => FriendCubit(
       friendRepository: get<IFriendRepository>(), authCubit: get<AuthCubit>()));
   gh.factory<ProfileCubit>(() => ProfileCubit(
-      authCubit: get<AuthCubit>(), friendCubit: get<FriendCubit>()));
+        authCubit: get<AuthCubit>(),
+        friendCubit: get<FriendCubit>(),
+        friendRepository: get<IFriendRepository>(),
+      ));
   gh.factory<UpdatingCubit>(() => UpdatingCubit(
         authRepository: get<IAuthRepository>(),
         validators: get<UserValidators>(),

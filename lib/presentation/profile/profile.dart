@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_good_chat/application/profile/profile_cubit.dart';
-import 'package:very_good_chat/application/profile/relationship.dart';
 import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_button.dart';
@@ -68,7 +67,7 @@ class Profile extends StatelessWidget {
           Row(
             children: [
               const Spacer(),
-              _buildFriendshipButton(context, relationship),
+              _buildFriendshipButton(context, cubit),
               const Spacer(),
               _buildMessagingButton(),
               const Spacer(),
@@ -79,7 +78,35 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Widget _buildFriendshipButton(BuildContext context, Relationship rs) {
+  Widget _buildFriendshipButton(BuildContext context, ProfileCubit cubit) {
+    IconData icon;
+    String text;
+    cubit.state.relationship.map(
+      self: (_) {
+        icon = FontAwesomeIcons.userCheck;
+        text = "You're friends";
+      },
+      friend: (_) {
+        icon = FontAwesomeIcons.userCheck;
+        text = "You're friends";
+      },
+      requestSent: (_) {
+        icon = FontAwesomeIcons.userClock;
+        text = 'Request sent';
+      },
+      requestReceived: (_) {
+        icon = FontAwesomeIcons.userClock;
+        text = 'Request received';
+      },
+      blocked: (_) {
+        icon = FontAwesomeIcons.ban;
+        text = 'Blocked';
+      },
+      stranger: (_) {
+        icon = FontAwesomeIcons.userPlus;
+        text = 'Add friend';
+      },
+    );
     return ProfileButton(
       onPressed: () {
         showGeneralDialog(
@@ -88,22 +115,16 @@ class Profile extends StatelessWidget {
           barrierLabel: 'Dismiss',
           transitionDuration: const Duration(milliseconds: 250),
           pageBuilder: (_, animation, __) {
-            return FriendshipMenu(animation: animation, relationship: rs);
+            return BlocProvider<ProfileCubit>.value(
+              value: cubit,
+              child: FriendshipMenu(animation: animation),
+            );
           },
         );
         return;
       },
-      icon: Icon(
-        rs.map(
-          self: (_) => FontAwesomeIcons.userCheck,
-          friend: (_) => FontAwesomeIcons.userCheck,
-          requestSent: (_) => FontAwesomeIcons.userClock,
-          requestReceived: (_) => FontAwesomeIcons.userClock,
-          blocked: (_) => FontAwesomeIcons.ban,
-          stranger: (_) => FontAwesomeIcons.userPlus,
-        ),
-      ),
-      label: "You're friends",
+      icon: Icon(icon),
+      label: text,
     );
   }
 

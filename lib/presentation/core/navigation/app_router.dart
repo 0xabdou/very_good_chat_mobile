@@ -32,8 +32,6 @@ class AppRouterDelegate extends RouterDelegate<String>
     return SynchronousFuture(null);
   }
 
-  List<Page> _history;
-
   List<Page> _generatePages(NavigationState state) {
     final authPages = state.authState.map(
       initial: (_) => [AppPages.splashScreen()],
@@ -55,14 +53,14 @@ class AppRouterDelegate extends RouterDelegate<String>
           heroTag: state.viewingProfilePicture.heroTag,
         ),
     ];
-    return _history = authPages..addAll(otherPages);
+    return authPages..addAll(otherPages);
   }
 
   bool _handlePop(Route route, result) {
     final key = (route.settings as MaterialPage).key as UniqueKey;
 
     if (key == AppKeys.loggedInScreen || key == AppKeys.loginScreen) {
-      // Do not pop because the only route in the stack
+      // Do not pop because it's the only route in the stack
       assert(!route.willHandlePopInternally);
       return false;
     }

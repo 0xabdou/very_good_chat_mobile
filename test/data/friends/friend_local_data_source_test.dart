@@ -68,4 +68,8 @@ void main() {
       verify(mockBatch.commit(noResult: true)).called(1);
     });
   });
+
+  group('deleteFriend()', () {
+    // TODO: test this
+  });
 }

@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
@@ -7,10 +8,16 @@ import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/application/profile/relationship.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
+import 'package:very_good_chat/domain/friends/friend_failure.dart';
+import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
+
+import '../../mock/mock_data.dart';
 
 class MockAuthCubit extends Mock implements AuthCubit {}
 
 class MockFriendCubit extends Mock implements FriendCubit {}
+
+class MockFriendRepository extends Mock implements IFriendRepository {}
 
 void main() {
   const currentUser = User(id: 'current_user_id', username: 'current_username');
@@ -28,14 +35,17 @@ void main() {
 
   AuthCubit mockAuthCubit;
   FriendCubit mockFriendCubit;
+  IFriendRepository mockRepo;
   ProfileCubit profileCubit;
 
   setUp(() {
     mockAuthCubit = MockAuthCubit();
     mockFriendCubit = MockFriendCubit();
+    mockRepo = MockFriendRepository();
     profileCubit = ProfileCubit(
       authCubit: mockAuthCubit,
       friendCubit: mockFriendCubit,
+      friendRepository: mockRepo,
     );
     when(mockAuthCubit.state).thenReturn(const AuthState.loggedIn(currentUser));
     when(mockFriendCubit.state).thenReturn(FriendState(
@@ -98,6 +108,59 @@ void main() {
           relationship: Relationship.stranger(),
         ),
       ],
+    );
+  });
+
+  group('unfriend()', () {
+    const seedState = ProfileState(
+      initialized: true,
+      user: user,
+      relationship: Relationship.friend(isOnline: false),
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if all goes well',
+      build: () {
+        when(mockRepo.unfriend(user.id)).thenAnswer((_) async => right(unit));
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.unfriend(),
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          relationship: const Relationship.stranger(),
+          friendOperation: const FriendOperation.done(),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.unfriend(user.id)).called(1);
+        verify(mockFriendCubit.update()).called(1);
+        verifyNoMoreInteractions(mockRepo);
+        verifyNoMoreInteractions(mockFriendCubit);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if something fails',
+      build: () {
+        when(mockRepo.unfriend(user.id))
+            .thenAnswer((_) async => left(const FriendFailure.server()));
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.unfriend(),
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.fail(FriendFailure.server()),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.unfriend(user.id)).called(1);
+        verifyNoMoreInteractions(mockRepo);
+        verifyZeroInteractions(mockFriendCubit);
+      },
     );
   });
 }

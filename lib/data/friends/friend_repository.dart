@@ -72,6 +72,15 @@ class FriendRepository implements IFriendRepository {
     );
   }
 
+  @override
+  Future<Either<FriendFailure, Unit>> unfriend(String userId) async {
+    return catchExceptions<Unit>(() async {
+      await _remoteDataSource.unfriend(userId);
+      await _localDataSource.deleteFriend(userId);
+      return unit;
+    });
+  }
+
   /// Catches [DioError]s and returns [FriendFailure]s accordingly
   @visibleForTesting
   Future<Either<FriendFailure, R>> catchExceptions<R>(

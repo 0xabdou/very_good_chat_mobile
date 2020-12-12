@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
+import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
@@ -41,6 +42,9 @@ class FriendCubit extends Cubit<FriendState> {
   @visibleForTesting
   Timer get friendsPollingTimer => _friendsPollingTimer;
 
+  /// Clean state
+  FriendState get _state => state.copyWith(failure: null);
+
   /// Get the friends list and emit them with a new state
   /// First, the persisted friends are emitted, then live data from backend
   /// is fetched and emitted
@@ -56,11 +60,11 @@ class FriendCubit extends Cubit<FriendState> {
       return;
     }
 
-    await refreshFriends();
+    await _refreshFriends();
 
     _friendsPollingTimer ??= Timer.periodic(
       const Duration(seconds: 10),
-      (_) => refreshFriends(),
+      (_) => _refreshFriends(),
     );
   }
 
@@ -72,14 +76,19 @@ class FriendCubit extends Cubit<FriendState> {
     emit(FriendState.initial());
   }
 
+  /// This is meant to be called bt [ProfileCubit] when something changes
+  /// e.g: a new friend was added/removed
+  void update() {
+    _refreshFriends();
+  }
+
   /// Fetches friends list from backend and emits a new state
-  @visibleForTesting
-  Future<void> refreshFriends() async {
+  Future<void> _refreshFriends() async {
     // Local friends
     final localFetchResult = await _repository.getFriendsLocally();
     localFetchResult.fold(
       (failure) {
-        emit(state.copyWith(failure: failure));
+        emit(_state.copyWith(failure: failure));
       },
       _emitNewFriends,
     );
@@ -88,15 +97,12 @@ class FriendCubit extends Cubit<FriendState> {
     final remoteFetchResult = await _repository.getFriendsRemotely();
     remoteFetchResult.fold(
       (failure) {
-        emit(state.copyWith(failure: failure));
+        emit(_state.copyWith(failure: failure));
       },
       _emitNewFriends,
     );
   }
 
-  // Determine what friends to remove
-  // Determine what friends to add
-  // Determine where to add them
   void _emitNewFriends(List<Friend> friends) {
     final onlineFriends = <Friend>[];
     final offlineFriends = <Friend>[];
@@ -106,7 +112,7 @@ class FriendCubit extends Cubit<FriendState> {
       else
         offlineFriends.add(friend);
     }
-    emit(state.copyWith(
+    emit(_state.copyWith(
       allFriends: friends,
       onlineFriends: onlineFriends,
       offlineFriends: offlineFriends,
@@ -116,10 +122,8 @@ class FriendCubit extends Cubit<FriendState> {
   @override
   void onChange(Change<FriendState> change) {
     super.onChange(change);
-    //final curFriendsNum = change.currentState.allFriends.length;
-    //final nextFriendsNum = change.nextState.allFriends.length;
-    //logger.d('From: FriendState(friends: $curFriendsNum)\n'
-    //    'To: FriendState(friends:$nextFriendsNum)');
+    //logger.d('From: FriendState(failure: ${change.currentState.failure})\n'
+    //    'To: FriendState(failure: ${change.nextState.failure})');
   }
 
   @override

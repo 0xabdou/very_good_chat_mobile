@@ -24,6 +24,9 @@ abstract class IFriendRepository {
   /// Get all (sent and received) friend requests
   Future<Either<FriendFailure, List<FriendRequest>>> getAllFriendRequests();
 
+  /// Unfriend the friend with [userId]
+  Future<Either<FriendFailure, Unit>> unfriend(String userId);
+
   /// Blocks the user with [userId]
   Future<Either<FriendFailure, Unit>> blockUser(String userId);
 }

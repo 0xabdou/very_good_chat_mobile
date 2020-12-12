@@ -21,9 +21,14 @@ abstract class IFriendRemoteDataSource {
   /// Get all (sent and received) friend requests
   Future<List<FriendRequest>> getAllFriendRequests();
 
+  /// Unfriend the friend with [userId]
+  Future<Unit> unfriend(String userId);
+
   /// Blocks the user with [userId]
   Future<Unit> blockUser(String userId);
 }
+
+List<Friend> _friends;
 
 /// An implementation of [IFriendRemoteDataSource]
 @Injectable(as: IFriendRemoteDataSource)
@@ -41,12 +46,19 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
   }
 
   @override
+  Future<Unit> unfriend(String userId) async {
+    await Future.delayed(const Duration(milliseconds: 2000));
+    //throw DioError(type: DioErrorType.RESPONSE);
+    _friends.removeWhere((f) => f.id == userId);
+    return unit;
+  }
+
+  @override
   Future<List<FriendRequest>> getAllFriendRequests() async {
     await Future.delayed(const Duration(milliseconds: 1000));
     return [];
   }
 
-  List<Friend> _friends;
   @override
   Future<List<Friend>> getFriends() async {
     await Future.delayed(const Duration(milliseconds: 1000));

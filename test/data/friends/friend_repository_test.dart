@@ -169,4 +169,21 @@ void main() {
       verifyNoMoreInteractions(mockRemoteDS);
     });
   });
+
+  group('unfriend()', () {
+    test('should return a unit on success', () async {
+      // arrange
+      const userId = 'userId';
+      when(mockRemoteDS.unfriend(userId)).thenAnswer((_) async => unit);
+      when(mockLocalDS.deleteFriend(userId)).thenAnswer((_) async => unit);
+      // act
+      final result = await repository.unfriend(userId);
+      // assert
+      expect(result, right(unit));
+      verify(mockRemoteDS.unfriend(userId)).called(1);
+      verify(mockLocalDS.deleteFriend(userId)).called(1);
+      verifyNoMoreInteractions(mockRemoteDS);
+      verifyNoMoreInteractions(mockLocalDS);
+    });
+  });
 }

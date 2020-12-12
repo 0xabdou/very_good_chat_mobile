@@ -11,6 +11,9 @@ abstract class IFriendLocalDataSource {
 
   /// Get the list of locally persisted [Friend]s
   Future<List<Friend>> getPersistedFriends();
+
+  /// Delete the persisted friend with the [userId]
+  Future<Unit> deleteFriend(String userId);
 }
 
 /// An implementation of [IFriendLocalDataSource] that uses [Sqflite] [Database]
@@ -71,6 +74,16 @@ class FriendLocalDataSource implements IFriendLocalDataSource {
     final batch = _db.batch();
     for (final friend in friends) batch.insert(friendTable, friend.toJson());
     await batch.commit(noResult: true);
+    return unit;
+  }
+
+  @override
+  Future<Unit> deleteFriend(String userId) async {
+    await _db.delete(
+      friendTable,
+      where: '$friendColumnId=?',
+      whereArgs: [userId],
+    );
     return unit;
   }
 }

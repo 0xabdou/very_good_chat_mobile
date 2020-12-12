@@ -6,6 +6,7 @@ import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/presentation/profile/profile.dart';
+import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/logger.dart';
 import 'package:very_good_chat/shared/utils/other_utils.dart';
 
@@ -32,11 +33,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
+    // Debatable
     authCubit = context.read();
     friendCubit = context.read();
     profileCubit = ProfileCubit(
       authCubit: authCubit,
       friendCubit: friendCubit,
+      friendRepository: getIt(),
     )..init(widget.user);
     super.initState();
   }
