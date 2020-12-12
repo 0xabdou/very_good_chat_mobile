@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/presentation/core/navigation/app_pages.dart';
 import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/shared/logger.dart';
+import 'package:very_good_chat/shared/utils/other_utils.dart';
 
 ///
 class AppRouteInformationParser extends RouteInformationParser<String> {
@@ -40,18 +41,20 @@ class AppRouterDelegate extends RouterDelegate<String>
       loggedIn: (_) => [AppPages.loggedInScreen()],
       registering: (r) => [
         AppPages.loginScreen(),
-        AppPages.updatingScreen(authInfo: r.authInfo),
+        AppPages.registrationScreen(r.authInfo),
       ],
       loggedOut: (_) => [AppPages.loginScreen()],
     );
     final otherPages = [
       if (state.viewingProfile != null)
         AppPages.profileScreen(state.viewingProfile),
+      if (state.editingProfile)
+        AppPages.profileEditingScreen(userFromState(state.authState)),
     ];
     return _history = authPages..addAll(otherPages);
   }
 
-  bool _popStuff(Route route, result) {
+  bool _handlePop(Route route, result) {
     final key = (route.settings as MaterialPage).key as UniqueKey;
 
     if (key == AppKeys.loggedInScreen || key == AppKeys.loginScreen) {
@@ -66,9 +69,12 @@ class AppRouterDelegate extends RouterDelegate<String>
     if (key == AppKeys.profileScreen) {
       logger.wtf('Popping PROFILE SCREEN');
       _cubit.closeProfile();
-    } else if (key == AppKeys.updatingScreen) {
+    } else if (key == AppKeys.registrationScreen) {
       logger.wtf('Popping UPDATING SCREEN');
-      _cubit.closeUpdatingScreen();
+      _cubit.closeRegistrationScreen();
+    } else if (key == AppKeys.profileEditingScreen) {
+      logger.wtf('Popping UPDATING SCREEN');
+      _cubit.closeProfileEditingScreen();
     }
     return true;
   }
@@ -81,7 +87,7 @@ class AppRouterDelegate extends RouterDelegate<String>
         return Navigator(
           key: _navigatorKey,
           pages: _generatePages(state),
-          onPopPage: _popStuff,
+          onPopPage: _handlePop,
         );
       },
     );

@@ -5,6 +5,7 @@ import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
+import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/presentation/profile/profile.dart';
 import 'package:very_good_chat/shared/logger.dart';
 import 'package:very_good_chat/shared/utils/other_utils.dart';
@@ -82,6 +83,7 @@ class CurrentUserScaffold extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   // TODO: Navigate to updating screen
+                  context.read<NavigationCubit>().editProfile();
                 },
                 icon: const Icon(Icons.edit),
               ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:very_good_chat/application/auth/updating/updating_cubit.dart';
+import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/presentation/shared/widgets/default_photo.dart';
 import 'package:very_good_chat/presentation/shared/widgets/loading_photo_placeholder.dart';
 import 'package:very_good_chat/shared/size_config.dart';
@@ -25,7 +26,7 @@ class UpdatingScreen extends StatelessWidget {
       cubit: _cubit,
       listener: (context, state) {
         if (state.done) {
-          ExtendedNavigator.root.pop();
+          context.read<NavigationCubit>().closeProfileEditingScreen();
         }
       },
       child: WillPopScope(
@@ -35,6 +36,9 @@ class UpdatingScreen extends StatelessWidget {
               ? null
               : _getAppBar(
                   submit: _cubit.submit,
+                  close: () {
+                    context.read<NavigationCubit>().closeProfileEditingScreen();
+                  },
                   loading: state.callingApi,
                   sc: sc,
                 ),
@@ -91,14 +95,13 @@ class UpdatingScreen extends StatelessWidget {
 
   AppBar _getAppBar({
     @required void Function() submit,
+    @required void Function() close,
     @required bool loading,
     @required SizeConfig sc,
   }) {
     return AppBar(
       leading: IconButton(
-        onPressed: () {
-          ExtendedNavigator.root.pop();
-        },
+        onPressed: close,
         icon: const Icon(Icons.clear),
       ),
       title: const Text('Edit profile'),

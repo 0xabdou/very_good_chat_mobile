@@ -51,19 +51,33 @@ class AppPages {
     );
   }
 
-  /// For [UpdatingScreen]
-  static Page updatingScreen({
+  /// for [UpdatingScreen] when registering
+  static Page registrationScreen(AuthProviderInfo authInfo) {
+    return _updatingScreen(authInfo: authInfo);
+  }
+
+  /// for [UpdatingScreen] when editing profile
+  static Page profileEditingScreen(User user) {
+    return _updatingScreen(currentUser: user);
+  }
+
+  static Page _updatingScreen({
     User currentUser,
     AuthProviderInfo authInfo,
   }) {
     assert(currentUser != null || authInfo != null);
     final cubit = getIt<UpdatingCubit>();
-    if (currentUser != null)
-      cubit.updating(currentUser);
-    else
+    final registering = authInfo != null;
+    Key key;
+    if (registering) {
       cubit.registering(authInfo);
+      key = AppKeys.registrationScreen;
+    } else {
+      cubit.updating(currentUser);
+      key = AppKeys.profileEditingScreen;
+    }
     return MaterialPage(
-      key: AppKeys.updatingScreen,
+      key: key,
       child: BlocProvider<UpdatingCubit>(
         create: (_) => cubit,
         child: UpdatingScreen(),
@@ -92,6 +106,10 @@ class AppKeys {
   final _profileScreenKey = UniqueKey();
   static UniqueKey get profileScreen => _instance._profileScreenKey;
 
-  final _updatingScreenKey = UniqueKey();
-  static UniqueKey get updatingScreen => _instance._updatingScreenKey;
+  final _profileEditingScreenKey = UniqueKey();
+  static UniqueKey get profileEditingScreen =>
+      _instance._profileEditingScreenKey;
+
+  final _registrationScreenKey = UniqueKey();
+  static UniqueKey get registrationScreen => _instance._registrationScreenKey;
 }

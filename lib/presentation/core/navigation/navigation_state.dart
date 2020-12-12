@@ -6,7 +6,7 @@ abstract class NavigationState with _$NavigationState {
   /// Constructor
   const factory NavigationState({
     @required AuthState authState,
-    bool editingProfile,
+    @Default(false) bool editingProfile,
     User viewingProfile,
     bool viewingProfilePicture,
   }) = _NavigationState;

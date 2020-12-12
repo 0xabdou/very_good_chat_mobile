@@ -29,7 +29,15 @@ class NavigationCubit extends Cubit<NavigationState> {
     emit(state.copyWith(viewingProfile: null));
   }
 
-  void closeUpdatingScreen() {
+  void editProfile() {
+    emit(state.copyWith(editingProfile: true));
+  }
+
+  void closeProfileEditingScreen() {
+    emit(state.copyWith(editingProfile: false));
+  }
+
+  void closeRegistrationScreen() {
     _authCubit.logout();
   }
 

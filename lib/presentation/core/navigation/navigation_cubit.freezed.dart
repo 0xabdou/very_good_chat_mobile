@@ -16,7 +16,7 @@ class _$NavigationStateTearOff {
 // ignore: unused_element
   _NavigationState call(
       {@required AuthState authState,
-      bool editingProfile,
+      bool editingProfile = false,
       User viewingProfile,
       bool viewingProfilePicture}) {
     return _NavigationState(
@@ -166,13 +166,15 @@ class __$NavigationStateCopyWithImpl<$Res>
 class _$_NavigationState implements _NavigationState {
   const _$_NavigationState(
       {@required this.authState,
-      this.editingProfile,
+      this.editingProfile = false,
       this.viewingProfile,
       this.viewingProfilePicture})
-      : assert(authState != null);
+      : assert(authState != null),
+        assert(editingProfile != null);
 
   @override
   final AuthState authState;
+  @JsonKey(defaultValue: false)
   @override
   final bool editingProfile;
   @override
