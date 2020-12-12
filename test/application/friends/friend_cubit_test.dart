@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
 
@@ -9,16 +12,24 @@ import '../../mock/mock_data.dart';
 
 class MockFriendRepository extends Mock implements IFriendRepository {}
 
+class MockAuthCubit extends MockBloc<AuthState> implements AuthCubit {}
+
+class MockStreamSubscription<T> extends Mock implements StreamSubscription<T> {}
+
 void main() {
   IFriendRepository mockRepo;
+  AuthCubit mockAuthCubit;
+  StreamSubscription<AuthState> mockSub;
   FriendCubit cubit;
 
   setUp(() {
     mockRepo = MockFriendRepository();
-    cubit = FriendCubit(friendRepository: mockRepo);
+    mockAuthCubit = MockAuthCubit();
+    mockSub = MockStreamSubscription<AuthState>();
+    when(mockAuthCubit.listen(any)).thenReturn(mockSub);
   });
 
-  group('fetchFriends()', () {
+  group('initialization', () {
     final localFriends = [
       friend.copyWith(id: 'local1', lastSeen: DateTime.now(), isOnline: true),
       friend.copyWith(id: 'local2'),
@@ -29,15 +40,23 @@ void main() {
     ];
     blocTest<FriendCubit, FriendState>(
       'should emit a state with local friend, then remote friends, '
-      'if all went well. It should also kick off polling',
+      'if the user is logged in. It should also kick off polling',
       build: () {
         when(mockRepo.getFriendsLocally())
             .thenAnswer((_) async => right(localFriends));
         when(mockRepo.getFriendsRemotely())
             .thenAnswer((_) async => right(remoteFriends));
-        return cubit;
+        whenListen(
+          mockAuthCubit,
+          Stream.fromIterable(
+            const [AuthState.initial(), AuthState.loggedIn(user)],
+          ),
+        );
+        return cubit = FriendCubit(
+          friendRepository: mockRepo,
+          authCubit: mockAuthCubit,
+        );
       },
-      act: (c) => c.fetchFriends(),
       expect: [
         FriendState.initial().copyWith(
           allFriends: localFriends,
@@ -54,6 +73,27 @@ void main() {
         verify(mockRepo.getFriendsLocally()).called(1);
         verify(mockRepo.getFriendsRemotely()).called(1);
         expect(c.friendsPollingTimer, isNotNull);
+      },
+    );
+
+    blocTest<FriendCubit, FriendState>(
+      'should emit nothing if the user is not logged in',
+      build: () {
+        whenListen(
+          mockAuthCubit,
+          Stream.fromIterable(
+            const [AuthState.initial(), AuthState.loggedOut()],
+          ),
+        );
+        return cubit = FriendCubit(
+          friendRepository: mockRepo,
+          authCubit: mockAuthCubit,
+        );
+      },
+      expect: [FriendState.initial()],
+      verify: (c) async {
+        verifyZeroInteractions(mockRepo);
+        expect(c.friendsPollingTimer, isNull);
       },
     );
   });

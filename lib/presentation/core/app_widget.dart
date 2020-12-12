@@ -18,6 +18,7 @@ class AppWidget extends StatelessWidget {
         ),
         BlocProvider<FriendCubit>(
           create: (_) => getIt(),
+          lazy: false,
         ),
         BlocProvider<NavigationCubit>(
           create: (_) => NavigationCubit(getIt()),
