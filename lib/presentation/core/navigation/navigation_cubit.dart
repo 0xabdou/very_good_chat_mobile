@@ -25,8 +25,27 @@ class NavigationCubit extends Cubit<NavigationState> {
     emit(state.copyWith(viewingProfile: userFromState(state.authState)));
   }
 
+  void viewOtherProfile(User user) {
+    emit(state.copyWith(viewingProfile: user));
+  }
+
+  void viewFullPicture({@required String photoUrl, String heroTag}) {
+    emit(
+      state.copyWith(
+        viewingProfilePicture: ViewingFullPhoto(
+          photoUrl: photoUrl,
+          heroTag: heroTag,
+        ),
+      ),
+    );
+  }
+
   void closeProfile() {
     emit(state.copyWith(viewingProfile: null));
+  }
+
+  void closeProfilePicture() {
+    emit(state.copyWith(viewingProfilePicture: null));
   }
 
   void editProfile() {

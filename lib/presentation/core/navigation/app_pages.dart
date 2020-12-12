@@ -8,6 +8,7 @@ import 'package:very_good_chat/presentation/auth/login_screen.dart';
 import 'package:very_good_chat/presentation/auth/splash_screen.dart';
 import 'package:very_good_chat/presentation/auth/updating_screen.dart';
 import 'package:very_good_chat/presentation/profile/profile_screen.dart';
+import 'package:very_good_chat/presentation/shared/full_image.dart';
 import 'package:very_good_chat/shared/injection.dart';
 
 /// Util class to generate pages
@@ -85,6 +86,15 @@ class AppPages {
     );
   }
 
+  static Page fullPhotoScreen({
+    @required String photoUrl,
+    String heroTag,
+  }) {
+    return MaterialPage(
+      key: AppKeys.fullPhotoScreen,
+      child: FullImage(imageUrl: photoUrl, tag: heroTag),
+    );
+  }
   // ############## PROFILE ###############
 }
 
@@ -112,4 +122,7 @@ class AppKeys {
 
   final _registrationScreenKey = UniqueKey();
   static UniqueKey get registrationScreen => _instance._registrationScreenKey;
+
+  final _fullPhotoScreenKey = UniqueKey();
+  static UniqueKey get fullPhotoScreen => _instance._fullPhotoScreenKey;
 }

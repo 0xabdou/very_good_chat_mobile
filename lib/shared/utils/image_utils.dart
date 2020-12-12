@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:photo/photo.dart';
 import 'package:very_good_chat/presentation/shared/image_cropper.dart';

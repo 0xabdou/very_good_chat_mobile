@@ -8,7 +8,7 @@ abstract class NavigationState with _$NavigationState {
     @required AuthState authState,
     @Default(false) bool editingProfile,
     User viewingProfile,
-    bool viewingProfilePicture,
+    ViewingFullPhoto viewingProfilePicture,
   }) = _NavigationState;
 
   /// Initial state
@@ -17,4 +17,14 @@ abstract class NavigationState with _$NavigationState {
       authState: AuthState.initial(),
     );
   }
+}
+
+/// Used by [NavigationState] when viewing a full screen photo
+@freezed
+abstract class ViewingFullPhoto with _$ViewingFullPhoto {
+  /// Constructor
+  const factory ViewingFullPhoto({
+    @required String photoUrl,
+    String heroTag,
+  }) = _ViewingFullPhoto;
 }

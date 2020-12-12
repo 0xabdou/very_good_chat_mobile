@@ -18,7 +18,7 @@ class _$NavigationStateTearOff {
       {@required AuthState authState,
       bool editingProfile = false,
       User viewingProfile,
-      bool viewingProfilePicture}) {
+      ViewingFullPhoto viewingProfilePicture}) {
     return _NavigationState(
       authState: authState,
       editingProfile: editingProfile,
@@ -37,7 +37,7 @@ mixin _$NavigationState {
   AuthState get authState;
   bool get editingProfile;
   User get viewingProfile;
-  bool get viewingProfilePicture;
+  ViewingFullPhoto get viewingProfilePicture;
 
   $NavigationStateCopyWith<NavigationState> get copyWith;
 }
@@ -51,10 +51,11 @@ abstract class $NavigationStateCopyWith<$Res> {
       {AuthState authState,
       bool editingProfile,
       User viewingProfile,
-      bool viewingProfilePicture});
+      ViewingFullPhoto viewingProfilePicture});
 
   $AuthStateCopyWith<$Res> get authState;
   $UserCopyWith<$Res> get viewingProfile;
+  $ViewingFullPhotoCopyWith<$Res> get viewingProfilePicture;
 }
 
 /// @nodoc
@@ -84,7 +85,7 @@ class _$NavigationStateCopyWithImpl<$Res>
           : viewingProfile as User,
       viewingProfilePicture: viewingProfilePicture == freezed
           ? _value.viewingProfilePicture
-          : viewingProfilePicture as bool,
+          : viewingProfilePicture as ViewingFullPhoto,
     ));
   }
 
@@ -107,6 +108,17 @@ class _$NavigationStateCopyWithImpl<$Res>
       return _then(_value.copyWith(viewingProfile: value));
     });
   }
+
+  @override
+  $ViewingFullPhotoCopyWith<$Res> get viewingProfilePicture {
+    if (_value.viewingProfilePicture == null) {
+      return null;
+    }
+    return $ViewingFullPhotoCopyWith<$Res>(_value.viewingProfilePicture,
+        (value) {
+      return _then(_value.copyWith(viewingProfilePicture: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -120,12 +132,14 @@ abstract class _$NavigationStateCopyWith<$Res>
       {AuthState authState,
       bool editingProfile,
       User viewingProfile,
-      bool viewingProfilePicture});
+      ViewingFullPhoto viewingProfilePicture});
 
   @override
   $AuthStateCopyWith<$Res> get authState;
   @override
   $UserCopyWith<$Res> get viewingProfile;
+  @override
+  $ViewingFullPhotoCopyWith<$Res> get viewingProfilePicture;
 }
 
 /// @nodoc
@@ -157,7 +171,7 @@ class __$NavigationStateCopyWithImpl<$Res>
           : viewingProfile as User,
       viewingProfilePicture: viewingProfilePicture == freezed
           ? _value.viewingProfilePicture
-          : viewingProfilePicture as bool,
+          : viewingProfilePicture as ViewingFullPhoto,
     ));
   }
 }
@@ -180,7 +194,7 @@ class _$_NavigationState implements _NavigationState {
   @override
   final User viewingProfile;
   @override
-  final bool viewingProfilePicture;
+  final ViewingFullPhoto viewingProfilePicture;
 
   @override
   String toString() {
@@ -223,7 +237,7 @@ abstract class _NavigationState implements NavigationState {
       {@required AuthState authState,
       bool editingProfile,
       User viewingProfile,
-      bool viewingProfilePicture}) = _$_NavigationState;
+      ViewingFullPhoto viewingProfilePicture}) = _$_NavigationState;
 
   @override
   AuthState get authState;
@@ -232,7 +246,143 @@ abstract class _NavigationState implements NavigationState {
   @override
   User get viewingProfile;
   @override
-  bool get viewingProfilePicture;
+  ViewingFullPhoto get viewingProfilePicture;
   @override
   _$NavigationStateCopyWith<_NavigationState> get copyWith;
+}
+
+/// @nodoc
+class _$ViewingFullPhotoTearOff {
+  const _$ViewingFullPhotoTearOff();
+
+// ignore: unused_element
+  _ViewingFullPhoto call({@required String photoUrl, String heroTag}) {
+    return _ViewingFullPhoto(
+      photoUrl: photoUrl,
+      heroTag: heroTag,
+    );
+  }
+}
+
+/// @nodoc
+// ignore: unused_element
+const $ViewingFullPhoto = _$ViewingFullPhotoTearOff();
+
+/// @nodoc
+mixin _$ViewingFullPhoto {
+  String get photoUrl;
+  String get heroTag;
+
+  $ViewingFullPhotoCopyWith<ViewingFullPhoto> get copyWith;
+}
+
+/// @nodoc
+abstract class $ViewingFullPhotoCopyWith<$Res> {
+  factory $ViewingFullPhotoCopyWith(
+          ViewingFullPhoto value, $Res Function(ViewingFullPhoto) then) =
+      _$ViewingFullPhotoCopyWithImpl<$Res>;
+  $Res call({String photoUrl, String heroTag});
+}
+
+/// @nodoc
+class _$ViewingFullPhotoCopyWithImpl<$Res>
+    implements $ViewingFullPhotoCopyWith<$Res> {
+  _$ViewingFullPhotoCopyWithImpl(this._value, this._then);
+
+  final ViewingFullPhoto _value;
+  // ignore: unused_field
+  final $Res Function(ViewingFullPhoto) _then;
+
+  @override
+  $Res call({
+    Object photoUrl = freezed,
+    Object heroTag = freezed,
+  }) {
+    return _then(_value.copyWith(
+      photoUrl: photoUrl == freezed ? _value.photoUrl : photoUrl as String,
+      heroTag: heroTag == freezed ? _value.heroTag : heroTag as String,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$ViewingFullPhotoCopyWith<$Res>
+    implements $ViewingFullPhotoCopyWith<$Res> {
+  factory _$ViewingFullPhotoCopyWith(
+          _ViewingFullPhoto value, $Res Function(_ViewingFullPhoto) then) =
+      __$ViewingFullPhotoCopyWithImpl<$Res>;
+  @override
+  $Res call({String photoUrl, String heroTag});
+}
+
+/// @nodoc
+class __$ViewingFullPhotoCopyWithImpl<$Res>
+    extends _$ViewingFullPhotoCopyWithImpl<$Res>
+    implements _$ViewingFullPhotoCopyWith<$Res> {
+  __$ViewingFullPhotoCopyWithImpl(
+      _ViewingFullPhoto _value, $Res Function(_ViewingFullPhoto) _then)
+      : super(_value, (v) => _then(v as _ViewingFullPhoto));
+
+  @override
+  _ViewingFullPhoto get _value => super._value as _ViewingFullPhoto;
+
+  @override
+  $Res call({
+    Object photoUrl = freezed,
+    Object heroTag = freezed,
+  }) {
+    return _then(_ViewingFullPhoto(
+      photoUrl: photoUrl == freezed ? _value.photoUrl : photoUrl as String,
+      heroTag: heroTag == freezed ? _value.heroTag : heroTag as String,
+    ));
+  }
+}
+
+/// @nodoc
+class _$_ViewingFullPhoto implements _ViewingFullPhoto {
+  const _$_ViewingFullPhoto({@required this.photoUrl, this.heroTag})
+      : assert(photoUrl != null);
+
+  @override
+  final String photoUrl;
+  @override
+  final String heroTag;
+
+  @override
+  String toString() {
+    return 'ViewingFullPhoto(photoUrl: $photoUrl, heroTag: $heroTag)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _ViewingFullPhoto &&
+            (identical(other.photoUrl, photoUrl) ||
+                const DeepCollectionEquality()
+                    .equals(other.photoUrl, photoUrl)) &&
+            (identical(other.heroTag, heroTag) ||
+                const DeepCollectionEquality().equals(other.heroTag, heroTag)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(photoUrl) ^
+      const DeepCollectionEquality().hash(heroTag);
+
+  @override
+  _$ViewingFullPhotoCopyWith<_ViewingFullPhoto> get copyWith =>
+      __$ViewingFullPhotoCopyWithImpl<_ViewingFullPhoto>(this, _$identity);
+}
+
+abstract class _ViewingFullPhoto implements ViewingFullPhoto {
+  const factory _ViewingFullPhoto({@required String photoUrl, String heroTag}) =
+      _$_ViewingFullPhoto;
+
+  @override
+  String get photoUrl;
+  @override
+  String get heroTag;
+  @override
+  _$ViewingFullPhotoCopyWith<_ViewingFullPhoto> get copyWith;
 }

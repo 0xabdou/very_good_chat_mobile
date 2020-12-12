@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/presentation/core/navigation/app_pages.dart';
 import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
-import 'package:very_good_chat/shared/logger.dart';
 import 'package:very_good_chat/shared/utils/other_utils.dart';
 
 ///
@@ -50,6 +49,11 @@ class AppRouterDelegate extends RouterDelegate<String>
         AppPages.profileScreen(state.viewingProfile),
       if (state.editingProfile)
         AppPages.profileEditingScreen(userFromState(state.authState)),
+      if (state.viewingProfilePicture != null)
+        AppPages.fullPhotoScreen(
+          photoUrl: state.viewingProfilePicture.photoUrl,
+          heroTag: state.viewingProfilePicture.heroTag,
+        ),
     ];
     return _history = authPages..addAll(otherPages);
   }
@@ -67,14 +71,13 @@ class AppRouterDelegate extends RouterDelegate<String>
     assert(success);
 
     if (key == AppKeys.profileScreen) {
-      logger.wtf('Popping PROFILE SCREEN');
       _cubit.closeProfile();
     } else if (key == AppKeys.registrationScreen) {
-      logger.wtf('Popping UPDATING SCREEN');
       _cubit.closeRegistrationScreen();
     } else if (key == AppKeys.profileEditingScreen) {
-      logger.wtf('Popping UPDATING SCREEN');
       _cubit.closeProfileEditingScreen();
+    } else if (key == AppKeys.fullPhotoScreen) {
+      _cubit.closeProfilePicture();
     }
     return true;
   }

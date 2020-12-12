@@ -1,13 +1,12 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/application/profile/relationship.dart';
+import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_button.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
-import 'package:very_good_chat/shared/router.gr.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
 /// Profile UI, can be used for the current user or his friends
@@ -39,13 +38,10 @@ class Profile extends StatelessWidget {
             tag: tag,
             child: ProfilePicture(
               onPressed: () {
-                ExtendedNavigator.root.push(
-                  Routes.fullImage,
-                  arguments: FullImageArguments(
-                    imageUrl: user.photoUrl,
-                    tag: tag,
-                  ),
-                );
+                context.read<NavigationCubit>().viewFullPicture(
+                      photoUrl: user.photoUrl,
+                      heroTag: tag,
+                    );
               },
               photoUrl: user.photoUrl,
               isOnline: isOnline,
