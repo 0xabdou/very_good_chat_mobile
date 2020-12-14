@@ -12,7 +12,7 @@ abstract class IFriendRepository {
   Future<Either<FriendFailure, List<Friend>>> getFriendsLocally();
 
   /// Send a friend request to the user with [userId]
-  Future<Either<FriendFailure, Unit>> sendFriendRequest(String userId);
+  Future<Either<FriendFailure, FriendRequest>> sendFriendRequest(String userId);
 
   /// Answers the friend request sent by the user with [userId]
   /// if [accept] is true, the request is accepted, else it's rejected

@@ -21,12 +21,28 @@ class NavigationCubit extends Cubit<NavigationState> {
   final AuthCubit _authCubit;
   StreamSubscription _sub;
 
+  void closeRegistrationScreen() {
+    _authCubit.logout();
+  }
+
   void viewOwnProfile() {
     emit(state.copyWith(viewingProfile: userFromState(state.authState)));
   }
 
   void viewOtherProfile(User user) {
     emit(state.copyWith(viewingProfile: user));
+  }
+
+  void closeProfile() {
+    emit(state.copyWith(viewingProfile: null));
+  }
+
+  void editProfile() {
+    emit(state.copyWith(editingProfile: true));
+  }
+
+  void closeProfileEditingScreen() {
+    emit(state.copyWith(editingProfile: false));
   }
 
   void viewFullPicture({@required String photoUrl, String heroTag}) {
@@ -40,24 +56,16 @@ class NavigationCubit extends Cubit<NavigationState> {
     );
   }
 
-  void closeProfile() {
-    emit(state.copyWith(viewingProfile: null));
-  }
-
   void closeProfilePicture() {
     emit(state.copyWith(viewingProfilePicture: null));
   }
 
-  void editProfile() {
-    emit(state.copyWith(editingProfile: true));
+  void openFriendRequestsScreen() {
+    emit(state.copyWith(viewingFriendRequests: true));
   }
 
-  void closeProfileEditingScreen() {
-    emit(state.copyWith(editingProfile: false));
-  }
-
-  void closeRegistrationScreen() {
-    _authCubit.logout();
+  void closeFriendRequestsScreen() {
+    emit(state.copyWith(viewingFriendRequests: false));
   }
 
   @override

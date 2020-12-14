@@ -60,12 +60,12 @@ void main() {
         );
       },
       expect: [
-        FriendState.initial().copyWith(
+        FriendState(
           allFriends: localFriends,
           onlineFriends: localFriends.where((f) => f.isOnline).toList(),
           offlineFriends: localFriends.where((f) => !f.isOnline).toList(),
         ),
-        FriendState.initial().copyWith(
+        FriendState(
           allFriends: remoteFriends,
           onlineFriends: remoteFriends.where((f) => f.isOnline).toList(),
           offlineFriends: remoteFriends.where((f) => !f.isOnline).toList(),
@@ -92,7 +92,7 @@ void main() {
           authCubit: mockAuthCubit,
         );
       },
-      expect: [FriendState.initial()],
+      expect: [FriendState()],
       verify: (c) async {
         verifyZeroInteractions(mockRepo);
         expect(c.friendsPollingTimer, isNull);
@@ -100,7 +100,7 @@ void main() {
     );
   });
 
-  group('update()', () {
+  group('friendRemoved()', () {
     // Not much to test here
   });
 }

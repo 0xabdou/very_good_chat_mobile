@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
@@ -11,6 +13,7 @@ import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
 import 'package:very_good_chat/shared/logger.dart';
+import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 import 'package:very_good_chat/shared/utils/other_utils.dart';
 
 part 'profile_cubit.freezed.dart';
@@ -43,7 +46,15 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   /// Unfriend this profile's user
-  Future<void> unfriend() async {
+  Future<void> unfriend(BuildContext context) async {
+    final yes = await DialogUtils.instance.showYesNoDialog(
+      context,
+      title: 'Unfriend',
+      content: 'Do you want to remove this person from your '
+          'friends list?',
+    );
+    if (!yes) return;
+
     emit(_state.copyWith(friendOperation: const FriendOperation.some()));
     final result = await _repository.unfriend(state.user.id);
     result.fold(
@@ -55,7 +66,26 @@ class ProfileCubit extends Cubit<ProfileState> {
           friendOperation: const FriendOperation.done(),
           relationship: const Relationship.stranger(),
         ));
-        _friendCubit.update();
+        _friendCubit.friendRemoved();
+      },
+    );
+  }
+
+  /// Send a friend request to this user
+  Future<void> sendFriendRequest() async {
+    emit(_state.copyWith(friendOperation: const FriendOperation.some()));
+
+    final result = await _repository.sendFriendRequest(state.user.id);
+    result.fold(
+      (failure) {
+        emit(_state.copyWith(friendOperation: FriendOperation.fail(failure)));
+      },
+      (request) {
+        emit(_state.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: const Relationship.requestSent(),
+        ));
+        _friendCubit.friendRequestSent(request);
       },
     );
   }
@@ -78,7 +108,19 @@ class ProfileCubit extends Cubit<ProfileState> {
         lastSeen: friend.lastSeen,
       );
     }
-    // TODO: Check if the user is blocked, has sent or received a friend request
+
+    final allRequests = _friendCubit.state.allRequests;
+    final request = allRequests.firstWhere(
+      (r) => r.user.id == user.id,
+      orElse: () => null,
+    );
+    if (request != null) {
+      return request.sent
+          ? const Relationship.requestSent()
+          : const Relationship.requestReceived();
+    }
+
+    // TODO: Check if the user is blocked
     return const Relationship.stranger();
   }
 

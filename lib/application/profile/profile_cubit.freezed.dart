@@ -170,7 +170,7 @@ class __$ProfileStateCopyWithImpl<$Res> extends _$ProfileStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_ProfileState implements _ProfileState {
+class _$_ProfileState with DiagnosticableTreeMixin implements _ProfileState {
   const _$_ProfileState(
       {@required this.initialized,
       this.user,
@@ -190,8 +190,19 @@ class _$_ProfileState implements _ProfileState {
   final FriendOperation friendOperation;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'ProfileState(initialized: $initialized, user: $user, relationship: $relationship, friendOperation: $friendOperation)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ProfileState'))
+      ..add(DiagnosticsProperty('initialized', initialized))
+      ..add(DiagnosticsProperty('user', user))
+      ..add(DiagnosticsProperty('relationship', relationship))
+      ..add(DiagnosticsProperty('friendOperation', friendOperation));
   }
 
   @override
@@ -342,12 +353,18 @@ class __$NoneCopyWithImpl<$Res> extends _$FriendOperationCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_None implements _None {
+class _$_None with DiagnosticableTreeMixin implements _None {
   const _$_None();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'FriendOperation.none()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'FriendOperation.none'));
   }
 
   @override
@@ -442,12 +459,18 @@ class __$SomeCopyWithImpl<$Res> extends _$FriendOperationCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_Some implements _Some {
+class _$_Some with DiagnosticableTreeMixin implements _Some {
   const _$_Some();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'FriendOperation.some()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'FriendOperation.some'));
   }
 
   @override
@@ -542,12 +565,18 @@ class __$DoneCopyWithImpl<$Res> extends _$FriendOperationCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_Done implements _Done {
+class _$_Done with DiagnosticableTreeMixin implements _Done {
   const _$_Done();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'FriendOperation.done()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'FriendOperation.done'));
   }
 
   @override
@@ -664,15 +693,23 @@ class __$FailCopyWithImpl<$Res> extends _$FriendOperationCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_Fail implements _Fail {
+class _$_Fail with DiagnosticableTreeMixin implements _Fail {
   const _$_Fail(this.failure) : assert(failure != null);
 
   @override
   final FriendFailure failure;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'FriendOperation.fail(failure: $failure)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'FriendOperation.fail'))
+      ..add(DiagnosticsProperty('failure', failure));
   }
 
   @override

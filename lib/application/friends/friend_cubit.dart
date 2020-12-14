@@ -23,7 +23,7 @@ class FriendCubit extends Cubit<FriendState> {
     @required AuthCubit authCubit,
   })  : _authCubit = authCubit,
         _repository = friendRepository,
-        super(FriendState.initial()) {
+        super(const FriendState()) {
     _sub = _authCubit.listen((state) {
       state.maybeMap(
         loggedIn: (_) => _init(),
@@ -42,8 +42,21 @@ class FriendCubit extends Cubit<FriendState> {
   @visibleForTesting
   Timer get friendsPollingTimer => _friendsPollingTimer;
 
-  /// Clean state
-  FriendState get _state => state.copyWith(failure: null);
+  @override
+  FriendState get state => super.state.copyWith(failure: null);
+
+  /// This is meant to be called by [ProfileCubit] when a friend is removed
+  void friendRemoved() {
+    _refreshFriends();
+  }
+
+  /// This is meant to be called by [ProfileCubit] when a friend request is sent
+  void friendRequestSent(FriendRequest request) {
+    final requests = List.of(state.allRequests)..add(request);
+    final sentRequests = List.of(state.sentRequests)..add(request);
+
+    emit(state.copyWith(allRequests: requests, sentRequests: sentRequests));
+  }
 
   /// Get the friends list and emit them with a new state
   /// First, the persisted friends are emitted, then live data from backend
@@ -73,13 +86,7 @@ class FriendCubit extends Cubit<FriendState> {
   Future<void> _clear() async {
     _friendsPollingTimer?.cancel();
     _friendsPollingTimer = null;
-    emit(FriendState.initial());
-  }
-
-  /// This is meant to be called bt [ProfileCubit] when something changes
-  /// e.g: a new friend was added/removed
-  void update() {
-    _refreshFriends();
+    emit(const FriendState());
   }
 
   /// Fetches friends list from backend and emits a new state
@@ -88,7 +95,7 @@ class FriendCubit extends Cubit<FriendState> {
     final localFetchResult = await _repository.getFriendsLocally();
     localFetchResult.fold(
       (failure) {
-        emit(_state.copyWith(failure: failure));
+        emit(state.copyWith(failure: failure));
       },
       _emitNewFriends,
     );
@@ -97,7 +104,7 @@ class FriendCubit extends Cubit<FriendState> {
     final remoteFetchResult = await _repository.getFriendsRemotely();
     remoteFetchResult.fold(
       (failure) {
-        emit(_state.copyWith(failure: failure));
+        emit(state.copyWith(failure: failure));
       },
       _emitNewFriends,
     );
@@ -112,7 +119,7 @@ class FriendCubit extends Cubit<FriendState> {
       else
         offlineFriends.add(friend);
     }
-    emit(_state.copyWith(
+    emit(state.copyWith(
       allFriends: friends,
       onlineFriends: onlineFriends,
       offlineFriends: offlineFriends,

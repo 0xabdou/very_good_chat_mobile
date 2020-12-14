@@ -66,8 +66,10 @@ class FriendRepository implements IFriendRepository {
   }
 
   @override
-  Future<Either<FriendFailure, Unit>> sendFriendRequest(String userId) {
-    return catchExceptions<Unit>(
+  Future<Either<FriendFailure, FriendRequest>> sendFriendRequest(
+    String userId,
+  ) {
+    return catchExceptions<FriendRequest>(
       () => _remoteDataSource.sendFriendRequest(userId),
     );
   }

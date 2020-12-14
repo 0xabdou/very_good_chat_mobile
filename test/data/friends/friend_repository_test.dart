@@ -5,6 +5,7 @@ import 'package:very_good_chat/data/friends/friend_local_data_source.dart';
 import 'package:very_good_chat/data/friends/friend_remote_data_source.dart';
 import 'package:very_good_chat/data/friends/friend_repository.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
+import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
 
 import '../../mock/mock_data.dart';
@@ -158,14 +159,18 @@ void main() {
   group('sendFriendRequest()', () {
     test('should return a unit on success', () async {
       // arrange
-      const userId = 'userId';
-      when(mockRemoteDS.sendFriendRequest(userId))
-          .thenAnswer((_) async => unit);
+      final request = FriendRequest(
+        user: user,
+        sentAt: DateTime.now(),
+        sent: true,
+      );
+      when(mockRemoteDS.sendFriendRequest(request.user.id))
+          .thenAnswer((_) async => request);
       // act
-      final result = await repository.sendFriendRequest(userId);
+      final result = await repository.sendFriendRequest(request.user.id);
       // assert
-      expect(result, right(unit));
-      verify(mockRemoteDS.sendFriendRequest(userId)).called(1);
+      expect(result, right(request));
+      verify(mockRemoteDS.sendFriendRequest(request.user.id)).called(1);
       verifyNoMoreInteractions(mockRemoteDS);
     });
   });

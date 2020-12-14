@@ -34,7 +34,7 @@ const friend = Friend(
   username: 'username',
 );
 final friendRequest = FriendRequest(
-  userId: 'userId',
+  user: user,
   sentAt: DateTime.now(),
   sent: false,
 );

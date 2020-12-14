@@ -18,11 +18,11 @@ class _$FriendRequestTearOff {
 
 // ignore: unused_element
   _FriendRequest call(
-      {@required @requiredNotNull String userId,
+      {@required @requiredNotNull User user,
       @required @_sentAtJsonKey DateTime sentAt,
       @required @requiredNotNull bool sent}) {
     return _FriendRequest(
-      userId: userId,
+      user: user,
       sentAt: sentAt,
       sent: sent,
     );
@@ -41,7 +41,7 @@ const $FriendRequest = _$FriendRequestTearOff();
 /// @nodoc
 mixin _$FriendRequest {
   @requiredNotNull
-  String get userId;
+  User get user;
   @_sentAtJsonKey
   DateTime get sentAt;
   @requiredNotNull
@@ -57,9 +57,11 @@ abstract class $FriendRequestCopyWith<$Res> {
           FriendRequest value, $Res Function(FriendRequest) then) =
       _$FriendRequestCopyWithImpl<$Res>;
   $Res call(
-      {@requiredNotNull String userId,
+      {@requiredNotNull User user,
       @_sentAtJsonKey DateTime sentAt,
       @requiredNotNull bool sent});
+
+  $UserCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -73,15 +75,25 @@ class _$FriendRequestCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object userId = freezed,
+    Object user = freezed,
     Object sentAt = freezed,
     Object sent = freezed,
   }) {
     return _then(_value.copyWith(
-      userId: userId == freezed ? _value.userId : userId as String,
+      user: user == freezed ? _value.user : user as User,
       sentAt: sentAt == freezed ? _value.sentAt : sentAt as DateTime,
       sent: sent == freezed ? _value.sent : sent as bool,
     ));
+  }
+
+  @override
+  $UserCopyWith<$Res> get user {
+    if (_value.user == null) {
+      return null;
+    }
+    return $UserCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
   }
 }
 
@@ -93,9 +105,12 @@ abstract class _$FriendRequestCopyWith<$Res>
       __$FriendRequestCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@requiredNotNull String userId,
+      {@requiredNotNull User user,
       @_sentAtJsonKey DateTime sentAt,
       @requiredNotNull bool sent});
+
+  @override
+  $UserCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -111,12 +126,12 @@ class __$FriendRequestCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object userId = freezed,
+    Object user = freezed,
     Object sentAt = freezed,
     Object sent = freezed,
   }) {
     return _then(_FriendRequest(
-      userId: userId == freezed ? _value.userId : userId as String,
+      user: user == freezed ? _value.user : user as User,
       sentAt: sentAt == freezed ? _value.sentAt : sentAt as DateTime,
       sent: sent == freezed ? _value.sent : sent as bool,
     ));
@@ -128,10 +143,10 @@ class __$FriendRequestCopyWithImpl<$Res>
 /// @nodoc
 class _$_FriendRequest implements _FriendRequest {
   const _$_FriendRequest(
-      {@required @requiredNotNull this.userId,
+      {@required @requiredNotNull this.user,
       @required @_sentAtJsonKey this.sentAt,
       @required @requiredNotNull this.sent})
-      : assert(userId != null),
+      : assert(user != null),
         assert(sentAt != null),
         assert(sent != null);
 
@@ -140,7 +155,7 @@ class _$_FriendRequest implements _FriendRequest {
 
   @override
   @requiredNotNull
-  final String userId;
+  final User user;
   @override
   @_sentAtJsonKey
   final DateTime sentAt;
@@ -150,15 +165,15 @@ class _$_FriendRequest implements _FriendRequest {
 
   @override
   String toString() {
-    return 'FriendRequest(userId: $userId, sentAt: $sentAt, sent: $sent)';
+    return 'FriendRequest(user: $user, sentAt: $sentAt, sent: $sent)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _FriendRequest &&
-            (identical(other.userId, userId) ||
-                const DeepCollectionEquality().equals(other.userId, userId)) &&
+            (identical(other.user, user) ||
+                const DeepCollectionEquality().equals(other.user, user)) &&
             (identical(other.sentAt, sentAt) ||
                 const DeepCollectionEquality().equals(other.sentAt, sentAt)) &&
             (identical(other.sent, sent) ||
@@ -168,7 +183,7 @@ class _$_FriendRequest implements _FriendRequest {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(userId) ^
+      const DeepCollectionEquality().hash(user) ^
       const DeepCollectionEquality().hash(sentAt) ^
       const DeepCollectionEquality().hash(sent);
 
@@ -184,7 +199,7 @@ class _$_FriendRequest implements _FriendRequest {
 
 abstract class _FriendRequest implements FriendRequest {
   const factory _FriendRequest(
-      {@required @requiredNotNull String userId,
+      {@required @requiredNotNull User user,
       @required @_sentAtJsonKey DateTime sentAt,
       @required @requiredNotNull bool sent}) = _$_FriendRequest;
 
@@ -193,7 +208,7 @@ abstract class _FriendRequest implements FriendRequest {
 
   @override
   @requiredNotNull
-  String get userId;
+  User get user;
   @override
   @_sentAtJsonKey
   DateTime get sentAt;

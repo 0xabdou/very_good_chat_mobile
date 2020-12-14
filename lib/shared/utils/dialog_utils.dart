@@ -1,6 +1,41 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
+/// A utility class for dialogs
+abstract class DialogUtils {
+  /// An implementation of [DialogUtils]
+  static DialogUtils instance = _GoodDialogUtils();
+
+  /// Show a dialog to confirm some action
+  Future<bool> showYesNoDialog(
+    BuildContext context, {
+    String title,
+    String content,
+    String yesText,
+    String noText,
+  });
+}
+
+class _GoodDialogUtils implements DialogUtils {
+  @override
+  Future<bool> showYesNoDialog(BuildContext context,
+      {String title = 'Cancel',
+      String content = 'Are you sure you want to cancel?',
+      String yesText = 'Yes',
+      String noText = 'No'}) async {
+    final result = await showDialog(
+      context: context,
+      builder: (_) => YesNoDialog(
+        title: title,
+        content: content,
+        yesText: yesText,
+        noText: noText,
+      ),
+    ) as bool;
+    return result ?? false;
+  }
+}
+
 /// A simple yes/no dialog widget
 class YesNoDialog extends StatelessWidget {
   /// Constructor
@@ -45,26 +80,6 @@ class YesNoDialog extends StatelessWidget {
       ],
     );
   }
-}
-
-/// Show a dialog and returns the user's input
-Future<bool> yesNoDialog(
-  BuildContext context, {
-  String title = 'Cancel',
-  String content = 'Are you sure you want to cancel?',
-  String yesText = 'Yes',
-  String noText = 'No',
-}) async {
-  final result = await showDialog(
-    context: context,
-    builder: (_) => YesNoDialog(
-      title: title,
-      content: content,
-      yesText: yesText,
-      noText: noText,
-    ),
-  ) as bool;
-  return result ?? false;
 }
 
 /// Show an error snack bar with the provided error message

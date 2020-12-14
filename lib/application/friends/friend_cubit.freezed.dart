@@ -15,16 +15,20 @@ class _$FriendStateTearOff {
 
 // ignore: unused_element
   _FriendState call(
-      {@required List<Friend> allFriends,
-      @required List<Friend> onlineFriends,
-      @required List<Friend> offlineFriends,
-      @required List<FriendRequest> friendRequests,
+      {List<Friend> allFriends = const [],
+      List<Friend> onlineFriends = const [],
+      List<Friend> offlineFriends = const [],
+      List<FriendRequest> allRequests = const [],
+      List<FriendRequest> sentRequests = const [],
+      List<FriendRequest> receivedRequests = const [],
       FriendFailure failure}) {
     return _FriendState(
       allFriends: allFriends,
       onlineFriends: onlineFriends,
       offlineFriends: offlineFriends,
-      friendRequests: friendRequests,
+      allRequests: allRequests,
+      sentRequests: sentRequests,
+      receivedRequests: receivedRequests,
       failure: failure,
     );
   }
@@ -39,7 +43,9 @@ mixin _$FriendState {
   List<Friend> get allFriends;
   List<Friend> get onlineFriends;
   List<Friend> get offlineFriends;
-  List<FriendRequest> get friendRequests;
+  List<FriendRequest> get allRequests;
+  List<FriendRequest> get sentRequests;
+  List<FriendRequest> get receivedRequests;
   FriendFailure get failure;
 
   $FriendStateCopyWith<FriendState> get copyWith;
@@ -54,7 +60,9 @@ abstract class $FriendStateCopyWith<$Res> {
       {List<Friend> allFriends,
       List<Friend> onlineFriends,
       List<Friend> offlineFriends,
-      List<FriendRequest> friendRequests,
+      List<FriendRequest> allRequests,
+      List<FriendRequest> sentRequests,
+      List<FriendRequest> receivedRequests,
       FriendFailure failure});
 
   $FriendFailureCopyWith<$Res> get failure;
@@ -73,7 +81,9 @@ class _$FriendStateCopyWithImpl<$Res> implements $FriendStateCopyWith<$Res> {
     Object allFriends = freezed,
     Object onlineFriends = freezed,
     Object offlineFriends = freezed,
-    Object friendRequests = freezed,
+    Object allRequests = freezed,
+    Object sentRequests = freezed,
+    Object receivedRequests = freezed,
     Object failure = freezed,
   }) {
     return _then(_value.copyWith(
@@ -86,9 +96,15 @@ class _$FriendStateCopyWithImpl<$Res> implements $FriendStateCopyWith<$Res> {
       offlineFriends: offlineFriends == freezed
           ? _value.offlineFriends
           : offlineFriends as List<Friend>,
-      friendRequests: friendRequests == freezed
-          ? _value.friendRequests
-          : friendRequests as List<FriendRequest>,
+      allRequests: allRequests == freezed
+          ? _value.allRequests
+          : allRequests as List<FriendRequest>,
+      sentRequests: sentRequests == freezed
+          ? _value.sentRequests
+          : sentRequests as List<FriendRequest>,
+      receivedRequests: receivedRequests == freezed
+          ? _value.receivedRequests
+          : receivedRequests as List<FriendRequest>,
       failure: failure == freezed ? _value.failure : failure as FriendFailure,
     ));
   }
@@ -115,7 +131,9 @@ abstract class _$FriendStateCopyWith<$Res>
       {List<Friend> allFriends,
       List<Friend> onlineFriends,
       List<Friend> offlineFriends,
-      List<FriendRequest> friendRequests,
+      List<FriendRequest> allRequests,
+      List<FriendRequest> sentRequests,
+      List<FriendRequest> receivedRequests,
       FriendFailure failure});
 
   @override
@@ -137,7 +155,9 @@ class __$FriendStateCopyWithImpl<$Res> extends _$FriendStateCopyWithImpl<$Res>
     Object allFriends = freezed,
     Object onlineFriends = freezed,
     Object offlineFriends = freezed,
-    Object friendRequests = freezed,
+    Object allRequests = freezed,
+    Object sentRequests = freezed,
+    Object receivedRequests = freezed,
     Object failure = freezed,
   }) {
     return _then(_FriendState(
@@ -150,9 +170,15 @@ class __$FriendStateCopyWithImpl<$Res> extends _$FriendStateCopyWithImpl<$Res>
       offlineFriends: offlineFriends == freezed
           ? _value.offlineFriends
           : offlineFriends as List<Friend>,
-      friendRequests: friendRequests == freezed
-          ? _value.friendRequests
-          : friendRequests as List<FriendRequest>,
+      allRequests: allRequests == freezed
+          ? _value.allRequests
+          : allRequests as List<FriendRequest>,
+      sentRequests: sentRequests == freezed
+          ? _value.sentRequests
+          : sentRequests as List<FriendRequest>,
+      receivedRequests: receivedRequests == freezed
+          ? _value.receivedRequests
+          : receivedRequests as List<FriendRequest>,
       failure: failure == freezed ? _value.failure : failure as FriendFailure,
     ));
   }
@@ -161,30 +187,44 @@ class __$FriendStateCopyWithImpl<$Res> extends _$FriendStateCopyWithImpl<$Res>
 /// @nodoc
 class _$_FriendState implements _FriendState {
   const _$_FriendState(
-      {@required this.allFriends,
-      @required this.onlineFriends,
-      @required this.offlineFriends,
-      @required this.friendRequests,
+      {this.allFriends = const [],
+      this.onlineFriends = const [],
+      this.offlineFriends = const [],
+      this.allRequests = const [],
+      this.sentRequests = const [],
+      this.receivedRequests = const [],
       this.failure})
       : assert(allFriends != null),
         assert(onlineFriends != null),
         assert(offlineFriends != null),
-        assert(friendRequests != null);
+        assert(allRequests != null),
+        assert(sentRequests != null),
+        assert(receivedRequests != null);
 
+  @JsonKey(defaultValue: const [])
   @override
   final List<Friend> allFriends;
+  @JsonKey(defaultValue: const [])
   @override
   final List<Friend> onlineFriends;
+  @JsonKey(defaultValue: const [])
   @override
   final List<Friend> offlineFriends;
+  @JsonKey(defaultValue: const [])
   @override
-  final List<FriendRequest> friendRequests;
+  final List<FriendRequest> allRequests;
+  @JsonKey(defaultValue: const [])
+  @override
+  final List<FriendRequest> sentRequests;
+  @JsonKey(defaultValue: const [])
+  @override
+  final List<FriendRequest> receivedRequests;
   @override
   final FriendFailure failure;
 
   @override
   String toString() {
-    return 'FriendState(allFriends: $allFriends, onlineFriends: $onlineFriends, offlineFriends: $offlineFriends, friendRequests: $friendRequests, failure: $failure)';
+    return 'FriendState(allFriends: $allFriends, onlineFriends: $onlineFriends, offlineFriends: $offlineFriends, allRequests: $allRequests, sentRequests: $sentRequests, receivedRequests: $receivedRequests, failure: $failure)';
   }
 
   @override
@@ -200,9 +240,15 @@ class _$_FriendState implements _FriendState {
             (identical(other.offlineFriends, offlineFriends) ||
                 const DeepCollectionEquality()
                     .equals(other.offlineFriends, offlineFriends)) &&
-            (identical(other.friendRequests, friendRequests) ||
+            (identical(other.allRequests, allRequests) ||
                 const DeepCollectionEquality()
-                    .equals(other.friendRequests, friendRequests)) &&
+                    .equals(other.allRequests, allRequests)) &&
+            (identical(other.sentRequests, sentRequests) ||
+                const DeepCollectionEquality()
+                    .equals(other.sentRequests, sentRequests)) &&
+            (identical(other.receivedRequests, receivedRequests) ||
+                const DeepCollectionEquality()
+                    .equals(other.receivedRequests, receivedRequests)) &&
             (identical(other.failure, failure) ||
                 const DeepCollectionEquality().equals(other.failure, failure)));
   }
@@ -213,7 +259,9 @@ class _$_FriendState implements _FriendState {
       const DeepCollectionEquality().hash(allFriends) ^
       const DeepCollectionEquality().hash(onlineFriends) ^
       const DeepCollectionEquality().hash(offlineFriends) ^
-      const DeepCollectionEquality().hash(friendRequests) ^
+      const DeepCollectionEquality().hash(allRequests) ^
+      const DeepCollectionEquality().hash(sentRequests) ^
+      const DeepCollectionEquality().hash(receivedRequests) ^
       const DeepCollectionEquality().hash(failure);
 
   @override
@@ -223,10 +271,12 @@ class _$_FriendState implements _FriendState {
 
 abstract class _FriendState implements FriendState {
   const factory _FriendState(
-      {@required List<Friend> allFriends,
-      @required List<Friend> onlineFriends,
-      @required List<Friend> offlineFriends,
-      @required List<FriendRequest> friendRequests,
+      {List<Friend> allFriends,
+      List<Friend> onlineFriends,
+      List<Friend> offlineFriends,
+      List<FriendRequest> allRequests,
+      List<FriendRequest> sentRequests,
+      List<FriendRequest> receivedRequests,
       FriendFailure failure}) = _$_FriendState;
 
   @override
@@ -236,7 +286,11 @@ abstract class _FriendState implements FriendState {
   @override
   List<Friend> get offlineFriends;
   @override
-  List<FriendRequest> get friendRequests;
+  List<FriendRequest> get allRequests;
+  @override
+  List<FriendRequest> get sentRequests;
+  @override
+  List<FriendRequest> get receivedRequests;
   @override
   FriendFailure get failure;
   @override

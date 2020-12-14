@@ -47,6 +47,7 @@ class AppRouterDelegate extends RouterDelegate<String>
         AppPages.profileScreen(state.viewingProfile),
       if (state.editingProfile)
         AppPages.profileEditingScreen(userFromState(state.authState)),
+      if (state.viewingFriendRequests) AppPages.freindRequestsScreen(),
       if (state.viewingProfilePicture != null)
         AppPages.fullPhotoScreen(
           photoUrl: state.viewingProfilePicture.photoUrl,
@@ -76,6 +77,8 @@ class AppRouterDelegate extends RouterDelegate<String>
       _cubit.closeProfileEditingScreen();
     } else if (key == AppKeys.fullPhotoScreen) {
       _cubit.closeProfilePicture();
+    } else if (key == AppKeys.friendRequestScreen) {
+      _cubit.closeFriendRequestsScreen();
     }
     return true;
   }

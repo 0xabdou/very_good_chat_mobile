@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
@@ -10,6 +11,7 @@ import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
+import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 import '../../mock/mock_data.dart';
 
@@ -18,6 +20,10 @@ class MockAuthCubit extends Mock implements AuthCubit {}
 class MockFriendCubit extends Mock implements FriendCubit {}
 
 class MockFriendRepository extends Mock implements IFriendRepository {}
+
+class MockDialogUtils extends Mock implements DialogUtils {}
+
+class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
   const currentUser = User(id: 'current_user_id', username: 'current_username');
@@ -37,6 +43,7 @@ void main() {
   FriendCubit mockFriendCubit;
   IFriendRepository mockRepo;
   ProfileCubit profileCubit;
+  DialogUtils mockDialogUtils;
 
   setUp(() {
     mockAuthCubit = MockAuthCubit();
@@ -52,8 +59,11 @@ void main() {
       allFriends: [friend],
       onlineFriends: [],
       offlineFriends: [friend],
-      friendRequests: [],
+      allRequests: [],
     ));
+
+    mockDialogUtils = MockDialogUtils();
+    DialogUtils.instance = mockDialogUtils;
   });
 
   blocTest<ProfileCubit, ProfileState>(
@@ -118,14 +128,29 @@ void main() {
       relationship: Relationship.friend(isOnline: false),
     );
 
+    void _stubDialog(bool result) {
+      when(mockDialogUtils.showYesNoDialog(
+        any,
+        title: anyNamed('title'),
+        content: anyNamed('content'),
+        yesText: anyNamed('yesText'),
+        noText: anyNamed('noText'),
+      )).thenAnswer((_) async => result);
+    }
+
+    void _stubRepo(Either<FriendFailure, Unit> result) {
+      when(mockRepo.unfriend(user.id)).thenAnswer((_) async => result);
+    }
+
     blocTest<ProfileCubit, ProfileState>(
-      'should behave as expected if all goes well',
+      'should behave as expected if the user confirms the action',
       build: () {
-        when(mockRepo.unfriend(user.id)).thenAnswer((_) async => right(unit));
+        _stubRepo(right(unit));
+        _stubDialog(true);
         return profileCubit;
       },
       seed: seedState,
-      act: (c) => c.unfriend(),
+      act: (c) => c.unfriend(MockBuildContext()),
       expect: [
         seedState.copyWith(friendOperation: const FriendOperation.some()),
         seedState.copyWith(
@@ -135,21 +160,37 @@ void main() {
       ],
       verify: (_) async {
         verify(mockRepo.unfriend(user.id)).called(1);
-        verify(mockFriendCubit.update()).called(1);
+        verify(mockFriendCubit.friendRemoved()).called(1);
         verifyNoMoreInteractions(mockRepo);
         verifyNoMoreInteractions(mockFriendCubit);
       },
     );
 
     blocTest<ProfileCubit, ProfileState>(
-      'should behave as expected if something fails',
+      'should behave as expected if the user cancels the action',
       build: () {
-        when(mockRepo.unfriend(user.id))
-            .thenAnswer((_) async => left(const FriendFailure.server()));
+        _stubRepo(right(unit));
+        _stubDialog(false);
         return profileCubit;
       },
       seed: seedState,
-      act: (c) => c.unfriend(),
+      act: (c) => c.unfriend(MockBuildContext()),
+      expect: [],
+      verify: (_) async {
+        verifyZeroInteractions(mockRepo);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if something fails',
+      build: () {
+        _stubRepo(left(const FriendFailure.server()));
+        _stubDialog(true);
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.unfriend(MockBuildContext()),
       expect: [
         seedState.copyWith(friendOperation: const FriendOperation.some()),
         seedState.copyWith(

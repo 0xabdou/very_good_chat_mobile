@@ -8,6 +8,7 @@ import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dar
 import 'package:very_good_chat/presentation/profile/profile.dart';
 import 'package:very_good_chat/shared/injection.dart';
 import 'package:very_good_chat/shared/logger.dart';
+import 'package:very_good_chat/shared/size_config.dart';
 import 'package:very_good_chat/shared/utils/other_utils.dart';
 
 /// Profile screen duh
@@ -84,7 +85,6 @@ class CurrentUserScaffold extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  // TODO: Navigate to updating screen
                   context.read<NavigationCubit>().editProfile();
                 },
                 icon: const Icon(Icons.edit),
@@ -104,11 +104,30 @@ class OtherUserScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileCubit = context.watch<ProfileCubit>();
     final user = profileCubit.state.user;
+    final sc = SizeConfig(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(user.name ?? user.username),
+        actions: [
+          PopupMenuButton<_OtherUserActions>(
+            onSelected: (action) {
+              // TODO: Block
+            },
+            offset: Offset(0, sc.height(6.2)),
+            itemBuilder: (_) => const [
+              PopupMenuItem(
+                value: _OtherUserActions.block,
+                child: Text('Block'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Profile(),
     );
   }
+}
+
+enum _OtherUserActions {
+  block,
 }

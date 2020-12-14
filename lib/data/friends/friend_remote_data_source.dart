@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 
@@ -12,7 +13,7 @@ abstract class IFriendRemoteDataSource {
   Future<List<Friend>> getFriends();
 
   /// Send a friend request to the user with [userId]
-  Future<Unit> sendFriendRequest(String userId);
+  Future<FriendRequest> sendFriendRequest(String userId);
 
   /// Answers the friend request sent by the user with [userId]
   /// if [accept] is true, the request is accepted, else it's rejected
@@ -107,8 +108,12 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
   }
 
   @override
-  Future<Unit> sendFriendRequest(String userId) async {
+  Future<FriendRequest> sendFriendRequest(String userId) async {
     await Future.delayed(const Duration(milliseconds: 1000));
-    return unit;
+    return FriendRequest(
+      user: User(id: userId, username: userId),
+      sentAt: DateTime.now(),
+      sent: true,
+    );
   }
 }

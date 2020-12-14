@@ -1,17 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 
+import '../../mock/mock_data.dart';
+
 void main() {
   final ms = DateTime.now().millisecondsSinceEpoch;
 
   final friendRequest = FriendRequest(
-    userId: 'userId',
+    user: user,
     sentAt: DateTime.fromMillisecondsSinceEpoch(ms),
     sent: true,
   );
 
   final friendRequestJson = <String, dynamic>{
-    'userId': friendRequest.userId,
+    'user': user.toJson(),
     'sentAt': friendRequest.sentAt.millisecondsSinceEpoch,
     'sent': friendRequest.sent,
   };

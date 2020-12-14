@@ -7,6 +7,7 @@ import 'package:very_good_chat/presentation/auth/logged_in_screen.dart';
 import 'package:very_good_chat/presentation/auth/login_screen.dart';
 import 'package:very_good_chat/presentation/auth/splash_screen.dart';
 import 'package:very_good_chat/presentation/auth/updating_screen.dart';
+import 'package:very_good_chat/presentation/friends/friend_requests_screen.dart';
 import 'package:very_good_chat/presentation/profile/profile_screen.dart';
 import 'package:very_good_chat/presentation/shared/full_image.dart';
 import 'package:very_good_chat/shared/injection.dart';
@@ -96,6 +97,16 @@ class AppPages {
     );
   }
   // ############## PROFILE ###############
+
+  // ############## FRIENDS ###############
+  static Page freindRequestsScreen() {
+    return MaterialPage(
+      key: AppKeys.friendRequestScreen,
+      child: FriendRequestsScreen(),
+    );
+  }
+  // ############## FRIENDS ###############
+
 }
 
 /// [ValueKey]s for app [Page]s
@@ -125,4 +136,7 @@ class AppKeys {
 
   final _fullPhotoScreenKey = UniqueKey();
   static UniqueKey get fullPhotoScreen => _instance._fullPhotoScreenKey;
+
+  final _friendRequestsScreen = UniqueKey();
+  static UniqueKey get friendRequestScreen => _instance._friendRequestsScreen;
 }

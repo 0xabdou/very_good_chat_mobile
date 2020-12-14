@@ -8,10 +8,12 @@ part of 'friend_request.dart';
 
 _$_FriendRequest _$_$_FriendRequestFromJson(Map<String, dynamic> json) {
   $checkKeys(json,
-      requiredKeys: const ['userId', 'sentAt', 'sent'],
-      disallowNullValues: const ['userId', 'sentAt', 'sent']);
+      requiredKeys: const ['user', 'sentAt', 'sent'],
+      disallowNullValues: const ['user', 'sentAt', 'sent']);
   return _$_FriendRequest(
-    userId: json['userId'] as String,
+    user: json['user'] == null
+        ? null
+        : User.fromJson(json['user'] as Map<String, dynamic>),
     sentAt: dateTimeFromJson(json['sentAt'] as int),
     sent: json['sent'] as bool,
   );
@@ -26,7 +28,7 @@ Map<String, dynamic> _$_$_FriendRequestToJson(_$_FriendRequest instance) {
     }
   }
 
-  writeNotNull('userId', instance.userId);
+  writeNotNull('user', instance.user?.toJson());
   writeNotNull('sentAt', dateTimeToJson(instance.sentAt));
   writeNotNull('sent', instance.sent);
   return val;

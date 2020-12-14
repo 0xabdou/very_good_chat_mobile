@@ -4,7 +4,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_editor/image_editor.dart';
-import 'package:very_good_chat/shared/utils/dialog_utils.dart' as dialog_utils;
+import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 /// A screen that helps edit images
 class ImageCropper extends StatefulWidget {
@@ -30,12 +30,13 @@ class _ImageCropperState extends State<ImageCropper> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => dialog_utils.yesNoDialog(context),
+      onWillPop: () => DialogUtils.instance.showYesNoDialog(context),
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             onPressed: () async {
-              final result = await dialog_utils.yesNoDialog(context);
+              final result =
+                  await DialogUtils.instance.showYesNoDialog(context);
               if (result) Navigator.pop(context);
             },
             icon: const Icon(Icons.clear),

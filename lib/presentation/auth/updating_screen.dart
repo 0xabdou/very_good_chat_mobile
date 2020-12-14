@@ -29,7 +29,7 @@ class UpdatingScreen extends StatelessWidget {
         }
       },
       child: WillPopScope(
-        onWillPop: () => yesNoDialog(context),
+        onWillPop: () => DialogUtils.instance.showYesNoDialog(context),
         child: Scaffold(
           appBar: state.registering
               ? null

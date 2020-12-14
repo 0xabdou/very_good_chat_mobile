@@ -18,12 +18,14 @@ class _$NavigationStateTearOff {
       {@required AuthState authState,
       bool editingProfile = false,
       User viewingProfile,
-      ViewingFullPhoto viewingProfilePicture}) {
+      ViewingFullPhoto viewingProfilePicture,
+      bool viewingFriendRequests = false}) {
     return _NavigationState(
       authState: authState,
       editingProfile: editingProfile,
       viewingProfile: viewingProfile,
       viewingProfilePicture: viewingProfilePicture,
+      viewingFriendRequests: viewingFriendRequests,
     );
   }
 }
@@ -38,6 +40,7 @@ mixin _$NavigationState {
   bool get editingProfile;
   User get viewingProfile;
   ViewingFullPhoto get viewingProfilePicture;
+  bool get viewingFriendRequests;
 
   $NavigationStateCopyWith<NavigationState> get copyWith;
 }
@@ -51,7 +54,8 @@ abstract class $NavigationStateCopyWith<$Res> {
       {AuthState authState,
       bool editingProfile,
       User viewingProfile,
-      ViewingFullPhoto viewingProfilePicture});
+      ViewingFullPhoto viewingProfilePicture,
+      bool viewingFriendRequests});
 
   $AuthStateCopyWith<$Res> get authState;
   $UserCopyWith<$Res> get viewingProfile;
@@ -73,6 +77,7 @@ class _$NavigationStateCopyWithImpl<$Res>
     Object editingProfile = freezed,
     Object viewingProfile = freezed,
     Object viewingProfilePicture = freezed,
+    Object viewingFriendRequests = freezed,
   }) {
     return _then(_value.copyWith(
       authState:
@@ -86,6 +91,9 @@ class _$NavigationStateCopyWithImpl<$Res>
       viewingProfilePicture: viewingProfilePicture == freezed
           ? _value.viewingProfilePicture
           : viewingProfilePicture as ViewingFullPhoto,
+      viewingFriendRequests: viewingFriendRequests == freezed
+          ? _value.viewingFriendRequests
+          : viewingFriendRequests as bool,
     ));
   }
 
@@ -132,7 +140,8 @@ abstract class _$NavigationStateCopyWith<$Res>
       {AuthState authState,
       bool editingProfile,
       User viewingProfile,
-      ViewingFullPhoto viewingProfilePicture});
+      ViewingFullPhoto viewingProfilePicture,
+      bool viewingFriendRequests});
 
   @override
   $AuthStateCopyWith<$Res> get authState;
@@ -159,6 +168,7 @@ class __$NavigationStateCopyWithImpl<$Res>
     Object editingProfile = freezed,
     Object viewingProfile = freezed,
     Object viewingProfilePicture = freezed,
+    Object viewingFriendRequests = freezed,
   }) {
     return _then(_NavigationState(
       authState:
@@ -172,6 +182,9 @@ class __$NavigationStateCopyWithImpl<$Res>
       viewingProfilePicture: viewingProfilePicture == freezed
           ? _value.viewingProfilePicture
           : viewingProfilePicture as ViewingFullPhoto,
+      viewingFriendRequests: viewingFriendRequests == freezed
+          ? _value.viewingFriendRequests
+          : viewingFriendRequests as bool,
     ));
   }
 }
@@ -182,9 +195,11 @@ class _$_NavigationState implements _NavigationState {
       {@required this.authState,
       this.editingProfile = false,
       this.viewingProfile,
-      this.viewingProfilePicture})
+      this.viewingProfilePicture,
+      this.viewingFriendRequests = false})
       : assert(authState != null),
-        assert(editingProfile != null);
+        assert(editingProfile != null),
+        assert(viewingFriendRequests != null);
 
   @override
   final AuthState authState;
@@ -195,10 +210,13 @@ class _$_NavigationState implements _NavigationState {
   final User viewingProfile;
   @override
   final ViewingFullPhoto viewingProfilePicture;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool viewingFriendRequests;
 
   @override
   String toString() {
-    return 'NavigationState(authState: $authState, editingProfile: $editingProfile, viewingProfile: $viewingProfile, viewingProfilePicture: $viewingProfilePicture)';
+    return 'NavigationState(authState: $authState, editingProfile: $editingProfile, viewingProfile: $viewingProfile, viewingProfilePicture: $viewingProfilePicture, viewingFriendRequests: $viewingFriendRequests)';
   }
 
   @override
@@ -216,7 +234,10 @@ class _$_NavigationState implements _NavigationState {
                     .equals(other.viewingProfile, viewingProfile)) &&
             (identical(other.viewingProfilePicture, viewingProfilePicture) ||
                 const DeepCollectionEquality().equals(
-                    other.viewingProfilePicture, viewingProfilePicture)));
+                    other.viewingProfilePicture, viewingProfilePicture)) &&
+            (identical(other.viewingFriendRequests, viewingFriendRequests) ||
+                const DeepCollectionEquality().equals(
+                    other.viewingFriendRequests, viewingFriendRequests)));
   }
 
   @override
@@ -225,7 +246,8 @@ class _$_NavigationState implements _NavigationState {
       const DeepCollectionEquality().hash(authState) ^
       const DeepCollectionEquality().hash(editingProfile) ^
       const DeepCollectionEquality().hash(viewingProfile) ^
-      const DeepCollectionEquality().hash(viewingProfilePicture);
+      const DeepCollectionEquality().hash(viewingProfilePicture) ^
+      const DeepCollectionEquality().hash(viewingFriendRequests);
 
   @override
   _$NavigationStateCopyWith<_NavigationState> get copyWith =>
@@ -237,7 +259,8 @@ abstract class _NavigationState implements NavigationState {
       {@required AuthState authState,
       bool editingProfile,
       User viewingProfile,
-      ViewingFullPhoto viewingProfilePicture}) = _$_NavigationState;
+      ViewingFullPhoto viewingProfilePicture,
+      bool viewingFriendRequests}) = _$_NavigationState;
 
   @override
   AuthState get authState;
@@ -247,6 +270,8 @@ abstract class _NavigationState implements NavigationState {
   User get viewingProfile;
   @override
   ViewingFullPhoto get viewingProfilePicture;
+  @override
+  bool get viewingFriendRequests;
   @override
   _$NavigationStateCopyWith<_NavigationState> get copyWith;
 }

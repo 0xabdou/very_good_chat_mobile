@@ -61,6 +61,14 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
           duration: const Duration(milliseconds: 400),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.people),
+            onPressed: () {
+              context.read<NavigationCubit>().openFriendRequestsScreen();
+            },
+          ),
+        ],
       ),
       backgroundColor: Theme.of(context).primaryColor,
       body: activeIndex == 0

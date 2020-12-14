@@ -9,6 +9,7 @@ abstract class NavigationState with _$NavigationState {
     @Default(false) bool editingProfile,
     User viewingProfile,
     ViewingFullPhoto viewingProfilePicture,
+    @Default(false) bool viewingFriendRequests,
   }) = _NavigationState;
 
   /// Initial state

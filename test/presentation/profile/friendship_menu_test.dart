@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/application/profile/relationship.dart';
@@ -103,13 +102,22 @@ void main() {
     });
 
     testWidgets(
-      'Should contain Unfriend and Block buttons',
+      'Should contain Unfriend button',
       (tester) async {
         final widget = _getWidget();
         await tester.pumpWidget(widget);
         expect(find.byIcon(Icons.person_remove), findsOneWidget);
-        expect(find.byIcon(FontAwesomeIcons.ban), findsOneWidget);
-        expect(find.byType(Icon), findsNWidgets(2));
+        expect(find.byType(Icon), findsNWidgets(1));
+      },
+    );
+
+    testWidgets(
+      'Clicking the unfriend button should not attempt to unfriend',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        await tester.tap(find.byIcon(Icons.person_remove));
+        verifyNever(mockCubit.unfriend(any));
       },
     );
   });
@@ -129,7 +137,7 @@ void main() {
         final widget = _getWidget();
         await tester.pumpWidget(widget);
         await tester.tap(find.byIcon(Icons.person_remove));
-        verify(mockCubit.unfriend()).called(1);
+        verify(mockCubit.unfriend(any)).called(1);
       },
     );
   });

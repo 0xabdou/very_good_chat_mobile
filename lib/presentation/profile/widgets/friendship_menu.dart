@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
@@ -83,7 +82,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
                     some: (_) {
                       _helpShowSpinkit();
                     },
-                    done: (_) => Navigator.of(context).pop(),
+                    //done: (_) => Navigator.of(context).pop(),
                     fail: (fail) {
                       final message = fail.failure.maybeMap(
                         network: (_) => 'Check your internet connection',
@@ -170,28 +169,17 @@ class _FriendshipMenuState extends State<FriendshipMenu>
         child: FriendshipSheetButton(
           onPressed: disabled
               ? null
-              : () {
+              : () async {
                   if (self) {
                     _showMessage("You can't unfriend your best friend! 🥺");
-                    return;
+                  } else {
+                    // ignore: unawaited_futures
+                    await cubit.unfriend(context);
+                    Navigator.of(context).pop();
                   }
-                  cubit.unfriend();
                 },
           icon: Icons.person_remove,
           label: 'Unfriend',
-          textColor: Colors.white,
-          backgroundColor: Colors.red,
-        ),
-      ),
-      Expanded(
-        child: FriendshipSheetButton(
-          onPressed: () {
-            if (self) {
-              _showMessage('Blocking yourself is not a good idea!');
-            }
-          },
-          icon: FontAwesomeIcons.ban,
-          label: 'Block',
           textColor: Colors.white,
           backgroundColor: Colors.red,
         ),
