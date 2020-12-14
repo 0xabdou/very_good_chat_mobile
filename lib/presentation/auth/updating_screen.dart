@@ -25,7 +25,7 @@ class UpdatingScreen extends StatelessWidget {
       cubit: _cubit,
       listener: (context, state) {
         if (state.done) {
-          context.read<NavigationCubit>().closeProfileEditingScreen();
+          context.read<NavigationCubit>().pop();
         }
       },
       child: WillPopScope(
@@ -36,7 +36,7 @@ class UpdatingScreen extends StatelessWidget {
               : _getAppBar(
                   submit: _cubit.submit,
                   close: () {
-                    context.read<NavigationCubit>().closeProfileEditingScreen();
+                    context.read<NavigationCubit>().pop();
                   },
                   loading: state.callingApi,
                   sc: sc,

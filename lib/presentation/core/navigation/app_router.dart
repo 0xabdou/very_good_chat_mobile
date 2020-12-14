@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_chat/presentation/core/navigation/app_pages.dart';
 import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
-import 'package:very_good_chat/shared/utils/other_utils.dart';
 
 ///
 class AppRouteInformationParser extends RouteInformationParser<String> {
@@ -32,31 +31,6 @@ class AppRouterDelegate extends RouterDelegate<String>
     return SynchronousFuture(null);
   }
 
-  List<Page> _generatePages(NavigationState state) {
-    final authPages = state.authState.map(
-      initial: (_) => [AppPages.splashScreen()],
-      loggedIn: (_) => [AppPages.loggedInScreen()],
-      registering: (r) => [
-        AppPages.loginScreen(),
-        AppPages.registrationScreen(r.authInfo),
-      ],
-      loggedOut: (_) => [AppPages.loginScreen()],
-    );
-    final otherPages = [
-      if (state.viewingProfile != null)
-        AppPages.profileScreen(state.viewingProfile),
-      if (state.editingProfile)
-        AppPages.profileEditingScreen(userFromState(state.authState)),
-      if (state.viewingFriendRequests) AppPages.freindRequestsScreen(),
-      if (state.viewingProfilePicture != null)
-        AppPages.fullPhotoScreen(
-          photoUrl: state.viewingProfilePicture.photoUrl,
-          heroTag: state.viewingProfilePicture.heroTag,
-        ),
-    ];
-    return authPages..addAll(otherPages);
-  }
-
   bool _handlePop(Route route, result) {
     final key = (route.settings as MaterialPage).key as UniqueKey;
 
@@ -69,28 +43,18 @@ class AppRouterDelegate extends RouterDelegate<String>
     final success = route.didPop(result);
     assert(success);
 
-    if (key == AppKeys.profileScreen) {
-      _cubit.closeProfile();
-    } else if (key == AppKeys.registrationScreen) {
-      _cubit.closeRegistrationScreen();
-    } else if (key == AppKeys.profileEditingScreen) {
-      _cubit.closeProfileEditingScreen();
-    } else if (key == AppKeys.fullPhotoScreen) {
-      _cubit.closeProfilePicture();
-    } else if (key == AppKeys.friendRequestScreen) {
-      _cubit.closeFriendRequestsScreen();
-    }
+    _cubit.pop();
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NavigationCubit, NavigationState>(
+    return BlocBuilder<NavigationCubit, List<Page>>(
       cubit: _cubit,
       builder: (context, state) {
         return Navigator(
           key: _navigatorKey,
-          pages: _generatePages(state),
+          pages: state,
           onPopPage: _handlePop,
         );
       },

@@ -1,71 +1,68 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
+import 'package:very_good_chat/presentation/core/navigation/app_pages.dart';
 import 'package:very_good_chat/shared/utils/other_utils.dart';
 
-part 'navigation_cubit.freezed.dart';
-part 'navigation_state.dart';
-
 /// Navigation stack management
-class NavigationCubit extends Cubit<NavigationState> {
+class NavigationCubit extends Cubit<List<Page>> {
   /// Constructor
-  NavigationCubit(this._authCubit) : super(NavigationState.initial()) {
-    _sub = _authCubit.listen((authState) {
-      emit(state.copyWith(authState: authState));
-    });
+  NavigationCubit(this._authCubit) : super([AppPages.splashScreen()]) {
+    _sub = _authCubit.listen(_authStateChanged);
   }
 
   final AuthCubit _authCubit;
   StreamSubscription _sub;
 
-  void closeRegistrationScreen() {
-    _authCubit.logout();
+  @override
+  List<Page> get state => List.of(super.state);
+
+  void _authStateChanged(AuthState authState) {
+    final pages = authState.map(
+      initial: (_) => [AppPages.splashScreen()],
+      loggedIn: (_) => [AppPages.loggedInScreen()],
+      registering: (r) => [
+        AppPages.loginScreen(),
+        AppPages.registrationScreen(r.authInfo),
+      ],
+      loggedOut: (_) => [AppPages.loginScreen()],
+    );
+    emit(pages);
   }
 
   void viewOwnProfile() {
-    emit(state.copyWith(viewingProfile: userFromState(state.authState)));
+    final currentUser = userFromState(_authCubit.state);
+    emit(state..add(AppPages.profileScreen(currentUser)));
   }
 
   void viewOtherProfile(User user) {
-    emit(state.copyWith(viewingProfile: user));
-  }
-
-  void closeProfile() {
-    emit(state.copyWith(viewingProfile: null));
+    emit(state..add(AppPages.profileScreen(user)));
   }
 
   void editProfile() {
-    emit(state.copyWith(editingProfile: true));
-  }
-
-  void closeProfileEditingScreen() {
-    emit(state.copyWith(editingProfile: false));
+    final currentUser = userFromState(_authCubit.state);
+    emit(state..add(AppPages.profileEditingScreen(currentUser)));
   }
 
   void viewFullPicture({@required String photoUrl, String heroTag}) {
-    emit(
-      state.copyWith(
-        viewingProfilePicture: ViewingFullPhoto(
-          photoUrl: photoUrl,
-          heroTag: heroTag,
-        ),
-      ),
-    );
-  }
-
-  void closeProfilePicture() {
-    emit(state.copyWith(viewingProfilePicture: null));
+    emit(state
+      ..add(AppPages.fullPhotoScreen(photoUrl: photoUrl, heroTag: heroTag)));
   }
 
   void openFriendRequestsScreen() {
-    emit(state.copyWith(viewingFriendRequests: true));
+    emit(state..add(AppPages.freindRequestsScreen()));
   }
 
-  void closeFriendRequestsScreen() {
-    emit(state.copyWith(viewingFriendRequests: false));
+  void pop() {
+    final currentPage = state.last;
+    if (currentPage.key == AppKeys.registrationScreen) {
+      _authCubit.logout();
+    } else
+      emit(state..removeLast());
   }
 
   @override
