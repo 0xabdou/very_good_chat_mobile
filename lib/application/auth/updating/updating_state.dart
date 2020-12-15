@@ -8,7 +8,7 @@ abstract class UpdatingState with _$UpdatingState {
     @required String username,
     @required String name,
     @Default(false) bool callingApi,
-    @Default(false) bool done,
+    @Default(false) bool doneUpdating,
     @Default(false) bool registering,
     @Default(false) bool uploadingPhoto,
     String authProviderAccessToken,

@@ -18,7 +18,7 @@ class _$UpdatingStateTearOff {
       {@required String username,
       @required String name,
       bool callingApi = false,
-      bool done = false,
+      bool doneUpdating = false,
       bool registering = false,
       bool uploadingPhoto = false,
       String authProviderAccessToken,
@@ -30,7 +30,7 @@ class _$UpdatingStateTearOff {
       username: username,
       name: name,
       callingApi: callingApi,
-      done: done,
+      doneUpdating: doneUpdating,
       registering: registering,
       uploadingPhoto: uploadingPhoto,
       authProviderAccessToken: authProviderAccessToken,
@@ -51,7 +51,7 @@ mixin _$UpdatingState {
   String get username;
   String get name;
   bool get callingApi;
-  bool get done;
+  bool get doneUpdating;
   bool get registering;
   bool get uploadingPhoto;
   String get authProviderAccessToken;
@@ -72,7 +72,7 @@ abstract class $UpdatingStateCopyWith<$Res> {
       {String username,
       String name,
       bool callingApi,
-      bool done,
+      bool doneUpdating,
       bool registering,
       bool uploadingPhoto,
       String authProviderAccessToken,
@@ -98,7 +98,7 @@ class _$UpdatingStateCopyWithImpl<$Res>
     Object username = freezed,
     Object name = freezed,
     Object callingApi = freezed,
-    Object done = freezed,
+    Object doneUpdating = freezed,
     Object registering = freezed,
     Object uploadingPhoto = freezed,
     Object authProviderAccessToken = freezed,
@@ -112,7 +112,8 @@ class _$UpdatingStateCopyWithImpl<$Res>
       name: name == freezed ? _value.name : name as String,
       callingApi:
           callingApi == freezed ? _value.callingApi : callingApi as bool,
-      done: done == freezed ? _value.done : done as bool,
+      doneUpdating:
+          doneUpdating == freezed ? _value.doneUpdating : doneUpdating as bool,
       registering:
           registering == freezed ? _value.registering : registering as bool,
       uploadingPhoto: uploadingPhoto == freezed
@@ -154,7 +155,7 @@ abstract class _$UpdatingStateCopyWith<$Res>
       {String username,
       String name,
       bool callingApi,
-      bool done,
+      bool doneUpdating,
       bool registering,
       bool uploadingPhoto,
       String authProviderAccessToken,
@@ -183,7 +184,7 @@ class __$UpdatingStateCopyWithImpl<$Res>
     Object username = freezed,
     Object name = freezed,
     Object callingApi = freezed,
-    Object done = freezed,
+    Object doneUpdating = freezed,
     Object registering = freezed,
     Object uploadingPhoto = freezed,
     Object authProviderAccessToken = freezed,
@@ -197,7 +198,8 @@ class __$UpdatingStateCopyWithImpl<$Res>
       name: name == freezed ? _value.name : name as String,
       callingApi:
           callingApi == freezed ? _value.callingApi : callingApi as bool,
-      done: done == freezed ? _value.done : done as bool,
+      doneUpdating:
+          doneUpdating == freezed ? _value.doneUpdating : doneUpdating as bool,
       registering:
           registering == freezed ? _value.registering : registering as bool,
       uploadingPhoto: uploadingPhoto == freezed
@@ -224,7 +226,7 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
       {@required this.username,
       @required this.name,
       this.callingApi = false,
-      this.done = false,
+      this.doneUpdating = false,
       this.registering = false,
       this.uploadingPhoto = false,
       this.authProviderAccessToken,
@@ -235,7 +237,7 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
       : assert(username != null),
         assert(name != null),
         assert(callingApi != null),
-        assert(done != null),
+        assert(doneUpdating != null),
         assert(registering != null),
         assert(uploadingPhoto != null);
 
@@ -248,7 +250,7 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
   final bool callingApi;
   @JsonKey(defaultValue: false)
   @override
-  final bool done;
+  final bool doneUpdating;
   @JsonKey(defaultValue: false)
   @override
   final bool registering;
@@ -268,7 +270,7 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UpdatingState(username: $username, name: $name, callingApi: $callingApi, done: $done, registering: $registering, uploadingPhoto: $uploadingPhoto, authProviderAccessToken: $authProviderAccessToken, photoBytes: $photoBytes, photoUrl: $photoUrl, apiFailure: $apiFailure, usernameError: $usernameError)';
+    return 'UpdatingState(username: $username, name: $name, callingApi: $callingApi, doneUpdating: $doneUpdating, registering: $registering, uploadingPhoto: $uploadingPhoto, authProviderAccessToken: $authProviderAccessToken, photoBytes: $photoBytes, photoUrl: $photoUrl, apiFailure: $apiFailure, usernameError: $usernameError)';
   }
 
   @override
@@ -279,7 +281,7 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
       ..add(DiagnosticsProperty('username', username))
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('callingApi', callingApi))
-      ..add(DiagnosticsProperty('done', done))
+      ..add(DiagnosticsProperty('doneUpdating', doneUpdating))
       ..add(DiagnosticsProperty('registering', registering))
       ..add(DiagnosticsProperty('uploadingPhoto', uploadingPhoto))
       ..add(DiagnosticsProperty(
@@ -302,8 +304,9 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
             (identical(other.callingApi, callingApi) ||
                 const DeepCollectionEquality()
                     .equals(other.callingApi, callingApi)) &&
-            (identical(other.done, done) ||
-                const DeepCollectionEquality().equals(other.done, done)) &&
+            (identical(other.doneUpdating, doneUpdating) ||
+                const DeepCollectionEquality()
+                    .equals(other.doneUpdating, doneUpdating)) &&
             (identical(other.registering, registering) ||
                 const DeepCollectionEquality()
                     .equals(other.registering, registering)) &&
@@ -334,7 +337,7 @@ class _$_UpdatingState with DiagnosticableTreeMixin implements _UpdatingState {
       const DeepCollectionEquality().hash(username) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(callingApi) ^
-      const DeepCollectionEquality().hash(done) ^
+      const DeepCollectionEquality().hash(doneUpdating) ^
       const DeepCollectionEquality().hash(registering) ^
       const DeepCollectionEquality().hash(uploadingPhoto) ^
       const DeepCollectionEquality().hash(authProviderAccessToken) ^
@@ -353,7 +356,7 @@ abstract class _UpdatingState implements UpdatingState {
       {@required String username,
       @required String name,
       bool callingApi,
-      bool done,
+      bool doneUpdating,
       bool registering,
       bool uploadingPhoto,
       String authProviderAccessToken,
@@ -369,7 +372,7 @@ abstract class _UpdatingState implements UpdatingState {
   @override
   bool get callingApi;
   @override
-  bool get done;
+  bool get doneUpdating;
   @override
   bool get registering;
   @override

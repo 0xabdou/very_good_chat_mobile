@@ -33,6 +33,7 @@ abstract class IFriendRemoteDataSource {
 }
 
 List<Friend> _friends;
+List<FriendRequest> _friendsWannaBe;
 
 /// An implementation of [IFriendRemoteDataSource]
 @Injectable(as: IFriendRemoteDataSource)
@@ -66,7 +67,19 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
   @override
   Future<List<FriendRequest>> getAllFriendRequests() async {
     await Future.delayed(const Duration(milliseconds: 1000));
-    return [];
+    if (_friendsWannaBe == null) {
+      _friendsWannaBe = [];
+      for (var i = 0; i < 10; i++) {
+        final user = _generateRandomUser();
+        final request = FriendRequest(
+          user: user,
+          sentAt: DateTime.now(),
+          sent: false,
+        );
+        _friendsWannaBe.add(request);
+      }
+    }
+    return _friendsWannaBe;
   }
 
   @override
@@ -75,15 +88,14 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
     if (_friends == null) {
       _friends = [];
       for (var i = 0; i < 10; i++) {
-        final picSize = 128 + Random().nextInt(128);
-        final username = 'u${Random().nextInt(10000000)}';
+        final user = _generateRandomUser();
         final online = Random().nextBool();
         final lastSeenMS = DateTime.now().millisecondsSinceEpoch -
             (online ? 0 : 60000 + Random().nextInt(60000 * 60 * 24));
         final friend = Friend(
-          id: username,
-          username: username,
-          photoUrl: 'https://picsum.photos/$picSize',
+          id: user.username,
+          username: user.username,
+          photoUrl: user.photoUrl,
           lastSeen: DateTime.fromMillisecondsSinceEpoch(lastSeenMS),
           isOnline: online,
         );
@@ -114,6 +126,16 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
       },
     );
     return _friends;
+  }
+
+  User _generateRandomUser() {
+    final picSize = 128 + Random().nextInt(128);
+    final username = 'u${Random().nextInt(10000000)}';
+    return User(
+      id: username,
+      username: username,
+      photoUrl: 'https://picsum.photos/$picSize',
+    );
   }
 
   @override

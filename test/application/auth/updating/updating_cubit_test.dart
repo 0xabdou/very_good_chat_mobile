@@ -265,7 +265,7 @@ void main() {
       name: userToCreate.name ?? '',
       photoBytes: userToCreate.photo,
       callingApi: false,
-      done: false,
+      doneUpdating: false,
       registering: true,
     );
 
@@ -280,7 +280,6 @@ void main() {
       act: (c) => c.submit(),
       expect: [
         seedState.copyWith(callingApi: true),
-        seedState.copyWith(done: true, callingApi: true),
       ],
       verify: (_) {
         verify(mockRepository.registerWithGoogle(userToCreate)).called(1);
@@ -314,7 +313,7 @@ void main() {
       username: userUpdates.username,
       name: userUpdates.name ?? '',
       callingApi: false,
-      done: false,
+      doneUpdating: false,
       registering: false,
     );
 
@@ -329,7 +328,7 @@ void main() {
       act: (c) => c.submit(),
       expect: [
         seedState.copyWith(callingApi: true),
-        seedState.copyWith(done: true, callingApi: true),
+        seedState.copyWith(doneUpdating: true, callingApi: true),
       ],
       verify: (_) {
         verify(mockRepository.updateUserInfo(userUpdates)).called(1);
@@ -360,7 +359,7 @@ void main() {
       username: userUpdates.username,
       name: userUpdates.name ?? '',
       callingApi: false,
-      done: false,
+      doneUpdating: false,
       registering: true,
     );
 

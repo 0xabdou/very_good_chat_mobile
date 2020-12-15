@@ -60,7 +60,14 @@ class NavigationCubit extends Cubit<List<Page>> {
   void pop() {
     final currentPage = state.last;
     if (currentPage.key == AppKeys.registrationScreen) {
-      _authCubit.logout();
+      _authCubit.state.maybeMap(
+        registering: (_) {
+          _authCubit.logout();
+        },
+        orElse: () {
+          emit(state..removeLast());
+        },
+      );
     } else
       emit(state..removeLast());
   }

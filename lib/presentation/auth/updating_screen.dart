@@ -24,7 +24,7 @@ class UpdatingScreen extends StatelessWidget {
     return BlocListener<UpdatingCubit, UpdatingState>(
       cubit: _cubit,
       listener: (context, state) {
-        if (state.done) {
+        if (state.doneUpdating) {
           context.read<NavigationCubit>().pop();
         }
       },

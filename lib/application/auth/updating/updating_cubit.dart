@@ -136,7 +136,7 @@ class UpdatingCubit extends Cubit<UpdatingState> {
       },
       (r) {
         _authCubit.checkAuthStatus();
-        emit(_state.copyWith(done: true));
+        emit(_state.copyWith(doneUpdating: !state.registering));
       },
     );
   }
@@ -181,6 +181,6 @@ class UpdatingCubit extends Cubit<UpdatingState> {
         'photoBytes: ${state.photoBytes != null ? 'exists' : null}, '
         'apiFailure: ${state.apiFailure}, '
         'usernameError: ${state.usernameError} '
-        ', done: ${state.done})';
+        ', doneUpdating: ${state.doneUpdating})';
   }
 }

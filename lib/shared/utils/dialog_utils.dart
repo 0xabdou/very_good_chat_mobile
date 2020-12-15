@@ -18,11 +18,13 @@ abstract class DialogUtils {
 
 class _GoodDialogUtils implements DialogUtils {
   @override
-  Future<bool> showYesNoDialog(BuildContext context,
-      {String title = 'Cancel',
-      String content = 'Are you sure you want to cancel?',
-      String yesText = 'Yes',
-      String noText = 'No'}) async {
+  Future<bool> showYesNoDialog(
+    BuildContext context, {
+    String title = 'Cancel',
+    String content = 'Are you sure you want to cancel?',
+    String yesText = 'Yes',
+    String noText = 'No',
+  }) async {
     final result = await showDialog(
       context: context,
       builder: (_) => YesNoDialog(
