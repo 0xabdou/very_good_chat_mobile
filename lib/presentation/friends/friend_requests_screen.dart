@@ -162,6 +162,7 @@ class RequestListItem extends StatelessWidget {
       );
     }
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
           onPressed: () {},

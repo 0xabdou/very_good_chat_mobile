@@ -51,7 +51,7 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
 
   @override
   Future<Unit> cancelFriendRequest(String userId) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 2000));
     return unit;
   }
 
