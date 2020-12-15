@@ -130,14 +130,53 @@ void main() {
         relationship: Relationship.friend(isOnline: true),
       ));
     });
+
     testWidgets(
-      'Clicking the unfriend button should attempt to unfriend, '
-      'also a spinner should show',
+      'Should contain Unfriend button',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        expect(find.byIcon(Icons.person_remove), findsOneWidget);
+        expect(find.byType(Icon), findsNWidgets(1));
+      },
+    );
+
+    testWidgets(
+      'Clicking the unfriend button should call cubit.unfriend()',
       (tester) async {
         final widget = _getWidget();
         await tester.pumpWidget(widget);
         await tester.tap(find.byIcon(Icons.person_remove));
         verify(mockCubit.unfriend(any)).called(1);
+      },
+    );
+  });
+
+  group('when Relationship.requestSent()', () {
+    setUp(() {
+      when(mockCubit.state).thenReturn(const ProfileState(
+        initialized: true,
+        user: user,
+        relationship: Relationship.requestSent(),
+      ));
+    });
+
+    testWidgets(
+      'Should contain a cancel button',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        expect(find.byIcon(Icons.cancel), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Clicking the cancel button should call cubit.cancelFriendRequest()',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        await tester.tap(find.byIcon(Icons.cancel));
+        verify(mockCubit.cancelFriendRequest(any)).called(1);
       },
     );
   });

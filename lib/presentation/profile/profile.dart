@@ -8,7 +8,6 @@ import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart
 import 'package:very_good_chat/presentation/profile/widgets/profile_button.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
 import 'package:very_good_chat/shared/size_config.dart';
-import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 /// Profile UI, can be used for the current user or his friends
 class Profile extends StatelessWidget {
@@ -148,20 +147,9 @@ class Profile extends StatelessWidget {
         text = 'Blocked';
       },
       stranger: (_) {
-        icon = FontAwesomeIcons.userPlus;
+        icon = Icons.person_add;
         text = 'Add friend';
-        onPressed = () async {
-          final yes = await DialogUtils.instance.showYesNoDialog(
-            context,
-            title: 'Add friend',
-            content: 'Do you want to send a friend request to this person?',
-          );
-          if (yes) {
-            // TODO: Send friend request
-            // ignore: unawaited_futures
-            cubit.sendFriendRequest();
-          }
-        };
+        onPressed = () => cubit.sendFriendRequest(context);
       },
     );
     return ProfileButton(

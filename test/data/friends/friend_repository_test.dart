@@ -191,4 +191,19 @@ void main() {
       verifyNoMoreInteractions(mockLocalDS);
     });
   });
+
+  group('cancelFriendRequest', () {
+    test('should return a unit on success', () async {
+      // arrange
+      const userId = 'userId';
+      when(mockRemoteDS.cancelFriendRequest(any)).thenAnswer((_) async => unit);
+      // act
+      final result = await repository.cancelFriendRequest(userId);
+      // assert
+      expect(result, right(unit));
+      verify(mockRemoteDS.cancelFriendRequest(userId));
+      verifyNoMoreInteractions(mockRemoteDS);
+      verifyZeroInteractions(mockLocalDS);
+    });
+  });
 }

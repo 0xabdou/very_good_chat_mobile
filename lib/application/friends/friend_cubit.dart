@@ -45,17 +45,32 @@ class FriendCubit extends Cubit<FriendState> {
   @override
   FriendState get state => super.state.copyWith(failure: null);
 
-  /// This is meant to be called by [ProfileCubit] when a friend is removed
+  /// Usually [ProfileCubit] when a friend is removed
   void friendRemoved() {
     _refreshFriends();
   }
 
-  /// This is meant to be called by [ProfileCubit] when a friend request is sent
+  /// Usually called by [ProfileCubit] when a friend request is sent
   void friendRequestSent(FriendRequest request) {
-    final requests = List.of(state.allRequests)..add(request);
-    final sentRequests = List.of(state.sentRequests)..add(request);
+    final requests = [request, ...state.allRequests];
+    emit(_spreadRequests(requests));
+  }
 
-    emit(state.copyWith(allRequests: requests, sentRequests: sentRequests));
+  /// Usually called by [ProfileCubit] when a friend request is canceled
+  void friendRequestCanceled(String userId) {
+    final requests = List.of(state.allRequests)
+      ..removeWhere(
+        (r) => r.user.id == userId,
+      );
+    emit(_spreadRequests(requests));
+  }
+
+  FriendState _spreadRequests(List<FriendRequest> allRequests) {
+    return state.copyWith(
+      allRequests: allRequests,
+      sentRequests: allRequests.where((r) => r.sent).toList(),
+      receivedRequests: allRequests.where((r) => !r.sent).toList(),
+    );
   }
 
   /// Get the friends list and emit them with a new state

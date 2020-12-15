@@ -73,71 +73,72 @@ class _FriendshipMenuState extends State<FriendshipMenu>
           alignment: Alignment.bottomCenter,
           child: SlideTransition(
             position: widget.animation.drive(tween),
-            child: Builder(builder: (context) {
-              final cubit = context.watch<ProfileCubit>();
-              final state = cubit.state;
-              return BlocListener<ProfileCubit, ProfileState>(
-                listener: (context, state) {
-                  state.friendOperation.maybeMap(
-                    some: (_) {
-                      _helpShowSpinkit();
-                    },
-                    //done: (_) => Navigator.of(context).pop(),
-                    fail: (fail) {
-                      final message = fail.failure.maybeMap(
-                        network: (_) => 'Check your internet connection',
-                        orElse: () => 'Something went wrong',
-                      );
-                      _showMessage(message, error: true);
-                    },
-                    orElse: () {},
-                  );
-                },
-                cubit: cubit,
-                child: Material(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ScaleTransition(
-                        scale: _scaleAnimation,
-                        child: state.friendOperation.maybeMap(
-                          some: (_) {
-                            return SpinKitThreeBounce(
-                              color: Colors.white,
-                              size: sc.width(5),
-                            );
-                          },
-                          orElse: () {
-                            return Text(
-                              message,
-                              key: const ValueKey(
-                                'friendship_menu_message',
-                              ),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: sc.width(4),
-                                color: messageColor,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: sc.height(0.5)),
-                      Container(
-                        height: sc.height(8),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(sc.height(8)),
+            child: Builder(
+              builder: (context) {
+                final cubit = context.watch<ProfileCubit>();
+                final state = cubit.state;
+                return BlocListener<ProfileCubit, ProfileState>(
+                  listener: (context, state) {
+                    state.friendOperation.maybeMap(
+                      some: (_) {
+                        _helpShowSpinkit();
+                      },
+                      fail: (fail) {
+                        final message = fail.failure.maybeMap(
+                          network: (_) => 'Check your internet connection',
+                          orElse: () => 'Something went wrong',
+                        );
+                        _showMessage(message, error: true);
+                      },
+                      orElse: () {},
+                    );
+                  },
+                  cubit: cubit,
+                  child: Material(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ScaleTransition(
+                          scale: _scaleAnimation,
+                          child: state.friendOperation.maybeMap(
+                            some: (_) {
+                              return SpinKitThreeBounce(
+                                color: Colors.white,
+                                size: sc.width(5),
+                              );
+                            },
+                            orElse: () {
+                              return Text(
+                                message,
+                                key: const ValueKey(
+                                  'friendship_menu_message',
+                                ),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: sc.width(4),
+                                  color: messageColor,
+                                ),
+                              );
+                            },
                           ),
                         ),
-                        child: Row(children: _buildActions(cubit)),
-                      ),
-                    ],
+                        SizedBox(height: sc.height(0.5)),
+                        Container(
+                          height: sc.height(8),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(sc.height(8)),
+                            ),
+                          ),
+                          child: Row(children: _buildActions(cubit)),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
           ),
         );
       },
@@ -148,7 +149,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
     return cubit.state.relationship.map(
       self: (_) => _buildFriendActions(cubit),
       friend: (_) => _buildFriendActions(cubit),
-      requestSent: (_) => [],
+      requestSent: (_) => _buildRequestSentActions(cubit),
       requestReceived: (_) => [],
       blocked: (_) => [],
       stranger: (_) => [],
@@ -173,13 +174,35 @@ class _FriendshipMenuState extends State<FriendshipMenu>
                   if (self) {
                     _showMessage("You can't unfriend your best friend! 🥺");
                   } else {
-                    // ignore: unawaited_futures
                     await cubit.unfriend(context);
                     Navigator.of(context).pop();
                   }
                 },
           icon: Icons.person_remove,
           label: 'Unfriend',
+          textColor: Colors.white,
+          backgroundColor: Colors.red,
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildRequestSentActions(ProfileCubit cubit) {
+    final disabled = cubit.state.friendOperation.maybeMap(
+      some: (_) => true,
+      orElse: () => false,
+    );
+    return [
+      Expanded(
+        child: FriendshipSheetButton(
+          onPressed: disabled
+              ? null
+              : () async {
+                  await cubit.cancelFriendRequest(context);
+                  Navigator.of(context).pop();
+                },
+          icon: Icons.cancel,
+          label: 'Cancel',
           textColor: Colors.white,
           backgroundColor: Colors.red,
         ),

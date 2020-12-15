@@ -15,6 +15,9 @@ abstract class IFriendRemoteDataSource {
   /// Send a friend request to the user with [userId]
   Future<FriendRequest> sendFriendRequest(String userId);
 
+  /// Cancel a sent friend request
+  Future<Unit> cancelFriendRequest(String userId);
+
   /// Answers the friend request sent by the user with [userId]
   /// if [accept] is true, the request is accepted, else it's rejected
   Future<Unit> answerFriendRequest(String userId, bool accept);
@@ -42,6 +45,12 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
 
   @override
   Future<Unit> blockUser(String userId) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return unit;
+  }
+
+  @override
+  Future<Unit> cancelFriendRequest(String userId) async {
     await Future.delayed(const Duration(milliseconds: 500));
     return unit;
   }

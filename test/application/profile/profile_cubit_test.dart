@@ -10,6 +10,7 @@ import 'package:very_good_chat/application/profile/relationship.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
+import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
 import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
@@ -38,6 +39,7 @@ void main() {
     id: 'stranger_user_id',
     username: 'stranger_username',
   );
+  const requestSentUser = User(id: 'request_sent', username: 'request_sent');
 
   AuthCubit mockAuthCubit;
   FriendCubit mockFriendCubit;
@@ -65,6 +67,16 @@ void main() {
     mockDialogUtils = MockDialogUtils();
     DialogUtils.instance = mockDialogUtils;
   });
+
+  void _stubDialog(bool result) {
+    when(mockDialogUtils.showYesNoDialog(
+      any,
+      title: anyNamed('title'),
+      content: anyNamed('content'),
+      yesText: anyNamed('yesText'),
+      noText: anyNamed('noText'),
+    )).thenAnswer((_) async => result);
+  }
 
   blocTest<ProfileCubit, ProfileState>(
     'The initial state',
@@ -128,16 +140,6 @@ void main() {
       relationship: Relationship.friend(isOnline: false),
     );
 
-    void _stubDialog(bool result) {
-      when(mockDialogUtils.showYesNoDialog(
-        any,
-        title: anyNamed('title'),
-        content: anyNamed('content'),
-        yesText: anyNamed('yesText'),
-        noText: anyNamed('noText'),
-      )).thenAnswer((_) async => result);
-    }
-
     void _stubRepo(Either<FriendFailure, Unit> result) {
       when(mockRepo.unfriend(user.id)).thenAnswer((_) async => result);
     }
@@ -200,6 +202,147 @@ void main() {
       verify: (_) async {
         verify(mockRepo.unfriend(user.id)).called(1);
         verifyNoMoreInteractions(mockRepo);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+  });
+
+  group('sendFriendRequest()', () {
+    const seedState = ProfileState(
+      initialized: true,
+      user: strangerUser,
+      relationship: Relationship.stranger(),
+    );
+
+    void _stubRepo(Either<FriendFailure, FriendRequest> result) {
+      when(mockRepo.sendFriendRequest(any)).thenAnswer((_) async => result);
+    }
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if the user confirms the action',
+      build: () {
+        _stubDialog(true);
+        _stubRepo(right(friendRequest));
+        return profileCubit;
+      },
+      act: (c) => c.sendFriendRequest(MockBuildContext()),
+      seed: seedState,
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: const Relationship.requestSent(),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.sendFriendRequest(seedState.user.id)).called(1);
+        verify(mockFriendCubit.friendRequestSent(friendRequest)).called(1);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if the user cancels the action',
+      build: () {
+        _stubDialog(false);
+        return profileCubit;
+      },
+      act: (c) => c.sendFriendRequest(MockBuildContext()),
+      seed: seedState,
+      expect: [],
+      verify: (_) async {
+        verifyZeroInteractions(mockRepo);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if the operation failed',
+      build: () {
+        _stubDialog(true);
+        _stubRepo(left(const FriendFailure.server()));
+        return profileCubit;
+      },
+      act: (c) => c.sendFriendRequest(MockBuildContext()),
+      seed: seedState,
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.fail(FriendFailure.server()),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.sendFriendRequest(seedState.user.id)).called(1);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+  });
+
+  group('cancelFriendRequest()', () {
+    const seedState = ProfileState(
+      initialized: true,
+      user: requestSentUser,
+      relationship: Relationship.requestSent(),
+    );
+
+    void _stubRepo(Either<FriendFailure, Unit> result) {
+      when(mockRepo.cancelFriendRequest(any)).thenAnswer((_) async => result);
+    }
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if the user confirms the action',
+      build: () {
+        _stubDialog(true);
+        _stubRepo(right(unit));
+        return profileCubit;
+      },
+      act: (c) => c.cancelFriendRequest(MockBuildContext()),
+      seed: seedState,
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: const Relationship.stranger(),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.cancelFriendRequest(seedState.user.id)).called(1);
+        verify(mockFriendCubit.friendRequestCanceled(seedState.user.id))
+            .called(1);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if the user cancels the action',
+      build: () {
+        _stubDialog(false);
+        return profileCubit;
+      },
+      act: (c) => c.cancelFriendRequest(MockBuildContext()),
+      seed: seedState,
+      expect: [],
+      verify: (_) async {
+        verifyZeroInteractions(mockRepo);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should behave as expected if the operation failed',
+      build: () {
+        _stubDialog(true);
+        _stubRepo(left(const FriendFailure.server()));
+        return profileCubit;
+      },
+      act: (c) => c.cancelFriendRequest(MockBuildContext()),
+      seed: seedState,
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.fail(FriendFailure.server()),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.cancelFriendRequest(seedState.user.id)).called(1);
         verifyZeroInteractions(mockFriendCubit);
       },
     );

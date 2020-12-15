@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
+import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
 
 import '../../mock/mock_data.dart';
@@ -92,7 +93,7 @@ void main() {
           authCubit: mockAuthCubit,
         );
       },
-      expect: [FriendState()],
+      expect: [const FriendState()],
       verify: (c) async {
         verifyZeroInteractions(mockRepo);
         expect(c.friendsPollingTimer, isNull);
@@ -102,5 +103,68 @@ void main() {
 
   group('friendRemoved()', () {
     // Not much to test here
+  });
+
+  group('friend requests', () {
+    final request1 = FriendRequest(
+      user: user.copyWith(id: '1'),
+      sentAt: DateTime.now(),
+      sent: true,
+    );
+
+    final request2 = FriendRequest(
+      user: user.copyWith(id: '2'),
+      sentAt: DateTime.now(),
+      sent: false,
+    );
+    final sentRequest = FriendRequest(
+      user: user.copyWith(id: '3'),
+      sentAt: DateTime.now(),
+      sent: true,
+    );
+
+    group('friendRequestSent()', () {
+      final seedState = FriendState(
+        allRequests: [request1, request2],
+        sentRequests: [request1],
+        receivedRequests: [request2],
+      );
+      blocTest<FriendCubit, FriendState>(
+        'should emit a state with the newly sent request',
+        build: () => cubit,
+        act: (c) => c.friendRequestSent(sentRequest),
+        seed: seedState,
+        expect: [
+          seedState.copyWith(
+            allRequests: [sentRequest, ...seedState.allRequests],
+            sentRequests: [sentRequest, ...seedState.sentRequests],
+          )
+        ],
+      );
+    });
+
+    group('friendRequestCanceled()', () {
+      final seedState = FriendState(
+        allRequests: [
+          sentRequest,
+          request1,
+          request2,
+        ],
+        sentRequests: [sentRequest, request1],
+        receivedRequests: [request2],
+      );
+      blocTest<FriendCubit, FriendState>(
+        'should emit a state with the canceled request removed',
+        build: () => cubit,
+        act: (c) => c.friendRequestCanceled(sentRequest.user.id),
+        seed: seedState,
+        expect: [
+          seedState.copyWith(
+            allRequests: List.of(seedState.allRequests)..remove(sentRequest),
+            sentRequests: List.of(seedState.sentRequests)..remove(sentRequest),
+          )
+        ],
+      );
+    });
   });
 }

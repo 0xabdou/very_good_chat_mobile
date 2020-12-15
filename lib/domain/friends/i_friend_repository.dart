@@ -14,6 +14,9 @@ abstract class IFriendRepository {
   /// Send a friend request to the user with [userId]
   Future<Either<FriendFailure, FriendRequest>> sendFriendRequest(String userId);
 
+  /// Cancel a sent friend request
+  Future<Either<FriendFailure, Unit>> cancelFriendRequest(String userId);
+
   /// Answers the friend request sent by the user with [userId]
   /// if [accept] is true, the request is accepted, else it's rejected
   Future<Either<FriendFailure, Unit>> answerFriendRequest(

@@ -75,6 +75,15 @@ class FriendRepository implements IFriendRepository {
   }
 
   @override
+  Future<Either<FriendFailure, Unit>> cancelFriendRequest(
+    String userId,
+  ) {
+    return catchExceptions<Unit>(
+      () => _remoteDataSource.cancelFriendRequest(userId),
+    );
+  }
+
+  @override
   Future<Either<FriendFailure, Unit>> unfriend(String userId) async {
     return catchExceptions<Unit>(() async {
       await _remoteDataSource.unfriend(userId);

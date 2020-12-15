@@ -72,7 +72,14 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   /// Send a friend request to this user
-  Future<void> sendFriendRequest() async {
+  Future<void> sendFriendRequest(BuildContext context) async {
+    final yes = await DialogUtils.instance.showYesNoDialog(
+      context,
+      title: 'Add Friend',
+      content: 'Do you want to send a friend request to this person?',
+    );
+    if (!yes) return;
+
     emit(_state.copyWith(friendOperation: const FriendOperation.some()));
 
     final result = await _repository.sendFriendRequest(state.user.id);
@@ -86,6 +93,32 @@ class ProfileCubit extends Cubit<ProfileState> {
           relationship: const Relationship.requestSent(),
         ));
         _friendCubit.friendRequestSent(request);
+      },
+    );
+  }
+
+  /// Cancel the friend request sent to this user
+  Future<void> cancelFriendRequest(BuildContext context) async {
+    final yes = await DialogUtils.instance.showYesNoDialog(
+      context,
+      title: 'Cancel',
+      content: 'Do you want to cancel the friend request?',
+    );
+    if (!yes) return;
+
+    emit(_state.copyWith(friendOperation: const FriendOperation.some()));
+
+    final result = await _repository.cancelFriendRequest(state.user.id);
+    result.fold(
+      (failure) {
+        emit(_state.copyWith(friendOperation: FriendOperation.fail(failure)));
+      },
+      (_) {
+        emit(_state.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: const Relationship.stranger(),
+        ));
+        _friendCubit.friendRequestCanceled(state.user.id);
       },
     );
   }
