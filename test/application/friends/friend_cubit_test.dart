@@ -6,10 +6,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
+import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
+import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 import '../../mock/mock_data.dart';
+import '../auth/updating/updating_cubit_test.dart';
 
 class MockFriendRepository extends Mock implements IFriendRepository {}
 
@@ -21,7 +24,7 @@ void main() {
   IFriendRepository mockRepo;
   AuthCubit mockAuthCubit;
   StreamSubscription<AuthState> mockSub;
-  // ignore: unused_local_variable
+  DialogUtils mockDialogUtils;
   FriendCubit cubit;
 
   setUp(() {
@@ -30,6 +33,7 @@ void main() {
     mockSub = MockStreamSubscription<AuthState>();
     when(mockAuthCubit.listen(any)).thenReturn(mockSub);
     cubit = FriendCubit(friendRepository: mockRepo, authCubit: mockAuthCubit);
+    DialogUtils.instance = mockDialogUtils = MockDialogUtils();
   });
 
   group('initialization', () {
@@ -164,6 +168,98 @@ void main() {
             sentRequests: List.of(seedState.sentRequests)..remove(sentRequest),
           )
         ],
+      );
+    });
+
+    group('cancelFriendRequest()', () {
+      final seedState = FriendState(
+        allRequests: [
+          sentRequest,
+          request1,
+          request2,
+        ],
+        sentRequests: [sentRequest, request1],
+        receivedRequests: [request2],
+        requestsBeingTreated: [request1.user.id],
+      );
+
+      void _stubRepo(Either<FriendFailure, Unit> result) {
+        when(mockRepo.cancelFriendRequest(any)).thenAnswer((_) async => result);
+      }
+
+      blocTest<FriendCubit, FriendState>(
+        'Should emit the right states if the user confirms the action',
+        build: () {
+          MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
+          _stubRepo(right(unit));
+          return cubit;
+        },
+        act: (c) => c.cancelFriendRequest(
+          sentRequest.user.id,
+          MockBuildContext(),
+        ),
+        seed: seedState,
+        expect: [
+          seedState.copyWith(
+            requestsBeingTreated: [
+              sentRequest.user.id,
+              ...seedState.requestsBeingTreated
+            ],
+          ),
+          seedState.copyWith(
+            allRequests: List.of(seedState.allRequests)..remove(sentRequest),
+            sentRequests: List.of(seedState.sentRequests)..remove(sentRequest),
+            requestsBeingTreated: List.of(seedState.requestsBeingTreated)
+              ..remove(sentRequest.user.id),
+          ),
+        ],
+        verify: (_) async {
+          verify(mockRepo.cancelFriendRequest(sentRequest.user.id)).called(1);
+        },
+      );
+
+      blocTest<FriendCubit, FriendState>(
+        'Should do nothing if the user cancels the action',
+        build: () {
+          MockDialogUtils.stubYesNoDialog(mockDialogUtils, false);
+          _stubRepo(right(unit));
+          return cubit;
+        },
+        act: (c) => c.cancelFriendRequest(
+          sentRequest.user.id,
+          MockBuildContext(),
+        ),
+        seed: seedState,
+        expect: [],
+        verify: (_) async {
+          verifyZeroInteractions(mockRepo);
+        },
+      );
+
+      blocTest<FriendCubit, FriendState>(
+        'Should emit the right states if canceling fails',
+        build: () {
+          MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
+          _stubRepo(left(const FriendFailure.server()));
+          return cubit;
+        },
+        act: (c) => c.cancelFriendRequest(
+          sentRequest.user.id,
+          MockBuildContext(),
+        ),
+        seed: seedState,
+        expect: [
+          seedState.copyWith(
+            requestsBeingTreated: [
+              sentRequest.user.id,
+              ...seedState.requestsBeingTreated,
+            ],
+          ),
+          seedState.copyWith(failure: const FriendFailure.server()),
+        ],
+        verify: (_) async {
+          verify(mockRepo.cancelFriendRequest(sentRequest.user.id)).called(1);
+        },
       );
     });
   });

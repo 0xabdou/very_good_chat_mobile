@@ -7,8 +7,7 @@ import 'package:very_good_chat/domain/auth/auth_provider_info.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
-
-class SqfliteDatabaseException extends Mock implements DatabaseException {}
+import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 // Auth
 const user = User(id: 'id', username: 'username');
@@ -40,6 +39,9 @@ final friendRequest = FriendRequest(
 );
 
 // Exceptions
+
+class SqfliteDatabaseException extends Mock implements DatabaseException {}
+
 final platformException = PlatformException(code: 'code', message: 'message');
 final databaseException = SqfliteDatabaseException();
 final serverException = DioError(
@@ -47,3 +49,16 @@ final serverException = DioError(
   response: Response(statusCode: 500),
 );
 final networkException = DioError(type: DioErrorType.CONNECT_TIMEOUT);
+
+// Utils
+class MockDialogUtils extends Mock implements DialogUtils {
+  static void stubYesNoDialog(MockDialogUtils mock, bool result) {
+    when(mock.showYesNoDialog(
+      any,
+      title: anyNamed('title'),
+      content: anyNamed('content'),
+      yesText: anyNamed('yesText'),
+      noText: anyNamed('noText'),
+    )).thenAnswer((_) async => result);
+  }
+}

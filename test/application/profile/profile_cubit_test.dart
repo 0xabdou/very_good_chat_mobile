@@ -22,8 +22,6 @@ class MockFriendCubit extends Mock implements FriendCubit {}
 
 class MockFriendRepository extends Mock implements IFriendRepository {}
 
-class MockDialogUtils extends Mock implements DialogUtils {}
-
 class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
@@ -67,16 +65,6 @@ void main() {
     mockDialogUtils = MockDialogUtils();
     DialogUtils.instance = mockDialogUtils;
   });
-
-  void _stubDialog(bool result) {
-    when(mockDialogUtils.showYesNoDialog(
-      any,
-      title: anyNamed('title'),
-      content: anyNamed('content'),
-      yesText: anyNamed('yesText'),
-      noText: anyNamed('noText'),
-    )).thenAnswer((_) async => result);
-  }
 
   blocTest<ProfileCubit, ProfileState>(
     'The initial state',
@@ -148,7 +136,7 @@ void main() {
       'should behave as expected if the user confirms the action',
       build: () {
         _stubRepo(right(unit));
-        _stubDialog(true);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
         return profileCubit;
       },
       seed: seedState,
@@ -172,7 +160,7 @@ void main() {
       'should behave as expected if the user cancels the action',
       build: () {
         _stubRepo(right(unit));
-        _stubDialog(false);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, false);
         return profileCubit;
       },
       seed: seedState,
@@ -188,7 +176,7 @@ void main() {
       'should behave as expected if something fails',
       build: () {
         _stubRepo(left(const FriendFailure.server()));
-        _stubDialog(true);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
         return profileCubit;
       },
       seed: seedState,
@@ -221,7 +209,7 @@ void main() {
     blocTest<ProfileCubit, ProfileState>(
       'should behave as expected if the user confirms the action',
       build: () {
-        _stubDialog(true);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
         _stubRepo(right(friendRequest));
         return profileCubit;
       },
@@ -243,7 +231,7 @@ void main() {
     blocTest<ProfileCubit, ProfileState>(
       'should behave as expected if the user cancels the action',
       build: () {
-        _stubDialog(false);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, false);
         return profileCubit;
       },
       act: (c) => c.sendFriendRequest(MockBuildContext()),
@@ -258,7 +246,7 @@ void main() {
     blocTest<ProfileCubit, ProfileState>(
       'should behave as expected if the operation failed',
       build: () {
-        _stubDialog(true);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
         _stubRepo(left(const FriendFailure.server()));
         return profileCubit;
       },
@@ -291,7 +279,7 @@ void main() {
     blocTest<ProfileCubit, ProfileState>(
       'should behave as expected if the user confirms the action',
       build: () {
-        _stubDialog(true);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
         _stubRepo(right(unit));
         return profileCubit;
       },
@@ -314,7 +302,7 @@ void main() {
     blocTest<ProfileCubit, ProfileState>(
       'should behave as expected if the user cancels the action',
       build: () {
-        _stubDialog(false);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, false);
         return profileCubit;
       },
       act: (c) => c.cancelFriendRequest(MockBuildContext()),
@@ -329,7 +317,7 @@ void main() {
     blocTest<ProfileCubit, ProfileState>(
       'should behave as expected if the operation failed',
       build: () {
-        _stubDialog(true);
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
         _stubRepo(left(const FriendFailure.server()));
         return profileCubit;
       },

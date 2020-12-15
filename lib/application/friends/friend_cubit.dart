@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
@@ -9,7 +11,9 @@ import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
+import 'package:very_good_chat/presentation/friends/friend_requests_screen.dart';
 import 'package:very_good_chat/shared/logger.dart';
+import 'package:very_good_chat/shared/utils/dialog_utils.dart';
 
 part 'friend_cubit.freezed.dart';
 part 'friend_state.dart';
@@ -59,10 +63,37 @@ class FriendCubit extends Cubit<FriendState> {
   /// Usually called by [ProfileCubit] when a friend request is canceled
   void friendRequestCanceled(String userId) {
     final requests = List.of(state.allRequests)
-      ..removeWhere(
-        (r) => r.user.id == userId,
-      );
-    emit(_spreadRequests(requests));
+      ..removeWhere((r) => r.user.id == userId);
+    final requestsBeingTreated = List.of(state.requestsBeingTreated)
+      ..remove(userId);
+    emit(_spreadRequests(requests)
+        .copyWith(requestsBeingTreated: requestsBeingTreated));
+  }
+
+  /// Cancel a friend request (Usually from [FriendRequestsScreen]
+  Future<void> cancelFriendRequest(String userId, BuildContext context) async {
+    final yes = await DialogUtils.instance.showYesNoDialog(
+      context,
+      title: 'Cancel',
+      content: 'Cancel this friend request?',
+    );
+    if (!yes) return;
+
+    final requestsBeingTreated = state.requestsBeingTreated;
+    emit(
+      state.copyWith(
+        requestsBeingTreated: [userId, ...requestsBeingTreated],
+      ),
+    );
+
+    final result = await _repository.cancelFriendRequest(userId);
+    result.fold(
+      (failure) => emit(state.copyWith(
+        failure: failure,
+        requestsBeingTreated: requestsBeingTreated,
+      )),
+      (_) => friendRequestCanceled(userId),
+    );
   }
 
   FriendState _spreadRequests(List<FriendRequest> allRequests) {

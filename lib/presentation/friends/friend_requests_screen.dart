@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
+import 'package:very_good_chat/presentation/friends/widgets/friend_tab_item.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
@@ -55,10 +57,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: _buildRequestList(
-                    active == 0 ? state.receivedRequests : state.sentRequests,
-                    sc,
-                  ),
+                  child: _buildRequests(state, sc, active == 1),
                 ),
               ),
             ],
@@ -68,7 +67,8 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
     );
   }
 
-  Widget _buildRequestList(List<FriendRequest> requests, SizeConfig sc) {
+  Widget _buildRequests(FriendState state, SizeConfig sc, bool sent) {
+    final requests = sent ? state.sentRequests : state.receivedRequests;
     return ListView.separated(
       itemCount: requests.length,
       separatorBuilder: (context, index) {
@@ -81,53 +81,15 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
         );
       },
       itemBuilder: (context, index) {
-        return RequestListItem(request: requests[index], sc: sc);
+        final request = requests[index];
+        final beingTreated =
+            state.requestsBeingTreated.contains(request.user.id);
+        return RequestListItem(
+          request: request,
+          sc: sc,
+          beingTreated: beingTreated,
+        );
       },
-    );
-  }
-}
-
-/// Tab bar item for friends screen
-@visibleForTesting
-class FriendsTabItem extends StatelessWidget {
-  /// Constructor
-  const FriendsTabItem({
-    Key key,
-    @required this.onTap,
-    @required this.text,
-    @required this.active,
-  }) : super(key: key);
-
-  /// Callback for when this item is clicked
-  final void Function() onTap;
-
-  /// The text to display
-  final String text;
-
-  /// True if this item is active
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: active ? Colors.grey.shade900 : Colors.transparent,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            style: TextStyle(
-              color: active ? Colors.white : Colors.grey,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
@@ -140,6 +102,7 @@ class RequestListItem extends StatelessWidget {
     Key key,
     @required this.request,
     @required this.sc,
+    this.beingTreated = false,
   }) : super(key: key);
 
   /// The friend for this list item
@@ -148,12 +111,14 @@ class RequestListItem extends StatelessWidget {
   /// Size config data
   final SizeConfig sc;
 
+  /// Is this requests being treated? (being canceled, accepted, or declined)
+  final bool beingTreated;
+
   @override
   Widget build(BuildContext context) {
     final user = request.user;
     return ListTile(
       onTap: () {
-        print('ahahahhah');
         context.read<NavigationCubit>().viewOtherProfile(user);
       },
       leading: ProfilePicture(
@@ -170,10 +135,43 @@ class RequestListItem extends StatelessWidget {
         style: TextStyle(fontSize: sc.width(4)),
       ),
       dense: true,
-      trailing: IconButton(
-        onPressed: () {},
+      trailing: _getTrailing(context, sc),
+    );
+  }
+
+  Widget _getTrailing(BuildContext context, SizeConfig sc) {
+    if (beingTreated) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SpinKitThreeBounce(
+            color: Colors.white,
+            size: sc.width(4),
+          ),
+        ],
+      );
+    }
+    if (request.sent) {
+      return IconButton(
+        onPressed: () {
+          context
+              .read<FriendCubit>()
+              .cancelFriendRequest(request.user.id, context);
+        },
         icon: const Icon(Icons.clear, color: Colors.red),
-      ),
+      );
+    }
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.check, color: Colors.green),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.clear, color: Colors.red),
+        ),
+      ],
     );
   }
 }

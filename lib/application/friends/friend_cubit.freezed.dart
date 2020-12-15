@@ -21,6 +21,7 @@ class _$FriendStateTearOff {
       List<FriendRequest> allRequests = const [],
       List<FriendRequest> sentRequests = const [],
       List<FriendRequest> receivedRequests = const [],
+      List<String> requestsBeingTreated = const [],
       FriendFailure failure}) {
     return _FriendState(
       allFriends: allFriends,
@@ -29,6 +30,7 @@ class _$FriendStateTearOff {
       allRequests: allRequests,
       sentRequests: sentRequests,
       receivedRequests: receivedRequests,
+      requestsBeingTreated: requestsBeingTreated,
       failure: failure,
     );
   }
@@ -45,7 +47,10 @@ mixin _$FriendState {
   List<Friend> get offlineFriends;
   List<FriendRequest> get allRequests;
   List<FriendRequest> get sentRequests;
-  List<FriendRequest> get receivedRequests;
+  List<FriendRequest>
+      get receivedRequests; // List of user ids of requests currently being treated
+// (being canceled, accepted, or rejected)
+  List<String> get requestsBeingTreated;
   FriendFailure get failure;
 
   $FriendStateCopyWith<FriendState> get copyWith;
@@ -63,6 +68,7 @@ abstract class $FriendStateCopyWith<$Res> {
       List<FriendRequest> allRequests,
       List<FriendRequest> sentRequests,
       List<FriendRequest> receivedRequests,
+      List<String> requestsBeingTreated,
       FriendFailure failure});
 
   $FriendFailureCopyWith<$Res> get failure;
@@ -84,6 +90,7 @@ class _$FriendStateCopyWithImpl<$Res> implements $FriendStateCopyWith<$Res> {
     Object allRequests = freezed,
     Object sentRequests = freezed,
     Object receivedRequests = freezed,
+    Object requestsBeingTreated = freezed,
     Object failure = freezed,
   }) {
     return _then(_value.copyWith(
@@ -105,6 +112,9 @@ class _$FriendStateCopyWithImpl<$Res> implements $FriendStateCopyWith<$Res> {
       receivedRequests: receivedRequests == freezed
           ? _value.receivedRequests
           : receivedRequests as List<FriendRequest>,
+      requestsBeingTreated: requestsBeingTreated == freezed
+          ? _value.requestsBeingTreated
+          : requestsBeingTreated as List<String>,
       failure: failure == freezed ? _value.failure : failure as FriendFailure,
     ));
   }
@@ -134,6 +144,7 @@ abstract class _$FriendStateCopyWith<$Res>
       List<FriendRequest> allRequests,
       List<FriendRequest> sentRequests,
       List<FriendRequest> receivedRequests,
+      List<String> requestsBeingTreated,
       FriendFailure failure});
 
   @override
@@ -158,6 +169,7 @@ class __$FriendStateCopyWithImpl<$Res> extends _$FriendStateCopyWithImpl<$Res>
     Object allRequests = freezed,
     Object sentRequests = freezed,
     Object receivedRequests = freezed,
+    Object requestsBeingTreated = freezed,
     Object failure = freezed,
   }) {
     return _then(_FriendState(
@@ -179,13 +191,16 @@ class __$FriendStateCopyWithImpl<$Res> extends _$FriendStateCopyWithImpl<$Res>
       receivedRequests: receivedRequests == freezed
           ? _value.receivedRequests
           : receivedRequests as List<FriendRequest>,
+      requestsBeingTreated: requestsBeingTreated == freezed
+          ? _value.requestsBeingTreated
+          : requestsBeingTreated as List<String>,
       failure: failure == freezed ? _value.failure : failure as FriendFailure,
     ));
   }
 }
 
 /// @nodoc
-class _$_FriendState implements _FriendState {
+class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
   const _$_FriendState(
       {this.allFriends = const [],
       this.onlineFriends = const [],
@@ -193,13 +208,15 @@ class _$_FriendState implements _FriendState {
       this.allRequests = const [],
       this.sentRequests = const [],
       this.receivedRequests = const [],
+      this.requestsBeingTreated = const [],
       this.failure})
       : assert(allFriends != null),
         assert(onlineFriends != null),
         assert(offlineFriends != null),
         assert(allRequests != null),
         assert(sentRequests != null),
-        assert(receivedRequests != null);
+        assert(receivedRequests != null),
+        assert(requestsBeingTreated != null);
 
   @JsonKey(defaultValue: const [])
   @override
@@ -219,12 +236,31 @@ class _$_FriendState implements _FriendState {
   @JsonKey(defaultValue: const [])
   @override
   final List<FriendRequest> receivedRequests;
+  @JsonKey(defaultValue: const [])
+  @override // List of user ids of requests currently being treated
+// (being canceled, accepted, or rejected)
+  final List<String> requestsBeingTreated;
   @override
   final FriendFailure failure;
 
   @override
-  String toString() {
-    return 'FriendState(allFriends: $allFriends, onlineFriends: $onlineFriends, offlineFriends: $offlineFriends, allRequests: $allRequests, sentRequests: $sentRequests, receivedRequests: $receivedRequests, failure: $failure)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'FriendState(allFriends: $allFriends, onlineFriends: $onlineFriends, offlineFriends: $offlineFriends, allRequests: $allRequests, sentRequests: $sentRequests, receivedRequests: $receivedRequests, requestsBeingTreated: $requestsBeingTreated, failure: $failure)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'FriendState'))
+      ..add(DiagnosticsProperty('allFriends', allFriends))
+      ..add(DiagnosticsProperty('onlineFriends', onlineFriends))
+      ..add(DiagnosticsProperty('offlineFriends', offlineFriends))
+      ..add(DiagnosticsProperty('allRequests', allRequests))
+      ..add(DiagnosticsProperty('sentRequests', sentRequests))
+      ..add(DiagnosticsProperty('receivedRequests', receivedRequests))
+      ..add(DiagnosticsProperty('requestsBeingTreated', requestsBeingTreated))
+      ..add(DiagnosticsProperty('failure', failure));
   }
 
   @override
@@ -249,6 +285,9 @@ class _$_FriendState implements _FriendState {
             (identical(other.receivedRequests, receivedRequests) ||
                 const DeepCollectionEquality()
                     .equals(other.receivedRequests, receivedRequests)) &&
+            (identical(other.requestsBeingTreated, requestsBeingTreated) ||
+                const DeepCollectionEquality().equals(
+                    other.requestsBeingTreated, requestsBeingTreated)) &&
             (identical(other.failure, failure) ||
                 const DeepCollectionEquality().equals(other.failure, failure)));
   }
@@ -262,6 +301,7 @@ class _$_FriendState implements _FriendState {
       const DeepCollectionEquality().hash(allRequests) ^
       const DeepCollectionEquality().hash(sentRequests) ^
       const DeepCollectionEquality().hash(receivedRequests) ^
+      const DeepCollectionEquality().hash(requestsBeingTreated) ^
       const DeepCollectionEquality().hash(failure);
 
   @override
@@ -277,6 +317,7 @@ abstract class _FriendState implements FriendState {
       List<FriendRequest> allRequests,
       List<FriendRequest> sentRequests,
       List<FriendRequest> receivedRequests,
+      List<String> requestsBeingTreated,
       FriendFailure failure}) = _$_FriendState;
 
   @override
@@ -291,6 +332,9 @@ abstract class _FriendState implements FriendState {
   List<FriendRequest> get sentRequests;
   @override
   List<FriendRequest> get receivedRequests;
+  @override // List of user ids of requests currently being treated
+// (being canceled, accepted, or rejected)
+  List<String> get requestsBeingTreated;
   @override
   FriendFailure get failure;
   @override
