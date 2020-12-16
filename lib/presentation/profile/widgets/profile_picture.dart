@@ -149,20 +149,17 @@ class LastSeenBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final duration = _duration;
     if (duration == null) return Container();
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(size),
-        color: Theme.of(context).primaryColor,
-      ),
-      padding: EdgeInsets.all(size / 10),
+    return Material(
+      borderRadius: BorderRadius.circular(size),
+      color: Theme.of(context).primaryColor,
+      clipBehavior: Clip.hardEdge,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(size),
           color: Colors.green.shade700.withOpacity(0.2),
         ),
-        padding: EdgeInsets.symmetric(
-          horizontal: size / 2,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: size / 2),
+        margin: EdgeInsets.all(size / 10),
         child: Text(
           duration,
           style: TextStyle(
