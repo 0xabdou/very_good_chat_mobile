@@ -148,6 +148,7 @@ class RequestListItem extends StatelessWidget {
             color: Colors.white,
             size: sc.width(4),
           ),
+          SizedBox(width: sc.width(5)),
         ],
       );
     }
@@ -165,11 +166,23 @@ class RequestListItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            context.read<FriendCubit>().answerFriendRequest(
+                  userId: request.user.id,
+                  accept: true,
+                  context: context,
+                );
+          },
           icon: const Icon(Icons.check, color: Colors.green),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            context.read<FriendCubit>().answerFriendRequest(
+                  userId: request.user.id,
+                  accept: false,
+                  context: context,
+                );
+          },
           icon: const Icon(Icons.clear, color: Colors.red),
         ),
       ],

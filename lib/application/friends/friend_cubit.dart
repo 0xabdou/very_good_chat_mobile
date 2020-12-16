@@ -49,28 +49,72 @@ class FriendCubit extends Cubit<FriendState> {
   @override
   FriendState get state => super.state.copyWith(failure: null);
 
-  /// Usually [ProfileCubit] when a friend is removed
-  void friendRemoved() {
-    _refreshFriends();
+  /// Fetches friends list from backend and emits a new state
+  Future<void> fetchFriends() async {
+    // Local friends
+    final localFetchResult = await _repository.getFriendsLocally();
+    localFetchResult.fold(
+      (failure) {
+        emit(state.copyWith(failure: failure));
+      },
+      _spreadFriends,
+    );
+
+    // remote friends
+    final remoteFetchResult = await _repository.getFriendsRemotely();
+    remoteFetchResult.fold(
+      (failure) {
+        emit(state.copyWith(failure: failure));
+      },
+      _spreadFriends,
+    );
   }
 
-  /// Usually called by [ProfileCubit] when a friend request is sent
-  void friendRequestSent(FriendRequest request) {
-    final requests = [request, ...state.allRequests];
-    emit(_spreadRequests(requests));
+  /// Fetch and emit all friend requests
+  Future<void> fetchRequests() async {
+    final result = await _repository.getAllFriendRequests();
+    result.fold(
+      (failure) => emit(state.copyWith(failure: failure)),
+      (requests) => emit(_spreadRequests(requests)),
+    );
   }
 
-  /// Usually called by [ProfileCubit] when a friend request is canceled
-  void friendRequestCanceled(String userId) {
-    final requests = List.of(state.allRequests)
-      ..removeWhere((r) => r.user.id == userId);
-    final requestsBeingTreated = List.of(state.requestsBeingTreated)
-      ..remove(userId);
-    emit(_spreadRequests(requests)
-        .copyWith(requestsBeingTreated: requestsBeingTreated));
+  /// Answer a friend request  (Usually called from [FriendRequestsScreen]
+  Future<void> answerFriendRequest({
+    @required String userId,
+    @required bool accept,
+    @required BuildContext context,
+  }) async {
+    final yes = await DialogUtils.instance.showYesNoDialog(
+      context,
+      title: accept ? 'Accept' : 'Decline',
+      content: accept
+          ? 'Accept this friend request?'
+          : 'Decline this friend request?',
+    );
+    if (!yes) return;
+
+    emit(
+      state.copyWith(
+        requestsBeingTreated: [userId, ...state.requestsBeingTreated],
+      ),
+    );
+    final result = await _repository.answerFriendRequest(userId, accept);
+    result.fold(
+      (failure) {
+        final rbt = List.of(state.requestsBeingTreated)..remove(userId);
+        emit(
+          state.copyWith(requestsBeingTreated: rbt, failure: failure),
+        );
+      },
+      (_) {
+        friendRequestRemoved(userId);
+        fetchFriends();
+      },
+    );
   }
 
-  /// Cancel a friend request (Usually from [FriendRequestsScreen]
+  /// Cancel a friend request (Usually called from [FriendRequestsScreen]
   Future<void> cancelFriendRequest(String userId, BuildContext context) async {
     final yes = await DialogUtils.instance.showYesNoDialog(
       context,
@@ -79,21 +123,57 @@ class FriendCubit extends Cubit<FriendState> {
     );
     if (!yes) return;
 
-    final requestsBeingTreated = state.requestsBeingTreated;
     emit(
       state.copyWith(
-        requestsBeingTreated: [userId, ...requestsBeingTreated],
+        requestsBeingTreated: [userId, ...state.requestsBeingTreated],
       ),
     );
 
     final result = await _repository.cancelFriendRequest(userId);
     result.fold(
-      (failure) => emit(state.copyWith(
-        failure: failure,
-        requestsBeingTreated: requestsBeingTreated,
-      )),
-      (_) => friendRequestCanceled(userId),
+      (failure) {
+        final rbt = List.of(state.requestsBeingTreated)..remove(userId);
+        emit(state.copyWith(
+          failure: failure,
+          requestsBeingTreated: rbt,
+        ));
+      },
+      (_) => friendRequestRemoved(userId),
     );
+  }
+
+  /// Emit a state with the newly added friend request
+  /// Usually called by [ProfileCubit] when a friend request is sent
+  void friendRequestAdded(FriendRequest request) {
+    final requests = [request, ...state.allRequests];
+    emit(_spreadRequests(requests));
+  }
+
+  /// Emit a state without the removed friend request
+  /// Usually called by [ProfileCubit] when a friend request is canceled
+  void friendRequestRemoved(String userId) {
+    final requests = List.of(state.allRequests)
+      ..removeWhere((r) => r.user.id == userId);
+    final requestsBeingTreated = List.of(state.requestsBeingTreated)
+      ..remove(userId);
+    emit(_spreadRequests(requests)
+        .copyWith(requestsBeingTreated: requestsBeingTreated));
+  }
+
+  void _spreadFriends(List<Friend> friends) {
+    final onlineFriends = <Friend>[];
+    final offlineFriends = <Friend>[];
+    for (final friend in friends) {
+      if (friend.isOnline)
+        onlineFriends.add(friend);
+      else
+        offlineFriends.add(friend);
+    }
+    emit(state.copyWith(
+      allFriends: friends,
+      onlineFriends: onlineFriends,
+      offlineFriends: offlineFriends,
+    ));
   }
 
   FriendState _spreadRequests(List<FriendRequest> allRequests) {
@@ -108,7 +188,7 @@ class FriendCubit extends Cubit<FriendState> {
   /// First, the persisted friends are emitted, then live data from backend
   /// is fetched and emitted
   /// A timer is also initialized to refresh friends list regularly
-  Future<void> _init() async {
+  void _init() {
     final loggedIn = _authCubit.state.maybeMap(
       loggedIn: (_) => true,
       orElse: () => false,
@@ -119,11 +199,12 @@ class FriendCubit extends Cubit<FriendState> {
       return;
     }
 
-    await _refreshFriends();
+    fetchFriends();
+    fetchRequests();
 
     _friendsPollingTimer ??= Timer.periodic(
       const Duration(seconds: 10),
-      (_) => _refreshFriends(),
+      (_) => fetchFriends(),
     );
   }
 
@@ -133,43 +214,6 @@ class FriendCubit extends Cubit<FriendState> {
     _friendsPollingTimer?.cancel();
     _friendsPollingTimer = null;
     emit(const FriendState());
-  }
-
-  /// Fetches friends list from backend and emits a new state
-  Future<void> _refreshFriends() async {
-    // Local friends
-    final localFetchResult = await _repository.getFriendsLocally();
-    localFetchResult.fold(
-      (failure) {
-        emit(state.copyWith(failure: failure));
-      },
-      _emitNewFriends,
-    );
-
-    // remote friends
-    final remoteFetchResult = await _repository.getFriendsRemotely();
-    remoteFetchResult.fold(
-      (failure) {
-        emit(state.copyWith(failure: failure));
-      },
-      _emitNewFriends,
-    );
-  }
-
-  void _emitNewFriends(List<Friend> friends) {
-    final onlineFriends = <Friend>[];
-    final offlineFriends = <Friend>[];
-    for (final friend in friends) {
-      if (friend.isOnline)
-        onlineFriends.add(friend);
-      else
-        offlineFriends.add(friend);
-    }
-    emit(state.copyWith(
-      allFriends: friends,
-      onlineFriends: onlineFriends,
-      offlineFriends: offlineFriends,
-    ));
   }
 
   @override

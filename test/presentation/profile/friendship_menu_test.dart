@@ -180,4 +180,53 @@ void main() {
       },
     );
   });
+
+  group('when Relationship.requestReceived()', () {
+    setUp(() {
+      when(mockCubit.state).thenReturn(const ProfileState(
+        initialized: true,
+        user: user,
+        relationship: Relationship.requestReceived(),
+      ));
+    });
+
+    testWidgets(
+      'Should contain an accept button',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        expect(find.byIcon(Icons.check), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Clicking the accept button should call cubit.answerFriendRequest(true)',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        await tester.tap(find.byIcon(Icons.check));
+        verify(mockCubit.answerFriendRequest(any, true)).called(1);
+      },
+    );
+
+    testWidgets(
+      'Should contain a decline button',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        expect(find.byIcon(Icons.cancel), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Clicking the decline button should call '
+      'cubit.answerFriendRequest(false)',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        await tester.tap(find.byIcon(Icons.cancel));
+        verify(mockCubit.answerFriendRequest(any, false)).called(1);
+      },
+    );
+  });
 }

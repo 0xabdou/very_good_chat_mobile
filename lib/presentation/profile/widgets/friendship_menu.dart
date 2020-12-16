@@ -150,7 +150,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
       self: (_) => _buildFriendActions(cubit),
       friend: (_) => _buildFriendActions(cubit),
       requestSent: (_) => _buildRequestSentActions(cubit),
-      requestReceived: (_) => [],
+      requestReceived: (_) => _buildRequestReceivedActions(cubit),
       blocked: (_) => [],
       stranger: (_) => [],
     );
@@ -199,6 +199,43 @@ class _FriendshipMenuState extends State<FriendshipMenu>
               ? null
               : () async {
                   await cubit.cancelFriendRequest(context);
+                  Navigator.of(context).pop();
+                },
+          icon: Icons.cancel,
+          label: 'Cancel',
+          textColor: Colors.white,
+          backgroundColor: Colors.red,
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildRequestReceivedActions(ProfileCubit cubit) {
+    final disabled = cubit.state.friendOperation.maybeMap(
+      some: (_) => true,
+      orElse: () => false,
+    );
+    return [
+      Expanded(
+        child: FriendshipSheetButton(
+          onPressed: disabled
+              ? null
+              : () async {
+                  await cubit.answerFriendRequest(context, true);
+                  Navigator.of(context).pop();
+                },
+          icon: Icons.check,
+          label: 'Accept',
+          textColor: Colors.white,
+          backgroundColor: Colors.green,
+        ),
+      ),
+      Expanded(
+        child: FriendshipSheetButton(
+          onPressed: disabled
+              ? null
+              : () async {
+                  await cubit.answerFriendRequest(context, false);
                   Navigator.of(context).pop();
                 },
           icon: Icons.cancel,

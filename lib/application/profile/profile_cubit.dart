@@ -66,7 +66,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           friendOperation: const FriendOperation.done(),
           relationship: const Relationship.stranger(),
         ));
-        _friendCubit.friendRemoved();
+        _friendCubit.fetchFriends();
       },
     );
   }
@@ -92,7 +92,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           friendOperation: const FriendOperation.done(),
           relationship: const Relationship.requestSent(),
         ));
-        _friendCubit.friendRequestSent(request);
+        _friendCubit.friendRequestAdded(request);
       },
     );
   }
@@ -118,7 +118,38 @@ class ProfileCubit extends Cubit<ProfileState> {
           friendOperation: const FriendOperation.done(),
           relationship: const Relationship.stranger(),
         ));
-        _friendCubit.friendRequestCanceled(state.user.id);
+        _friendCubit.friendRequestRemoved(state.user.id);
+      },
+    );
+  }
+
+  /// Cancel the friend request sent to this user
+  Future<void> answerFriendRequest(BuildContext context, bool accept) async {
+    final yes = await DialogUtils.instance.showYesNoDialog(
+      context,
+      title: accept ? 'Accept' : 'Decline',
+      content: 'Do you want to ${accept ? 'accept' : 'decline '} '
+          'the friend request?',
+    );
+    if (!yes) return;
+
+    emit(_state.copyWith(friendOperation: const FriendOperation.some()));
+
+    final result = await _repository.answerFriendRequest(state.user.id, accept);
+    result.fold(
+      (failure) {
+        emit(_state.copyWith(friendOperation: FriendOperation.fail(failure)));
+      },
+      (_) {
+        emit(_state.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: accept
+              ? const Relationship.friend(isOnline: false)
+              : const Relationship.stranger(),
+        ));
+        _friendCubit
+          ..friendRequestRemoved(state.user.id)
+          ..fetchFriends();
       },
     );
   }

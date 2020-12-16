@@ -32,7 +32,7 @@ abstract class IFriendRemoteDataSource {
   Future<Unit> blockUser(String userId);
 }
 
-List<Friend> _friends;
+List<Friend> _friends = [];
 List<FriendRequest> _friendsWannaBe;
 
 /// An implementation of [IFriendRemoteDataSource]
@@ -41,6 +41,25 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
   @override
   Future<Unit> answerFriendRequest(String userId, bool accept) async {
     await Future.delayed(const Duration(milliseconds: 500));
+    if (accept) {
+      final user = _friendsWannaBe
+          .firstWhere(
+            (r) => r.user.id == userId,
+            orElse: () => null,
+          )
+          .user;
+      if (user != null) {
+        _friends.add(
+          Friend(
+            id: user.id,
+            username: user.username,
+            photoUrl: user.photoUrl,
+            isOnline: true,
+            lastSeen: DateTime.now(),
+          ),
+        );
+      }
+    }
     return unit;
   }
 
@@ -85,38 +104,21 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
   @override
   Future<List<Friend>> getFriends() async {
     await Future.delayed(const Duration(milliseconds: 1000));
-    if (_friends == null) {
-      _friends = [];
-      for (var i = 0; i < 10; i++) {
-        final user = _generateRandomUser();
-        final online = Random().nextBool();
-        final lastSeenMS = DateTime.now().millisecondsSinceEpoch -
-            (online ? 0 : 60000 + Random().nextInt(60000 * 60 * 24));
-        final friend = Friend(
-          id: user.username,
-          username: user.username,
-          photoUrl: user.photoUrl,
-          lastSeen: DateTime.fromMillisecondsSinceEpoch(lastSeenMS),
-          isOnline: online,
-        );
-        _friends.add(friend);
-      }
-    } else {
-      try {
-        await Dio().get('https://google.com');
-      } on Exception {
-        throw DioError(type: DioErrorType.RESPONSE);
-      }
-      _friends = List<Friend>.from(_friends);
-      for (var i = 0; i < _friends.length; i++) {
-        final online = Random().nextBool();
-        final lastSeenMS = DateTime.now().millisecondsSinceEpoch -
-            (online ? 0 : 60000 + Random().nextInt(60000 * 60 * 24));
-        _friends[i] = _friends[i].copyWith(
-          lastSeen: DateTime.fromMillisecondsSinceEpoch(lastSeenMS),
-          isOnline: online,
-        );
-      }
+
+    try {
+      await Dio().get('https://google.com');
+    } on Exception {
+      throw DioError(type: DioErrorType.RESPONSE);
+    }
+    _friends = List<Friend>.from(_friends);
+    for (var i = 0; i < _friends.length; i++) {
+      final online = Random().nextBool();
+      final lastSeenMS = DateTime.now().millisecondsSinceEpoch -
+          (online ? 0 : 60000 + Random().nextInt(60000 * 60 * 24));
+      _friends[i] = _friends[i].copyWith(
+        lastSeen: DateTime.fromMillisecondsSinceEpoch(lastSeenMS),
+        isOnline: online,
+      );
     }
     _friends.sort(
       (a, b) {

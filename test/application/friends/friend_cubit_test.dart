@@ -46,13 +46,15 @@ void main() {
       friend.copyWith(id: 'remote2'),
     ];
     blocTest<FriendCubit, FriendState>(
-      'should emit a state with local friend, then remote friends, '
-      'if the user is logged in. It should also kick off polling',
+      'should emit the expected states if the user is logged in. '
+      'It should also kick off polling',
       build: () {
         when(mockRepo.getFriendsLocally())
             .thenAnswer((_) async => right(localFriends));
         when(mockRepo.getFriendsRemotely())
             .thenAnswer((_) async => right(remoteFriends));
+        when(mockRepo.getAllFriendRequests())
+            .thenAnswer((_) async => right([]));
         whenListen(
           mockAuthCubit,
           Stream.fromIterable(
@@ -79,6 +81,7 @@ void main() {
       verify: (c) async {
         verify(mockRepo.getFriendsLocally()).called(1);
         verify(mockRepo.getFriendsRemotely()).called(1);
+        verify(mockRepo.getAllFriendRequests()).called(1);
         expect(c.friendsPollingTimer, isNotNull);
       },
     );
@@ -126,8 +129,45 @@ void main() {
       sentAt: DateTime.now(),
       sent: true,
     );
+    final receivedRequest = FriendRequest(
+      user: user.copyWith(id: '4'),
+      sentAt: DateTime.now(),
+      sent: false,
+    );
 
-    group('friendRequestSent()', () {
+    group('fetchRequests', () {
+      blocTest<FriendCubit, FriendState>(
+        'should emit the expected states if fetching succeeds',
+        build: () {
+          when(mockRepo.getAllFriendRequests())
+              .thenAnswer((_) async => right([request1, request2]));
+          return cubit;
+        },
+        act: (c) => c.fetchRequests(),
+        seed: const FriendState(),
+        expect: [
+          FriendState(
+            allRequests: [request1, request2],
+            sentRequests: [request1],
+            receivedRequests: [request2],
+          ),
+        ],
+      );
+
+      blocTest<FriendCubit, FriendState>(
+        'should emit the expected states if fetching fails',
+        build: () {
+          when(mockRepo.getAllFriendRequests())
+              .thenAnswer((_) async => left(const FriendFailure.server()));
+          return cubit;
+        },
+        act: (c) => c.fetchRequests(),
+        seed: const FriendState(),
+        expect: const [FriendState(failure: FriendFailure.server())],
+      );
+    });
+
+    group('friendRequestAdded()', () {
       final seedState = FriendState(
         allRequests: [request1, request2],
         sentRequests: [request1],
@@ -136,7 +176,7 @@ void main() {
       blocTest<FriendCubit, FriendState>(
         'should emit a state with the newly sent request',
         build: () => cubit,
-        act: (c) => c.friendRequestSent(sentRequest),
+        act: (c) => c.friendRequestAdded(sentRequest),
         seed: seedState,
         expect: [
           seedState.copyWith(
@@ -147,7 +187,7 @@ void main() {
       );
     });
 
-    group('friendRequestCanceled()', () {
+    group('friendRequestRemoved()', () {
       final seedState = FriendState(
         allRequests: [
           sentRequest,
@@ -160,7 +200,7 @@ void main() {
       blocTest<FriendCubit, FriendState>(
         'should emit a state with the canceled request removed',
         build: () => cubit,
-        act: (c) => c.friendRequestCanceled(sentRequest.user.id),
+        act: (c) => c.friendRequestRemoved(sentRequest.user.id),
         seed: seedState,
         expect: [
           seedState.copyWith(
@@ -259,6 +299,110 @@ void main() {
         ],
         verify: (_) async {
           verify(mockRepo.cancelFriendRequest(sentRequest.user.id)).called(1);
+        },
+      );
+    });
+
+    group('answerFriendRequest()', () {
+      final seedState = FriendState(
+        allRequests: [
+          receivedRequest,
+          request1,
+          request2,
+        ],
+        sentRequests: [request1],
+        receivedRequests: [receivedRequest, request2],
+        requestsBeingTreated: [request1.user.id],
+      );
+      final expectedState1 = seedState.copyWith(
+        allRequests: List.of(seedState.allRequests)..remove(receivedRequest),
+        receivedRequests: List.of(seedState.receivedRequests)
+          ..remove(receivedRequest),
+        requestsBeingTreated: List.of(seedState.requestsBeingTreated)
+          ..remove(receivedRequest.user.id),
+      );
+
+      void _stubRepo(Either<FriendFailure, Unit> result) {
+        when(mockRepo.answerFriendRequest(any, any))
+            .thenAnswer((_) async => result);
+      }
+
+      void _act(FriendCubit cubit) {
+        cubit.answerFriendRequest(
+          userId: receivedRequest.user.id,
+          accept: true,
+          context: MockBuildContext(),
+        );
+      }
+
+      blocTest<FriendCubit, FriendState>(
+        'Should emit the right states if the user confirms the action',
+        build: () {
+          MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
+          _stubRepo(right(unit));
+          when(mockRepo.getFriendsLocally()).thenAnswer((_) async => right([]));
+          when(mockRepo.getFriendsRemotely())
+              .thenAnswer((_) async => right([friend]));
+          return cubit;
+        },
+        act: _act,
+        seed: seedState,
+        expect: [
+          seedState.copyWith(
+            requestsBeingTreated: [
+              receivedRequest.user.id,
+              ...seedState.requestsBeingTreated
+            ],
+          ),
+          expectedState1,
+          expectedState1.copyWith(
+            allFriends: [friend],
+            offlineFriends: [friend],
+          ),
+        ],
+        verify: (_) async {
+          verify(mockRepo.answerFriendRequest(receivedRequest.user.id, true))
+              .called(1);
+          verify(mockRepo.getFriendsRemotely()).called(1);
+        },
+      );
+
+      blocTest<FriendCubit, FriendState>(
+        'Should do nothing if the user cancels the action',
+        build: () {
+          MockDialogUtils.stubYesNoDialog(mockDialogUtils, false);
+          _stubRepo(right(unit));
+          return cubit;
+        },
+        act: _act,
+        seed: seedState,
+        expect: [],
+        verify: (_) async {
+          verifyZeroInteractions(mockRepo);
+        },
+      );
+
+      blocTest<FriendCubit, FriendState>(
+        'Should emit the right states if answering fails',
+        build: () {
+          MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
+          _stubRepo(left(const FriendFailure.server()));
+          return cubit;
+        },
+        act: _act,
+        seed: seedState,
+        expect: [
+          seedState.copyWith(
+            requestsBeingTreated: [
+              receivedRequest.user.id,
+              ...seedState.requestsBeingTreated,
+            ],
+          ),
+          seedState.copyWith(failure: const FriendFailure.server()),
+        ],
+        verify: (_) async {
+          verify(mockRepo.answerFriendRequest(receivedRequest.user.id, true))
+              .called(1);
         },
       );
     });
