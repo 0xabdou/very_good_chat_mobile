@@ -89,6 +89,13 @@ class CurrentUserScaffold extends StatelessWidget {
                 },
                 icon: const Icon(Icons.edit),
               ),
+              IconButton(
+                onPressed: () {
+                  //  TODO: go to settings page instead when you implement it
+                  context.read<NavigationCubit>().viewBlockedUsersScreen();
+                },
+                icon: const Icon(Icons.settings),
+              ),
             ],
           ),
           body: Profile(),

@@ -7,6 +7,7 @@ import 'package:very_good_chat/presentation/auth/logged_in_screen.dart';
 import 'package:very_good_chat/presentation/auth/login_screen.dart';
 import 'package:very_good_chat/presentation/auth/splash_screen.dart';
 import 'package:very_good_chat/presentation/auth/updating_screen.dart';
+import 'package:very_good_chat/presentation/friends/blocked_users_screen.dart';
 import 'package:very_good_chat/presentation/friends/friend_requests_screen.dart';
 import 'package:very_good_chat/presentation/profile/profile_screen.dart';
 import 'package:very_good_chat/presentation/shared/full_image.dart';
@@ -108,6 +109,13 @@ class AppPages {
       child: FriendRequestsScreen(),
     );
   }
+
+  static Page blockedUsersScreen() {
+    return MaterialPage(
+      key: AppKeys.blockedUsersScreen,
+      child: BlockedUsersScreen(),
+    );
+  }
   // ############## FRIENDS ###############
 
 }
@@ -140,6 +148,10 @@ class AppKeys {
   final _fullPhotoScreenKey = UniqueKey();
   static UniqueKey get fullPhotoScreen => _instance._fullPhotoScreenKey;
 
-  final _friendRequestsScreen = UniqueKey();
-  static UniqueKey get friendRequestScreen => _instance._friendRequestsScreen;
+  final _friendRequestsScreenKey = UniqueKey();
+  static UniqueKey get friendRequestScreen =>
+      _instance._friendRequestsScreenKey;
+
+  final _blockedUsersScreenKey = UniqueKey();
+  static UniqueKey get blockedUsersScreen => _instance._blockedUsersScreenKey;
 }

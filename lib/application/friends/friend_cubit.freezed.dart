@@ -18,7 +18,7 @@ class _$FriendStateTearOff {
       {List<Friend> allFriends = const [],
       List<Friend> onlineFriends = const [],
       List<Friend> offlineFriends = const [],
-      List<User> blockedUsers,
+      List<User> blockedUsers = const [],
       List<FriendRequest> allRequests = const [],
       List<FriendRequest> sentRequests = const [],
       List<FriendRequest> receivedRequests = const [],
@@ -218,7 +218,7 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
       {this.allFriends = const [],
       this.onlineFriends = const [],
       this.offlineFriends = const [],
-      this.blockedUsers,
+      this.blockedUsers = const [],
       this.allRequests = const [],
       this.sentRequests = const [],
       this.receivedRequests = const [],
@@ -227,6 +227,7 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
       : assert(allFriends != null),
         assert(onlineFriends != null),
         assert(offlineFriends != null),
+        assert(blockedUsers != null),
         assert(allRequests != null),
         assert(sentRequests != null),
         assert(receivedRequests != null),
@@ -241,6 +242,7 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
   @JsonKey(defaultValue: const [])
   @override
   final List<Friend> offlineFriends;
+  @JsonKey(defaultValue: const [])
   @override
   final List<User> blockedUsers;
   @JsonKey(defaultValue: const [])

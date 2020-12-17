@@ -5,7 +5,7 @@ import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/presentation/friends/widgets/friend_tab_item.dart';
-import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
+import 'package:very_good_chat/presentation/friends/widgets/user_list_item.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
 /// Friends screen
@@ -84,63 +84,30 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
         final request = requests[index];
         final beingTreated =
             state.requestsBeingTreated.contains(request.user.id);
-        return RequestListItem(
-          request: request,
+        return UserListItem(
+          onPressed: () {
+            context.read<NavigationCubit>().viewOtherProfile(request.user);
+          },
+          user: request.user,
+          trailing: _getTrailing(
+            request: request,
+            loading: beingTreated,
+            context: context,
+            sc: sc,
+          ),
           sc: sc,
-          beingTreated: beingTreated,
         );
       },
     );
   }
-}
 
-/// List item for friends list
-@visibleForTesting
-class RequestListItem extends StatelessWidget {
-  /// Constructor
-  const RequestListItem({
-    Key key,
-    @required this.request,
-    @required this.sc,
-    this.beingTreated = false,
-  }) : super(key: key);
-
-  /// The friend for this list item
-  final FriendRequest request;
-
-  /// Size config data
-  final SizeConfig sc;
-
-  /// Is this requests being treated? (being canceled, accepted, or declined)
-  final bool beingTreated;
-
-  @override
-  Widget build(BuildContext context) {
-    final user = request.user;
-    return ListTile(
-      onTap: () {
-        context.read<NavigationCubit>().viewOtherProfile(user);
-      },
-      leading: ProfilePicture(
-        onPressed: () {
-          context.read<NavigationCubit>().viewOtherProfile(user);
-        },
-        photoUrl: user.photoUrl,
-        radius: sc.width(10),
-        onlineDotRadius: sc.width(3),
-        lastSeenBadgeSize: sc.width(2.5),
-      ),
-      title: Text(
-        user.name ?? user.username,
-        style: TextStyle(fontSize: sc.width(4)),
-      ),
-      dense: true,
-      trailing: _getTrailing(context, sc),
-    );
-  }
-
-  Widget _getTrailing(BuildContext context, SizeConfig sc) {
-    if (beingTreated) {
+  Widget _getTrailing({
+    @required FriendRequest request,
+    @required bool loading,
+    @required BuildContext context,
+    @required SizeConfig sc,
+  }) {
+    if (loading) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [

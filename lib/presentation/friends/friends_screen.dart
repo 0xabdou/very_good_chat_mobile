@@ -4,7 +4,7 @@ import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dart';
 import 'package:very_good_chat/presentation/friends/widgets/friend_tab_item.dart';
-import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
+import 'package:very_good_chat/presentation/friends/widgets/user_list_item.dart';
 import 'package:very_good_chat/shared/logger.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
@@ -77,50 +77,21 @@ class _FriendsScreenState extends State<FriendsScreen> {
         );
       },
       itemBuilder: (context, index) {
-        return FriendsListItem(friend: friends[index], sc: sc);
+        final friend = friends[index];
+        final user = friend.toUser();
+        return UserListItem(
+          onPressed: () {
+            logger.wtf('Go to conversation');
+          },
+          onPhotoPressed: () {
+            context.read<NavigationCubit>().viewOtherProfile(user);
+          },
+          user: user,
+          isOnline: friend.isOnline,
+          lastSeen: friend.lastSeen,
+          sc: sc,
+        );
       },
-    );
-  }
-}
-
-/// List item for friends list
-@visibleForTesting
-class FriendsListItem extends StatelessWidget {
-  /// Constructor
-  const FriendsListItem({
-    Key key,
-    @required this.friend,
-    @required this.sc,
-  }) : super(key: key);
-
-  /// The friend for this list item
-  final Friend friend;
-
-  /// Size config data
-  final SizeConfig sc;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        logger.wtf('Go to conversation');
-      },
-      leading: ProfilePicture(
-        onPressed: () {
-          context.read<NavigationCubit>().viewOtherProfile(friend.toUser());
-        },
-        photoUrl: friend.photoUrl,
-        isOnline: friend.isOnline,
-        lastSeen: friend.lastSeen,
-        radius: sc.width(10),
-        onlineDotRadius: sc.width(3),
-        lastSeenBadgeSize: sc.width(2.5),
-      ),
-      title: Text(
-        friend.name ?? friend.username,
-        style: TextStyle(fontSize: sc.width(4)),
-      ),
-      dense: true,
     );
   }
 }

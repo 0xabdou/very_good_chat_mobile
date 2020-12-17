@@ -62,11 +62,18 @@ class _LoggedInScreenState extends State<LoggedInScreen> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.people),
-            onPressed: () {
-              context.read<NavigationCubit>().openFriendRequestsScreen();
-            },
+          AnimatedSwitcher(
+            child: activeIndex == 1
+                ? IconButton(
+                    icon: const Icon(Icons.person_add),
+                    onPressed: () {
+                      context
+                          .read<NavigationCubit>()
+                          .viewFriendRequestsScreen();
+                    },
+                  )
+                : Container(),
+            duration: const Duration(milliseconds: 400),
           ),
         ],
       ),

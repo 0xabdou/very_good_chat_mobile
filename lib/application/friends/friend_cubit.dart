@@ -206,6 +206,7 @@ class FriendCubit extends Cubit<FriendState> {
 
     fetchFriends();
     fetchRequests();
+    fetchBlockedUsers();
 
     _friendsPollingTimer ??= Timer.periodic(
       const Duration(minutes: 1),

@@ -62,8 +62,12 @@ class NavigationCubit extends Cubit<List<Page>> {
       ));
   }
 
-  void openFriendRequestsScreen() {
+  void viewFriendRequestsScreen() {
     emit(state..add(AppPages.freindRequestsScreen()));
+  }
+
+  void viewBlockedUsersScreen() {
+    emit(state..add(AppPages.blockedUsersScreen()));
   }
 
   void pop() {
