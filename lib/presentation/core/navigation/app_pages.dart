@@ -16,8 +16,6 @@ import 'package:very_good_chat/shared/injection.dart';
 class AppPages {
   const AppPages._();
 
-  static ValueKey _classKey<T>() => ValueKey('$T');
-
   // ############## AUTH ###############
   /// For [SplashScreen]
   static Page splashScreen() {
@@ -88,12 +86,17 @@ class AppPages {
   }
 
   static Page fullPhotoScreen({
-    @required String photoUrl,
+    String photoUrl,
+    ImageProvider provider,
     String heroTag,
   }) {
     return MaterialPage(
       key: AppKeys.fullPhotoScreen,
-      child: FullImage(imageUrl: photoUrl, tag: heroTag),
+      child: FullImage(
+        imageUrl: photoUrl,
+        provider: provider,
+        tag: heroTag,
+      ),
     );
   }
   // ############## PROFILE ###############

@@ -10,12 +10,17 @@ class FullImage extends StatelessWidget {
   /// Constructor
   const FullImage({
     Key key,
-    @required this.imageUrl,
+    this.imageUrl,
+    this.provider,
     this.tag,
-  }) : super(key: key);
+  })  : assert(imageUrl != null || provider != null),
+        super(key: key);
 
   /// The image url
   final String imageUrl;
+
+  /// The image provider
+  final ImageProvider provider;
 
   /// The hero widget tag
   final String tag;
@@ -31,18 +36,20 @@ class FullImage extends StatelessWidget {
       child: Hero(
         tag: tag,
         child: Center(
-          child: CachedNetworkImage(
-            imageUrl: imageUrl,
-            width: sc.width(100),
-            height: sc.height(100),
-            imageBuilder: (context, image) {
-              return ExtendedImage(
-                image: image,
-                mode: ExtendedImageMode.gesture,
-              );
-            },
-            placeholder: (_, __) => LoadingPhotoPlaceholder(),
-          ),
+          child: imageUrl != null
+              ? CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  width: sc.width(100),
+                  height: sc.height(100),
+                  imageBuilder: (context, image) {
+                    return ExtendedImage(
+                      image: image,
+                      mode: ExtendedImageMode.gesture,
+                    );
+                  },
+                  placeholder: (_, __) => LoadingPhotoPlaceholder(),
+                )
+              : Image(image: provider),
         ),
       ),
     );

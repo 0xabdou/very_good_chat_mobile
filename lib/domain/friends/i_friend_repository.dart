@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
@@ -30,6 +31,12 @@ abstract class IFriendRepository {
   /// Unfriend the friend with [userId]
   Future<Either<FriendFailure, Unit>> unfriend(String userId);
 
-  /// Blocks the user with [userId]
+  /// Block the user with [userId]
   Future<Either<FriendFailure, Unit>> blockUser(String userId);
+
+  /// Unblock the user with [userId]
+  Future<Either<FriendFailure, Unit>> unblockUser(String userId);
+
+  /// Get a list of blocked users
+  Future<Either<FriendFailure, List<User>>> getBlockedUsers();
 }

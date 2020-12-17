@@ -7,6 +7,7 @@ import 'package:very_good_chat/presentation/core/navigation/navigation_cubit.dar
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_button.dart';
 import 'package:very_good_chat/presentation/profile/widgets/profile_picture.dart';
+import 'package:very_good_chat/presentation/shared/widgets/default_photo.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
 /// Profile UI, can be used for the current user or his friends
@@ -21,11 +22,13 @@ class Profile extends StatelessWidget {
     final relationship = state.relationship;
     var isOnline = false;
     DateTime lastSeen;
+    var isFriend = false;
     relationship.maybeWhen(
       self: () => isOnline = true,
       friend: (io, ls) {
         isOnline = io;
         lastSeen = ls;
+        isFriend = true;
       },
       orElse: () {},
     );
@@ -37,12 +40,15 @@ class Profile extends StatelessWidget {
           Hero(
             tag: tag,
             child: ProfilePicture(
-              onPressed: () {
-                context.read<NavigationCubit>().viewFullPicture(
-                      photoUrl: user.photoUrl,
-                      heroTag: tag,
-                    );
-              },
+              onPressed: isFriend
+                  ? () {
+                      context.read<NavigationCubit>().viewFullPicture(
+                            photoUrl: user.photoUrl,
+                            provider: DefaultPhoto.provider,
+                            heroTag: tag,
+                          );
+                    }
+                  : null,
               photoUrl: user.photoUrl,
               isOnline: isOnline,
               lastSeen: lastSeen,

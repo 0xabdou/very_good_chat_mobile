@@ -104,24 +104,30 @@ class OtherUserScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileCubit = context.watch<ProfileCubit>();
     final user = profileCubit.state.user;
+    final blocked = profileCubit.state.relationship.maybeMap(
+      orElse: () => false,
+      blocked: (_) => true,
+    );
     final sc = SizeConfig(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(user.name ?? user.username),
-        actions: [
-          PopupMenuButton<_OtherUserActions>(
-            onSelected: (action) {
-              // TODO: Block
-            },
-            offset: Offset(0, sc.height(6.2)),
-            itemBuilder: (_) => const [
-              PopupMenuItem(
-                value: _OtherUserActions.block,
-                child: Text('Block'),
-              ),
-            ],
-          ),
-        ],
+        actions: blocked
+            ? null
+            : [
+                PopupMenuButton<_OtherUserActions>(
+                  onSelected: (action) {
+                    profileCubit.block(context);
+                  },
+                  offset: Offset(0, sc.height(6.2)),
+                  itemBuilder: (_) => const [
+                    PopupMenuItem(
+                      value: _OtherUserActions.block,
+                      child: Text('Block'),
+                    ),
+                  ],
+                ),
+              ],
       ),
       body: Profile(),
     );

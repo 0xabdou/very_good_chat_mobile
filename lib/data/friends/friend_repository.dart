@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:very_good_chat/data/friends/friend_local_data_source.dart';
 import 'package:very_good_chat/data/friends/friend_remote_data_source.dart';
+import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
@@ -90,6 +91,16 @@ class FriendRepository implements IFriendRepository {
       await _localDataSource.deleteFriend(userId);
       return unit;
     });
+  }
+
+  @override
+  Future<Either<FriendFailure, List<User>>> getBlockedUsers() {
+    return catchExceptions<List<User>>(_remoteDataSource.getBlockedUsers);
+  }
+
+  @override
+  Future<Either<FriendFailure, Unit>> unblockUser(String userId) {
+    return catchExceptions<Unit>(() => _remoteDataSource.unblockUser(userId));
   }
 
   /// Catches [DioError]s and returns [FriendFailure]s accordingly

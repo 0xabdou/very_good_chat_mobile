@@ -44,8 +44,10 @@ class ProfilePicture extends StatelessWidget {
   /// The size of the last seen badge
   final double lastSeenBadgeSize;
 
+  /// Online dot alignment
   final Alignment dotAlignment;
 
+  /// Last seen badge alignment
   final Alignment badgeAlignment;
 
   @override
@@ -74,7 +76,12 @@ class ProfilePicture extends StatelessWidget {
                     },
                     placeholder: (_, __) => LoadingPhotoPlaceholder(),
                   )
-                : DefaultPhoto(),
+                : Ink.image(
+                    image: DefaultPhoto.provider,
+                    child: InkWell(
+                      onTap: onPressed,
+                    ),
+                  ),
           ),
           if (isOnline)
             Positioned.fill(

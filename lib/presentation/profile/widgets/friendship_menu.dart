@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/shared/size_config.dart';
 
@@ -151,7 +152,7 @@ class _FriendshipMenuState extends State<FriendshipMenu>
       friend: (_) => _buildFriendActions(cubit),
       requestSent: (_) => _buildRequestSentActions(cubit),
       requestReceived: (_) => _buildRequestReceivedActions(cubit),
-      blocked: (_) => [],
+      blocked: (_) => _buildBlockedActions(cubit),
       stranger: (_) => [],
     );
   }
@@ -242,6 +243,29 @@ class _FriendshipMenuState extends State<FriendshipMenu>
           label: 'Cancel',
           textColor: Colors.white,
           backgroundColor: Colors.red,
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _buildBlockedActions(ProfileCubit cubit) {
+    final disabled = cubit.state.friendOperation.maybeMap(
+      some: (_) => true,
+      orElse: () => false,
+    );
+    return [
+      Expanded(
+        child: FriendshipSheetButton(
+          onPressed: disabled
+              ? null
+              : () async {
+                  await cubit.unblock(context);
+                  Navigator.of(context).pop();
+                },
+          icon: FontAwesomeIcons.unlockAlt,
+          label: 'Unblock',
+          textColor: Colors.white,
+          backgroundColor: Colors.green,
         ),
       ),
     ];

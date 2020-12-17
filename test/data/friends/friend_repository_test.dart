@@ -206,4 +206,34 @@ void main() {
       verifyZeroInteractions(mockLocalDS);
     });
   });
+
+  group('unblockUser()', () {
+    test('should return a unit on success', () async {
+      // arrange
+      const userId = 'userId';
+      when(mockRemoteDS.blockUser(any)).thenAnswer((_) async => unit);
+      // act
+      final result = await repository.blockUser(userId);
+      // assert
+      expect(result, right(unit));
+      verify(mockRemoteDS.blockUser(userId));
+      verifyNoMoreInteractions(mockRemoteDS);
+      verifyZeroInteractions(mockLocalDS);
+    });
+  });
+
+  group('unblockUser()', () {
+    test('should return a unit on success', () async {
+      // arrange
+      const blocked = [user];
+      when(mockRemoteDS.getBlockedUsers()).thenAnswer((_) async => blocked);
+      // act
+      final result = await repository.getBlockedUsers();
+      // assert
+      expect(result, right(blocked));
+      verify(mockRemoteDS.getBlockedUsers());
+      verifyNoMoreInteractions(mockRemoteDS);
+      verifyZeroInteractions(mockLocalDS);
+    });
+  });
 }

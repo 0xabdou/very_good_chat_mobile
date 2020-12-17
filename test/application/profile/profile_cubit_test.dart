@@ -33,14 +33,19 @@ void main() {
     isOnline: false,
     lastSeen: DateTime.now(),
   );
+  const requestSentUser = User(id: 'request_sent', username: 'request_sent');
+  const requestReceivedUser = User(
+    id: 'request_received',
+    username: 'request_received',
+  );
   const strangerUser = User(
     id: 'stranger_user_id',
     username: 'stranger_username',
   );
-  const requestSentUser = User(id: 'request_sent', username: 'request_sent');
-  const requestReceived = User(
-    id: 'request_received',
-    username: 'request_received',
+
+  const blockedUser = User(
+    id: 'blocked_user_id',
+    username: 'blocked_username',
   );
 
   AuthCubit mockAuthCubit;
@@ -343,7 +348,7 @@ void main() {
   group('answerFriendRequest()', () {
     const seedState = ProfileState(
       initialized: true,
-      user: requestReceived,
+      user: requestReceivedUser,
       relationship: Relationship.requestReceived(),
     );
 
@@ -434,6 +439,242 @@ void main() {
       verify: (_) async {
         verify(mockRepo.answerFriendRequest(seedState.user.id, true)).called(1);
         verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+  });
+
+  group('block()', () {
+    const seedState = ProfileState(
+      initialized: true,
+      user: blockedUser,
+      relationship: Relationship.stranger(),
+    );
+
+    void _stubRepo(Either<FriendFailure, Unit> result) {
+      when(mockRepo.blockUser(any)).thenAnswer((_) async => result);
+    }
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should emit the expected sates if the user confirms the action, '
+      'should also notify the friend bloc',
+      build: () {
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
+        _stubRepo(right(unit));
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.block(MockBuildContext()),
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: const Relationship.blocked(),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.blockUser(seedState.user.id)).called(1);
+        verify(mockFriendCubit.fetchBlockedUsers()).called(1);
+        verify(mockFriendCubit.fetchFriends()).called(1);
+        verify(mockFriendCubit.friendRequestRemoved(seedState.user.id))
+            .called(1);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should emit the expected sates if the user confirms the action, and the '
+      'blocking fails. Should not notify the friend bloc',
+      build: () {
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
+        _stubRepo(left(const FriendFailure.server()));
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.block(MockBuildContext()),
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.fail(FriendFailure.server()),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.blockUser(seedState.user.id)).called(1);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should emit the expected sates if the user cancels the action',
+      build: () {
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, false);
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.block(MockBuildContext()),
+      expect: [],
+      verify: (_) async {
+        verifyZeroInteractions(mockRepo);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+  });
+
+  group('unblock()', () {
+    const seedState = ProfileState(
+      initialized: true,
+      user: blockedUser,
+      relationship: Relationship.blocked(),
+    );
+
+    void _stubRepo(Either<FriendFailure, Unit> result) {
+      when(mockRepo.unblockUser(any)).thenAnswer((_) async => result);
+    }
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should emit the expected sates if the user confirms the action, '
+      'should also notify the friend bloc',
+      build: () {
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
+        _stubRepo(right(unit));
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.unblock(MockBuildContext()),
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: const Relationship.stranger(),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.unblockUser(seedState.user.id)).called(1);
+        verify(mockFriendCubit.fetchBlockedUsers()).called(1);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should emit the expected sates if the user confirms the action, and the '
+      'blocking fails. Should not notify the friend bloc',
+      build: () {
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, true);
+        _stubRepo(left(const FriendFailure.server()));
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.unblock(MockBuildContext()),
+      expect: [
+        seedState.copyWith(friendOperation: const FriendOperation.some()),
+        seedState.copyWith(
+          friendOperation: const FriendOperation.fail(FriendFailure.server()),
+        ),
+      ],
+      verify: (_) async {
+        verify(mockRepo.unblockUser(seedState.user.id)).called(1);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'should emit the expected sates if the user cancels the action',
+      build: () {
+        MockDialogUtils.stubYesNoDialog(mockDialogUtils, false);
+        return profileCubit;
+      },
+      seed: seedState,
+      act: (c) => c.unblock(MockBuildContext()),
+      expect: [],
+      verify: (_) async {
+        verifyZeroInteractions(mockRepo);
+        verifyZeroInteractions(mockFriendCubit);
+      },
+    );
+  });
+
+  group('getRelationship', () {
+    setUp(() {
+      when(mockAuthCubit.state).thenReturn(
+        const AuthState.loggedIn(currentUser),
+      );
+      when(mockFriendCubit.state).thenReturn(FriendState(
+        allFriends: [Friend(id: friendUser.id, username: friendUser.username)],
+        allRequests: [
+          FriendRequest(
+            user: requestReceivedUser,
+            sent: false,
+            sentAt: DateTime.now(),
+          ),
+          FriendRequest(
+            user: requestSentUser,
+            sent: true,
+            sentAt: DateTime.now(),
+          ),
+        ],
+        blockedUsers: [blockedUser],
+      ));
+    });
+
+    test(
+      'should return Relationship.self() if the user is the current user',
+      () async {
+        // act
+        final result = profileCubit.getRelationship(currentUser);
+        // assert
+        expect(result, const Relationship.self());
+      },
+    );
+
+    test(
+      'should return Relationship.friend() if the user is friend '
+      'of the current user',
+      () async {
+        // act
+        final result = profileCubit.getRelationship(friendUser);
+        // assert
+        expect(result, const Relationship.friend(isOnline: false));
+      },
+    );
+
+    test(
+      'should return Relationship.requestSent() if the user has sent a '
+      'friend request to the current user',
+      () async {
+        // act
+        final result = profileCubit.getRelationship(requestSentUser);
+        // assert
+        expect(result, const Relationship.requestSent());
+      },
+    );
+
+    test(
+      'should return Relationship.requestReceived() if the user has received a '
+      'friend request from the current user',
+      () async {
+        // act
+        final result = profileCubit.getRelationship(requestReceivedUser);
+        // assert
+        expect(result, const Relationship.requestReceived());
+      },
+    );
+
+    test(
+      'should return Relationship.blocked() if the user is blocked '
+      'by the current user',
+      () async {
+        // act
+        final result = profileCubit.getRelationship(blockedUser);
+        // assert
+        expect(result, const Relationship.blocked());
+      },
+    );
+
+    test(
+      'should return Relationship.stranger() if the user is a stranger to '
+      'the current user',
+      () async {
+        // act
+        final result = profileCubit.getRelationship(strangerUser);
+        // assert
+        expect(result, const Relationship.stranger());
       },
     );
   });

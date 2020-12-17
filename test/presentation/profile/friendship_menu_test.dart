@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/profile/profile_cubit.dart';
 import 'package:very_good_chat/application/profile/relationship.dart';
@@ -226,6 +227,35 @@ void main() {
         await tester.pumpWidget(widget);
         await tester.tap(find.byIcon(Icons.cancel));
         verify(mockCubit.answerFriendRequest(any, false)).called(1);
+      },
+    );
+  });
+
+  group('when Relationship.blocked()', () {
+    setUp(() {
+      when(mockCubit.state).thenReturn(const ProfileState(
+        initialized: true,
+        user: user,
+        relationship: Relationship.blocked(),
+      ));
+    });
+
+    testWidgets(
+      'Should contain an unblock button',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        expect(find.byIcon(FontAwesomeIcons.unlockAlt), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Clicking the unblock button should call cubit.unblock()',
+      (tester) async {
+        final widget = _getWidget();
+        await tester.pumpWidget(widget);
+        await tester.tap(find.byIcon(FontAwesomeIcons.unlockAlt));
+        verify(mockCubit.unblock(any)).called(1);
       },
     );
   });

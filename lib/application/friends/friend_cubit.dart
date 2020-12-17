@@ -63,11 +63,15 @@ class FriendCubit extends Cubit<FriendState> {
 
     // remote friends
     final remoteFetchResult = await _repository.getFriendsRemotely();
-    remoteFetchResult.fold(
-      (failure) {
-        emit(state.copyWith(failure: failure));
-      },
-      _spreadFriends,
+    remoteFetchResult.fold((_) {}, _spreadFriends);
+  }
+
+  /// Fetch the blocked users
+  Future<void> fetchBlockedUsers() async {
+    final result = await _repository.getBlockedUsers();
+    result.fold(
+      (failure) => emit(state.copyWith(failure: failure)),
+      (blocked) => emit(state.copyWith(blockedUsers: blocked)),
     );
   }
 
@@ -204,7 +208,7 @@ class FriendCubit extends Cubit<FriendState> {
     fetchRequests();
 
     _friendsPollingTimer ??= Timer.periodic(
-      const Duration(seconds: 10),
+      const Duration(minutes: 1),
       (_) => fetchFriends(),
     );
   }

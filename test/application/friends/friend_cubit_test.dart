@@ -37,22 +37,12 @@ void main() {
   });
 
   group('initialization', () {
-    final localFriends = [
-      friend.copyWith(id: 'local1', lastSeen: DateTime.now(), isOnline: true),
-      friend.copyWith(id: 'local2'),
-    ];
-    final remoteFriends = [
-      friend.copyWith(id: 'remote1', lastSeen: DateTime.now(), isOnline: true),
-      friend.copyWith(id: 'remote2'),
-    ];
     blocTest<FriendCubit, FriendState>(
       'should emit the expected states if the user is logged in. '
       'It should also kick off polling',
       build: () {
-        when(mockRepo.getFriendsLocally())
-            .thenAnswer((_) async => right(localFriends));
-        when(mockRepo.getFriendsRemotely())
-            .thenAnswer((_) async => right(remoteFriends));
+        when(mockRepo.getFriendsLocally()).thenAnswer((_) async => right([]));
+        when(mockRepo.getFriendsRemotely()).thenAnswer((_) async => right([]));
         when(mockRepo.getAllFriendRequests())
             .thenAnswer((_) async => right([]));
         whenListen(
@@ -66,22 +56,7 @@ void main() {
           authCubit: mockAuthCubit,
         );
       },
-      expect: [
-        FriendState(
-          allFriends: localFriends,
-          onlineFriends: localFriends.where((f) => f.isOnline).toList(),
-          offlineFriends: localFriends.where((f) => !f.isOnline).toList(),
-        ),
-        FriendState(
-          allFriends: remoteFriends,
-          onlineFriends: remoteFriends.where((f) => f.isOnline).toList(),
-          offlineFriends: remoteFriends.where((f) => !f.isOnline).toList(),
-        ),
-      ],
       verify: (c) async {
-        verify(mockRepo.getFriendsLocally()).called(1);
-        verify(mockRepo.getFriendsRemotely()).called(1);
-        verify(mockRepo.getAllFriendRequests()).called(1);
         expect(c.friendsPollingTimer, isNotNull);
       },
     );
@@ -108,8 +83,106 @@ void main() {
     );
   });
 
-  group('friendRemoved()', () {
-    // Not much to test here
+  group('fetchFriends()', () {
+    final localFriends = [
+      friend.copyWith(id: 'local1', lastSeen: DateTime.now(), isOnline: true),
+      friend.copyWith(id: 'local2'),
+    ];
+    final remoteFriends = [
+      friend.copyWith(id: 'remote1', lastSeen: DateTime.now(), isOnline: true),
+      friend.copyWith(id: 'remote2'),
+    ];
+
+    blocTest<FriendCubit, FriendState>(
+      'should emit the expected states if fetching succeeds',
+      build: () {
+        when(mockRepo.getFriendsLocally())
+            .thenAnswer((_) async => right(localFriends));
+        when(mockRepo.getFriendsRemotely())
+            .thenAnswer((_) async => right(remoteFriends));
+        return cubit;
+      },
+      act: (c) => c.fetchFriends(),
+      expect: [
+        FriendState(
+          allFriends: localFriends,
+          onlineFriends: localFriends.where((f) => f.isOnline).toList(),
+          offlineFriends: localFriends.where((f) => !f.isOnline).toList(),
+        ),
+        FriendState(
+          allFriends: remoteFriends,
+          onlineFriends: remoteFriends.where((f) => f.isOnline).toList(),
+          offlineFriends: remoteFriends.where((f) => !f.isOnline).toList(),
+        ),
+      ],
+    );
+
+    blocTest<FriendCubit, FriendState>(
+      'should emit the expected states if fetching local friends failed',
+      build: () {
+        when(mockRepo.getFriendsLocally())
+            .thenAnswer((_) async => left(const FriendFailure.local()));
+        when(mockRepo.getFriendsRemotely())
+            .thenAnswer((_) async => right(remoteFriends));
+        return cubit;
+      },
+      act: (c) => c.fetchFriends(),
+      expect: [
+        const FriendState(failure: FriendFailure.local()),
+        FriendState(
+          allFriends: remoteFriends,
+          onlineFriends: remoteFriends.where((f) => f.isOnline).toList(),
+          offlineFriends: remoteFriends.where((f) => !f.isOnline).toList(),
+        ),
+      ],
+    );
+
+    blocTest<FriendCubit, FriendState>(
+      'should emit the expected states if fetching remote friends failed',
+      build: () {
+        when(mockRepo.getFriendsLocally())
+            .thenAnswer((_) async => right(localFriends));
+        when(mockRepo.getFriendsRemotely())
+            .thenAnswer((_) async => left(const FriendFailure.server()));
+        return cubit;
+      },
+      act: (c) => c.fetchFriends(),
+      expect: [
+        FriendState(
+          allFriends: localFriends,
+          onlineFriends: localFriends.where((f) => f.isOnline).toList(),
+          offlineFriends: localFriends.where((f) => !f.isOnline).toList(),
+        ),
+      ],
+    );
+  });
+
+  group('fetchBlockedUsers()', () {
+    final blocked = [user];
+
+    blocTest<FriendCubit, FriendState>(
+      'should emit the expected states if fetching succeeds',
+      build: () {
+        when(mockRepo.getBlockedUsers())
+            .thenAnswer((_) async => right(blocked));
+        return cubit;
+      },
+      act: (c) => c.fetchBlockedUsers(),
+      expect: [
+        FriendState(blockedUsers: blocked),
+      ],
+    );
+
+    blocTest<FriendCubit, FriendState>(
+      'should emit the expected states if fetching fails',
+      build: () {
+        when(mockRepo.getBlockedUsers())
+            .thenAnswer((_) async => left(const FriendFailure.server()));
+        return cubit;
+      },
+      act: (c) => c.fetchBlockedUsers(),
+      expect: const [FriendState(failure: FriendFailure.server())],
+    );
   });
 
   group('friend requests', () {
@@ -135,7 +208,7 @@ void main() {
       sent: false,
     );
 
-    group('fetchRequests', () {
+    group('fetchRequests()', () {
       blocTest<FriendCubit, FriendState>(
         'should emit the expected states if fetching succeeds',
         build: () {

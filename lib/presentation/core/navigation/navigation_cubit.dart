@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
 import 'package:very_good_chat/presentation/core/navigation/app_pages.dart';
@@ -48,9 +47,19 @@ class NavigationCubit extends Cubit<List<Page>> {
     emit(state..add(AppPages.profileEditingScreen(currentUser)));
   }
 
-  void viewFullPicture({@required String photoUrl, String heroTag}) {
+  void viewFullPicture({
+    String photoUrl,
+    ImageProvider provider,
+    String heroTag,
+  }) {
     emit(state
-      ..add(AppPages.fullPhotoScreen(photoUrl: photoUrl, heroTag: heroTag)));
+      ..add(
+        AppPages.fullPhotoScreen(
+          photoUrl: photoUrl,
+          provider: provider,
+          heroTag: heroTag,
+        ),
+      ));
   }
 
   void openFriendRequestsScreen() {

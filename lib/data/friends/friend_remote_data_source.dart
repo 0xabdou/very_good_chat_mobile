@@ -34,6 +34,9 @@ abstract class IFriendRemoteDataSource {
   /// Blocks the user with [userId]
   Future<Unit> blockUser(String userId);
 
+  /// Unblock the user with [userId]
+  Future<Unit> unblockUser(String userId);
+
   /// Get all blocked users
   Future<List<User>> getBlockedUsers();
 }
@@ -213,6 +216,17 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
 
     final user = _getUserById(userId);
     _blocked = [user, ..._blocked];
+    _friends.removeWhere((f) => f.id == user.id);
+    _friendRequests.removeWhere((r) => r.user.id == user.id);
+    return unit;
+  }
+
+  @override
+  Future<Unit> unblockUser(String userId) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _ensureInitialized;
+
+    _blocked.removeWhere((u) => u.id == userId);
     return unit;
   }
 

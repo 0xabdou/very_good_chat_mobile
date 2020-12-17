@@ -41,7 +41,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(ProfileState(
       initialized: true,
       user: user,
-      relationship: _getRelationship(user),
+      relationship: getRelationship(user),
     ));
   }
 
@@ -154,13 +154,82 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
+  /// Block this user
+  Future<void> block(BuildContext context) async {
+    final yes = await DialogUtils.instance.showYesNoDialog(
+      context,
+      title: 'Block',
+      content: 'Do you want to block this person?',
+    );
+    if (!yes) return;
+
+    emit(state.copyWith(friendOperation: const FriendOperation.some()));
+
+    final result = await _repository.blockUser(state.user.id);
+    result.fold(
+      (failure) {
+        emit(state.copyWith(friendOperation: FriendOperation.fail(failure)));
+      },
+      (_) {
+        emit(state.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: const Relationship.blocked(),
+        ));
+        // FriendCubit should be notified to add the user to the blocked list.
+        // Also, remove it from friends/requests list, just in case the user
+        // was already a friend, or has received/sent friend request.
+        _friendCubit
+          ..friendRequestRemoved(state.user.id)
+          ..fetchFriends()
+          ..fetchBlockedUsers();
+      },
+    );
+  }
+
+  /// Unblock this user
+  Future<void> unblock(BuildContext context) async {
+    final yes = await DialogUtils.instance.showYesNoDialog(
+      context,
+      title: 'Unblock',
+      content: 'Do you want to unblock this person?',
+    );
+    if (!yes) return;
+
+    emit(state.copyWith(friendOperation: const FriendOperation.some()));
+
+    final result = await _repository.unblockUser(state.user.id);
+    result.fold(
+      (failure) {
+        emit(state.copyWith(friendOperation: FriendOperation.fail(failure)));
+      },
+      (_) {
+        emit(state.copyWith(
+          friendOperation: const FriendOperation.done(),
+          relationship: const Relationship.stranger(),
+        ));
+        _friendCubit.fetchBlockedUsers();
+      },
+    );
+  }
+
   // TODO: needs testing
   /// Decides what type of user is this and returns it
-  Relationship _getRelationship(User user) {
+  @visibleForTesting
+  Relationship getRelationship(User user) {
     final currentUser = userFromState(_authCubit.state);
     if (currentUser?.id == user.id) {
       return const Relationship.self();
     }
+
+    final blockedUsers = _friendCubit.state.blockedUsers;
+    final blocked = blockedUsers.firstWhere(
+      (u) => u.id == user.id,
+      orElse: () => null,
+    );
+    if (blocked != null) {
+      return const Relationship.blocked();
+    }
+
     final allFriends = _friendCubit.state.allFriends;
     final friend = allFriends.firstWhere(
       (f) => f.id == user.id,
@@ -184,7 +253,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           : const Relationship.requestReceived();
     }
 
-    // TODO: Check if the user is blocked
     return const Relationship.stranger();
   }
 
