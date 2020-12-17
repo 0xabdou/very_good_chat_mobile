@@ -8,6 +8,7 @@ abstract class FriendState with _$FriendState {
     @Default([]) List<Friend> allFriends,
     @Default([]) List<Friend> onlineFriends,
     @Default([]) List<Friend> offlineFriends,
+    @Default([]) List<User> blockedUsers,
     @Default([]) List<FriendRequest> allRequests,
     @Default([]) List<FriendRequest> sentRequests,
     @Default([]) List<FriendRequest> receivedRequests,

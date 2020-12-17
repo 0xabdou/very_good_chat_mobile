@@ -18,6 +18,7 @@ class _$FriendStateTearOff {
       {List<Friend> allFriends = const [],
       List<Friend> onlineFriends = const [],
       List<Friend> offlineFriends = const [],
+      List<User> blockedUsers = const [],
       List<FriendRequest> allRequests = const [],
       List<FriendRequest> sentRequests = const [],
       List<FriendRequest> receivedRequests = const [],
@@ -27,6 +28,7 @@ class _$FriendStateTearOff {
       allFriends: allFriends,
       onlineFriends: onlineFriends,
       offlineFriends: offlineFriends,
+      blockedUsers: blockedUsers,
       allRequests: allRequests,
       sentRequests: sentRequests,
       receivedRequests: receivedRequests,
@@ -45,6 +47,7 @@ mixin _$FriendState {
   List<Friend> get allFriends;
   List<Friend> get onlineFriends;
   List<Friend> get offlineFriends;
+  List<User> get blockedUsers;
   List<FriendRequest> get allRequests;
   List<FriendRequest> get sentRequests;
   List<FriendRequest>
@@ -65,6 +68,7 @@ abstract class $FriendStateCopyWith<$Res> {
       {List<Friend> allFriends,
       List<Friend> onlineFriends,
       List<Friend> offlineFriends,
+      List<User> blockedUsers,
       List<FriendRequest> allRequests,
       List<FriendRequest> sentRequests,
       List<FriendRequest> receivedRequests,
@@ -87,6 +91,7 @@ class _$FriendStateCopyWithImpl<$Res> implements $FriendStateCopyWith<$Res> {
     Object allFriends = freezed,
     Object onlineFriends = freezed,
     Object offlineFriends = freezed,
+    Object blockedUsers = freezed,
     Object allRequests = freezed,
     Object sentRequests = freezed,
     Object receivedRequests = freezed,
@@ -103,6 +108,9 @@ class _$FriendStateCopyWithImpl<$Res> implements $FriendStateCopyWith<$Res> {
       offlineFriends: offlineFriends == freezed
           ? _value.offlineFriends
           : offlineFriends as List<Friend>,
+      blockedUsers: blockedUsers == freezed
+          ? _value.blockedUsers
+          : blockedUsers as List<User>,
       allRequests: allRequests == freezed
           ? _value.allRequests
           : allRequests as List<FriendRequest>,
@@ -141,6 +149,7 @@ abstract class _$FriendStateCopyWith<$Res>
       {List<Friend> allFriends,
       List<Friend> onlineFriends,
       List<Friend> offlineFriends,
+      List<User> blockedUsers,
       List<FriendRequest> allRequests,
       List<FriendRequest> sentRequests,
       List<FriendRequest> receivedRequests,
@@ -166,6 +175,7 @@ class __$FriendStateCopyWithImpl<$Res> extends _$FriendStateCopyWithImpl<$Res>
     Object allFriends = freezed,
     Object onlineFriends = freezed,
     Object offlineFriends = freezed,
+    Object blockedUsers = freezed,
     Object allRequests = freezed,
     Object sentRequests = freezed,
     Object receivedRequests = freezed,
@@ -182,6 +192,9 @@ class __$FriendStateCopyWithImpl<$Res> extends _$FriendStateCopyWithImpl<$Res>
       offlineFriends: offlineFriends == freezed
           ? _value.offlineFriends
           : offlineFriends as List<Friend>,
+      blockedUsers: blockedUsers == freezed
+          ? _value.blockedUsers
+          : blockedUsers as List<User>,
       allRequests: allRequests == freezed
           ? _value.allRequests
           : allRequests as List<FriendRequest>,
@@ -205,6 +218,7 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
       {this.allFriends = const [],
       this.onlineFriends = const [],
       this.offlineFriends = const [],
+      this.blockedUsers = const [],
       this.allRequests = const [],
       this.sentRequests = const [],
       this.receivedRequests = const [],
@@ -213,6 +227,7 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
       : assert(allFriends != null),
         assert(onlineFriends != null),
         assert(offlineFriends != null),
+        assert(blockedUsers != null),
         assert(allRequests != null),
         assert(sentRequests != null),
         assert(receivedRequests != null),
@@ -227,6 +242,9 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
   @JsonKey(defaultValue: const [])
   @override
   final List<Friend> offlineFriends;
+  @JsonKey(defaultValue: const [])
+  @override
+  final List<User> blockedUsers;
   @JsonKey(defaultValue: const [])
   @override
   final List<FriendRequest> allRequests;
@@ -245,7 +263,7 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'FriendState(allFriends: $allFriends, onlineFriends: $onlineFriends, offlineFriends: $offlineFriends, allRequests: $allRequests, sentRequests: $sentRequests, receivedRequests: $receivedRequests, requestsBeingTreated: $requestsBeingTreated, failure: $failure)';
+    return 'FriendState(allFriends: $allFriends, onlineFriends: $onlineFriends, offlineFriends: $offlineFriends, blockedUsers: $blockedUsers, allRequests: $allRequests, sentRequests: $sentRequests, receivedRequests: $receivedRequests, requestsBeingTreated: $requestsBeingTreated, failure: $failure)';
   }
 
   @override
@@ -256,6 +274,7 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
       ..add(DiagnosticsProperty('allFriends', allFriends))
       ..add(DiagnosticsProperty('onlineFriends', onlineFriends))
       ..add(DiagnosticsProperty('offlineFriends', offlineFriends))
+      ..add(DiagnosticsProperty('blockedUsers', blockedUsers))
       ..add(DiagnosticsProperty('allRequests', allRequests))
       ..add(DiagnosticsProperty('sentRequests', sentRequests))
       ..add(DiagnosticsProperty('receivedRequests', receivedRequests))
@@ -276,6 +295,9 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
             (identical(other.offlineFriends, offlineFriends) ||
                 const DeepCollectionEquality()
                     .equals(other.offlineFriends, offlineFriends)) &&
+            (identical(other.blockedUsers, blockedUsers) ||
+                const DeepCollectionEquality()
+                    .equals(other.blockedUsers, blockedUsers)) &&
             (identical(other.allRequests, allRequests) ||
                 const DeepCollectionEquality()
                     .equals(other.allRequests, allRequests)) &&
@@ -298,6 +320,7 @@ class _$_FriendState with DiagnosticableTreeMixin implements _FriendState {
       const DeepCollectionEquality().hash(allFriends) ^
       const DeepCollectionEquality().hash(onlineFriends) ^
       const DeepCollectionEquality().hash(offlineFriends) ^
+      const DeepCollectionEquality().hash(blockedUsers) ^
       const DeepCollectionEquality().hash(allRequests) ^
       const DeepCollectionEquality().hash(sentRequests) ^
       const DeepCollectionEquality().hash(receivedRequests) ^
@@ -314,6 +337,7 @@ abstract class _FriendState implements FriendState {
       {List<Friend> allFriends,
       List<Friend> onlineFriends,
       List<Friend> offlineFriends,
+      List<User> blockedUsers,
       List<FriendRequest> allRequests,
       List<FriendRequest> sentRequests,
       List<FriendRequest> receivedRequests,
@@ -326,6 +350,8 @@ abstract class _FriendState implements FriendState {
   List<Friend> get onlineFriends;
   @override
   List<Friend> get offlineFriends;
+  @override
+  List<User> get blockedUsers;
   @override
   List<FriendRequest> get allRequests;
   @override
