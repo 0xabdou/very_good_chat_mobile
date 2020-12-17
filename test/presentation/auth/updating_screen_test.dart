@@ -23,7 +23,7 @@ void main() {
   Widget _getWidget() {
     return BlocProvider(
       create: (_) => mockCubit,
-      child: wrapInMaterialApp(UpdatingScreen()),
+      child: wrapInMaterialApp(wrapInMaterial(UpdatingScreen())),
     );
   }
 
@@ -146,14 +146,20 @@ void main() {
   });
 
   group('UpdatingProfilePicture', () {
+    Widget _getWidget(UpdatingState state) {
+      return wrapInMaterialApp(
+        wrapInMaterial(
+          UpdatingProfilePicture(state: state, onEditPressed: () {}),
+        ),
+      );
+    }
+
     testWidgets(
       'Should always contain an image and an edit button',
       (tester) async {
         // arrange
         final state = UpdatingState.initial();
-        final widget = wrapInMaterialApp(
-          UpdatingProfilePicture(state: state, onEditPressed: () {}),
-        );
+        final widget = _getWidget(state);
         // render
         await tester.pumpWidget(widget);
         // assert
@@ -167,9 +173,7 @@ void main() {
       (tester) async {
         // arrange
         final state = UpdatingState.initial();
-        final widget = wrapInMaterialApp(
-          UpdatingProfilePicture(state: state, onEditPressed: () {}),
-        );
+        final widget = _getWidget(state);
         // render
         await tester.pumpWidget(widget);
         // assert
@@ -182,9 +186,7 @@ void main() {
       (tester) async {
         // arrange
         final state = UpdatingState.initial().copyWith(uploadingPhoto: true);
-        final widget = wrapInMaterialApp(
-          UpdatingProfilePicture(state: state, onEditPressed: () {}),
-        );
+        final widget = _getWidget(state);
         // render
         await tester.pumpWidget(widget);
         // assert

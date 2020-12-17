@@ -211,7 +211,7 @@ class UpdatingProfilePicture extends StatelessWidget {
         placeholder: (_, __) => LoadingPhotoPlaceholder(),
       );
     }
-    return DefaultPhoto();
+    return const Image(image: DefaultPhoto.provider);
   }
 }
 

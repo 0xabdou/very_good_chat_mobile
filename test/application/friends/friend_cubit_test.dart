@@ -45,6 +45,7 @@ void main() {
         when(mockRepo.getFriendsRemotely()).thenAnswer((_) async => right([]));
         when(mockRepo.getAllFriendRequests())
             .thenAnswer((_) async => right([]));
+        when(mockRepo.getBlockedUsers()).thenAnswer((_) async => right([]));
         whenListen(
           mockAuthCubit,
           Stream.fromIterable(

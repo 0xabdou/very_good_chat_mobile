@@ -76,12 +76,7 @@ class ProfilePicture extends StatelessWidget {
                     },
                     placeholder: (_, __) => LoadingPhotoPlaceholder(),
                   )
-                : Ink.image(
-                    image: DefaultPhoto.provider,
-                    child: InkWell(
-                      onTap: onPressed,
-                    ),
-                  ),
+                : DefaultPhoto(onPressed: onPressed),
           ),
           if (isOnline)
             Positioned.fill(
