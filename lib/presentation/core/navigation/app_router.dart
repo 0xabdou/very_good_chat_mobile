@@ -32,9 +32,9 @@ class AppRouterDelegate extends RouterDelegate<String>
   }
 
   bool _handlePop(Route route, result) {
-    final key = (route.settings as MaterialPage).key as UniqueKey;
+    final key = (route.settings as GoodPage).screenKey;
 
-    if (key == AppKeys.loggedInScreen || key == AppKeys.loginScreen) {
+    if (key.screen == Screen.loggedIn || key.screen == Screen.login) {
       // Do not pop because it's the only route in the stack
       assert(!route.willHandlePopInternally);
       return false;

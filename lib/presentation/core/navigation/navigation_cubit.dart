@@ -8,7 +8,7 @@ import 'package:very_good_chat/presentation/core/navigation/app_pages.dart';
 import 'package:very_good_chat/shared/utils/other_utils.dart';
 
 /// Navigation stack management
-class NavigationCubit extends Cubit<List<Page>> {
+class NavigationCubit extends Cubit<List<GoodPage>> {
   /// Constructor
   NavigationCubit(this._authCubit) : super([AppPages.splashScreen()]) {
     _sub = _authCubit.listen(_authStateChanged);
@@ -18,7 +18,7 @@ class NavigationCubit extends Cubit<List<Page>> {
   StreamSubscription _sub;
 
   @override
-  List<Page> get state => List.of(super.state);
+  List<GoodPage> get state => List.of(super.state);
 
   void _authStateChanged(AuthState authState) {
     final pages = authState.map(
@@ -39,7 +39,7 @@ class NavigationCubit extends Cubit<List<Page>> {
   }
 
   void viewOtherProfile(User user) {
-    emit(state..add(AppPages.profileScreen(user)));
+    emit(state..add(AppPages.profileScreen(user, suffix: user.username)));
   }
 
   void editProfile() {
@@ -72,7 +72,7 @@ class NavigationCubit extends Cubit<List<Page>> {
 
   void pop() {
     final currentPage = state.last;
-    if (currentPage.key == AppKeys.registrationScreen) {
+    if (currentPage.screenKey.screen == Screen.registration) {
       _authCubit.state.maybeMap(
         registering: (_) {
           _authCubit.logout();

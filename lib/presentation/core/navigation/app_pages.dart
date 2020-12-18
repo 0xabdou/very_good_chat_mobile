@@ -19,25 +19,25 @@ class AppPages {
 
   // ############## AUTH ###############
   /// For [SplashScreen]
-  static Page splashScreen() {
-    return MaterialPage(
-      key: AppKeys.splashScreen,
+  static GoodPage splashScreen() {
+    return GoodPage(
+      screenKey: ScreenKey(Screen.splash),
       child: SplashScreen(),
     );
   }
 
   /// For [LoginScreen]
-  static Page loginScreen() {
-    return MaterialPage(
-      key: AppKeys.loginScreen,
+  static GoodPage loginScreen() {
+    return GoodPage(
+      screenKey: ScreenKey(Screen.login),
       child: LoginScreen(),
     );
   }
 
   /// For [LoggedInScreen]
-  static Page loggedInScreen() {
-    return MaterialPage(
-      key: AppKeys.loggedInScreen,
+  static GoodPage loggedInScreen() {
+    return GoodPage(
+      screenKey: ScreenKey(Screen.loggedIn),
       child: LoggedInScreen(),
     );
   }
@@ -45,40 +45,40 @@ class AppPages {
 
   // ############## PROFILE ###############
   /// For [ProfileScreen]
-  static Page profileScreen(User user) {
-    return MaterialPage(
-      key: AppKeys.profileScreen,
+  static GoodPage profileScreen(User user, {String suffix}) {
+    return GoodPage(
+      screenKey: ScreenKey(Screen.profile, suffix: '_$suffix'),
       child: ProfileScreen(user: user),
     );
   }
 
   /// for [UpdatingScreen] when registering
-  static Page registrationScreen(AuthProviderInfo authInfo) {
+  static GoodPage registrationScreen(AuthProviderInfo authInfo) {
     return _updatingScreen(authInfo: authInfo);
   }
 
   /// for [UpdatingScreen] when editing profile
-  static Page profileEditingScreen(User user) {
+  static GoodPage profileEditingScreen(User user) {
     return _updatingScreen(currentUser: user);
   }
 
-  static Page _updatingScreen({
+  static GoodPage _updatingScreen({
     User currentUser,
     AuthProviderInfo authInfo,
   }) {
     assert(currentUser != null || authInfo != null);
     final cubit = getIt<UpdatingCubit>();
     final registering = authInfo != null;
-    Key key;
+    ScreenKey key;
     if (registering) {
       cubit.registering(authInfo);
-      key = AppKeys.registrationScreen;
+      key = ScreenKey(Screen.registration);
     } else {
       cubit.updating(currentUser);
-      key = AppKeys.profileEditingScreen;
+      key = ScreenKey(Screen.profileEditing);
     }
-    return MaterialPage(
-      key: key,
+    return GoodPage(
+      screenKey: key,
       child: BlocProvider<UpdatingCubit>(
         create: (_) => cubit,
         child: UpdatingScreen(),
@@ -86,13 +86,13 @@ class AppPages {
     );
   }
 
-  static Page fullPhotoScreen({
+  static GoodPage fullPhotoScreen({
     String photoUrl,
     ImageProvider provider,
     String heroTag,
   }) {
-    return MaterialPage(
-      key: AppKeys.fullPhotoScreen,
+    return GoodPage(
+      screenKey: ScreenKey(Screen.fullImage),
       child: FullImage(
         imageUrl: photoUrl,
         provider: provider,
@@ -103,55 +103,72 @@ class AppPages {
   // ############## PROFILE ###############
 
   // ############## FRIENDS ###############
-  static Page freindRequestsScreen() {
-    return MaterialPage(
-      key: AppKeys.friendRequestScreen,
+  static GoodPage freindRequestsScreen() {
+    return GoodPage(
+      screenKey: ScreenKey(Screen.friendRequests),
       child: FriendRequestsScreen(),
     );
   }
 
-  static Page blockedUsersScreen() {
-    return MaterialPage(
-      key: AppKeys.blockedUsersScreen,
+  static GoodPage blockedUsersScreen() {
+    return GoodPage(
+      screenKey: ScreenKey(Screen.blockedUsers),
       child: BlockedUsersScreen(),
     );
   }
   // ############## FRIENDS ###############
-
 }
 
-/// [ValueKey]s for app [Page]s
-class AppKeys {
-  AppKeys._();
+/// Custom material page
+class GoodPage extends MaterialPage {
+  /// Constructor
+  const GoodPage({
+    @required this.screenKey,
+    @required Widget child,
+  }) : super(key: screenKey, child: child);
 
-  static AppKeys _instance = AppKeys._();
+  /// This page's key
+  final ScreenKey screenKey;
+}
 
-  final _splashScreenKey = UniqueKey();
-  static UniqueKey get splashScreen => _instance._splashScreenKey;
+/// App keys
+class ScreenKey extends ValueKey<String> {
+  /// Constructor
+  const ScreenKey(this.screen, {this.suffix}) : super('$screen${suffix ?? ''}');
 
-  final _loginScreenKey = UniqueKey();
-  static UniqueKey get loginScreen => _instance._loginScreenKey;
+  /// Screen type
+  final Screen screen;
 
-  final _loggedInScreenKey = UniqueKey();
-  static UniqueKey get loggedInScreen => _instance._loggedInScreenKey;
+  /// Suffix (To distinguish between multiple screens of the same type)
+  final String suffix;
+}
 
-  final _profileScreenKey = UniqueKey();
-  static UniqueKey get profileScreen => _instance._profileScreenKey;
+/// App screens
+enum Screen {
+  /// Splash screen
+  splash,
 
-  final _profileEditingScreenKey = UniqueKey();
-  static UniqueKey get profileEditingScreen =>
-      _instance._profileEditingScreenKey;
+  /// Registration screen
+  registration,
 
-  final _registrationScreenKey = UniqueKey();
-  static UniqueKey get registrationScreen => _instance._registrationScreenKey;
+  /// Login screen
+  login,
 
-  final _fullPhotoScreenKey = UniqueKey();
-  static UniqueKey get fullPhotoScreen => _instance._fullPhotoScreenKey;
+  /// Logged in screen
+  loggedIn,
 
-  final _friendRequestsScreenKey = UniqueKey();
-  static UniqueKey get friendRequestScreen =>
-      _instance._friendRequestsScreenKey;
+  /// Profile screen
+  profile,
 
-  final _blockedUsersScreenKey = UniqueKey();
-  static UniqueKey get blockedUsersScreen => _instance._blockedUsersScreenKey;
+  /// Profile editing screen
+  profileEditing,
+
+  /// Blocked users screen
+  blockedUsers,
+
+  /// Friend requests screen
+  friendRequests,
+
+  /// Full image screen
+  fullImage,
 }
