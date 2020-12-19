@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
+import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/friend_request.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
@@ -35,6 +36,28 @@ void main() {
     cubit = FriendCubit(friendRepository: mockRepo, authCubit: mockAuthCubit);
     DialogUtils.instance = mockDialogUtils = MockDialogUtils();
   });
+
+  final request1 = FriendRequest(
+    user: user.copyWith(id: '1'),
+    sentAt: DateTime.now(),
+    sent: true,
+  );
+
+  final request2 = FriendRequest(
+    user: user.copyWith(id: '2'),
+    sentAt: DateTime.now(),
+    sent: false,
+  );
+  final sentRequest = FriendRequest(
+    user: user.copyWith(id: '3'),
+    sentAt: DateTime.now(),
+    sent: true,
+  );
+  final receivedRequest = FriendRequest(
+    user: user.copyWith(id: '4'),
+    sentAt: DateTime.now(),
+    sent: false,
+  );
 
   group('initialization', () {
     blocTest<FriendCubit, FriendState>(
@@ -187,28 +210,6 @@ void main() {
   });
 
   group('friend requests', () {
-    final request1 = FriendRequest(
-      user: user.copyWith(id: '1'),
-      sentAt: DateTime.now(),
-      sent: true,
-    );
-
-    final request2 = FriendRequest(
-      user: user.copyWith(id: '2'),
-      sentAt: DateTime.now(),
-      sent: false,
-    );
-    final sentRequest = FriendRequest(
-      user: user.copyWith(id: '3'),
-      sentAt: DateTime.now(),
-      sent: true,
-    );
-    final receivedRequest = FriendRequest(
-      user: user.copyWith(id: '4'),
-      sentAt: DateTime.now(),
-      sent: false,
-    );
-
     group('fetchRequests()', () {
       blocTest<FriendCubit, FriendState>(
         'should emit the expected states if fetching succeeds',
@@ -238,50 +239,6 @@ void main() {
         act: (c) => c.fetchRequests(),
         seed: const FriendState(),
         expect: const [FriendState(failure: FriendFailure.server())],
-      );
-    });
-
-    group('friendRequestAdded()', () {
-      final seedState = FriendState(
-        allRequests: [request1, request2],
-        sentRequests: [request1],
-        receivedRequests: [request2],
-      );
-      blocTest<FriendCubit, FriendState>(
-        'should emit a state with the newly sent request',
-        build: () => cubit,
-        act: (c) => c.friendRequestAdded(sentRequest),
-        seed: seedState,
-        expect: [
-          seedState.copyWith(
-            allRequests: [sentRequest, ...seedState.allRequests],
-            sentRequests: [sentRequest, ...seedState.sentRequests],
-          )
-        ],
-      );
-    });
-
-    group('friendRequestRemoved()', () {
-      final seedState = FriendState(
-        allRequests: [
-          sentRequest,
-          request1,
-          request2,
-        ],
-        sentRequests: [sentRequest, request1],
-        receivedRequests: [request2],
-      );
-      blocTest<FriendCubit, FriendState>(
-        'should emit a state with the canceled request removed',
-        build: () => cubit,
-        act: (c) => c.friendRequestRemoved(sentRequest.user.id),
-        seed: seedState,
-        expect: [
-          seedState.copyWith(
-            allRequests: List.of(seedState.allRequests)..remove(sentRequest),
-            sentRequests: List.of(seedState.sentRequests)..remove(sentRequest),
-          )
-        ],
       );
     });
 
@@ -480,5 +437,112 @@ void main() {
         },
       );
     });
+  });
+
+  group('Functions called by ProfileCubit', () {
+    group('friendAdded()', () {
+      const friend = Friend(id: 'friend', username: 'friend');
+      blocTest<FriendCubit, FriendState>(
+        'should emit a state with the new friend',
+        build: () => cubit,
+        act: (c) => c.friendAdded(friend),
+        expect: const [
+          FriendState(allFriends: [friend], offlineFriends: [friend]),
+        ],
+      );
+    });
+
+    group('friendRemoved()', () {
+      const friend = Friend(id: 'friend', username: 'friend');
+      blocTest<FriendCubit, FriendState>(
+        'should emit a state with the friend removed',
+        build: () => cubit,
+        act: (c) => c.friendRemoved(friend.id),
+        seed: const FriendState(
+          allFriends: [friend],
+          offlineFriends: [friend],
+        ),
+        expect: const [FriendState()],
+      );
+    });
+
+    group('userBlocked()', () {
+      const friend = Friend(id: 'friend', username: 'friend');
+      final user = friend.toUser();
+      final request = FriendRequest(
+        user: user,
+        sentAt: DateTime.now(),
+        sent: true,
+      );
+      final seedState = FriendState(
+          allFriends: [friend],
+          offlineFriends: [friend],
+          allRequests: [request],
+          sentRequests: [request]);
+      blocTest<FriendCubit, FriendState>(
+        'should emit a state with the user blocked and removed from all lists',
+        build: () => cubit,
+        act: (c) => c.userBlocked(user),
+        seed: seedState,
+        expect: [
+          FriendState(blockedUsers: [user])
+        ],
+      );
+    });
+
+    group('userUnblocked()', () {
+      final user = friend.toUser();
+      blocTest<FriendCubit, FriendState>(
+        'should emit a state with the user blocked and removed from all lists',
+        build: () => cubit,
+        act: (c) => c.userUnblocked(user.id),
+        seed: FriendState(blockedUsers: [user]),
+        expect: const [FriendState()],
+      );
+    });
+  });
+
+  group('friendRequestAdded()', () {
+    final seedState = FriendState(
+      allRequests: [request1, request2],
+      sentRequests: [request1],
+      receivedRequests: [request2],
+    );
+    blocTest<FriendCubit, FriendState>(
+      'should emit a state with the newly sent request',
+      build: () => cubit,
+      act: (c) => c.friendRequestAdded(sentRequest),
+      seed: seedState,
+      expect: [
+        seedState.copyWith(
+          allRequests: [sentRequest, ...seedState.allRequests],
+          sentRequests: [sentRequest, ...seedState.sentRequests],
+        )
+      ],
+    );
+  });
+
+  group('friendRequestRemoved()', () {
+    final seedState = FriendState(
+      allRequests: [
+        sentRequest,
+        request1,
+        request2,
+      ],
+      sentRequests: [sentRequest, request1],
+      receivedRequests: [request2],
+    );
+    blocTest<FriendCubit, FriendState>(
+      'should emit a state with the canceled request removed',
+      build: () => cubit,
+      act: (c) => c.friendRequestRemoved(sentRequest.user.id),
+      seed: seedState,
+      expect: [
+        seedState.copyWith(
+          allRequests: List.of(seedState.allRequests)..remove(sentRequest),
+          sentRequests: List.of(seedState.sentRequests)..remove(sentRequest),
+        )
+      ],
+    );
   });
 }

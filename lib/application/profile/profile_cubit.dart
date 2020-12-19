@@ -9,6 +9,7 @@ import 'package:very_good_chat/application/auth/auth_cubit.dart';
 import 'package:very_good_chat/application/friends/friend_cubit.dart';
 import 'package:very_good_chat/application/profile/relationship.dart';
 import 'package:very_good_chat/domain/auth/user.dart';
+import 'package:very_good_chat/domain/friends/friend.dart';
 import 'package:very_good_chat/domain/friends/friend_failure.dart';
 import 'package:very_good_chat/domain/friends/i_friend_repository.dart';
 import 'package:very_good_chat/presentation/profile/widgets/friendship_menu.dart';
@@ -66,7 +67,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           friendOperation: const FriendOperation.done(),
           relationship: const Relationship.stranger(),
         ));
-        _friendCubit.fetchFriends();
+        _friendCubit.friendRemoved(state.user.id);
       },
     );
   }
@@ -147,9 +148,12 @@ class ProfileCubit extends Cubit<ProfileState> {
               ? const Relationship.friend(isOnline: false)
               : const Relationship.stranger(),
         ));
-        _friendCubit
-          ..friendRequestRemoved(state.user.id)
-          ..fetchFriends();
+        _friendCubit.friendRequestRemoved(state.user.id);
+        if (accept) {
+          _friendCubit.friendAdded(
+            Friend(id: state.user.id, username: state.user.username),
+          );
+        }
       },
     );
   }
@@ -179,9 +183,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         // Also, remove it from friends/requests list, just in case the user
         // was already a friend, or has received/sent friend request.
         _friendCubit
-          ..friendRequestRemoved(state.user.id)
-          ..fetchFriends()
-          ..fetchBlockedUsers();
+          ..userBlocked(state.user)
+          ..friendRemoved(state.user.id)
+          ..friendRequestRemoved(state.user.id);
       },
     );
   }
@@ -207,12 +211,11 @@ class ProfileCubit extends Cubit<ProfileState> {
           friendOperation: const FriendOperation.done(),
           relationship: const Relationship.stranger(),
         ));
-        _friendCubit.fetchBlockedUsers();
+        _friendCubit.userUnblocked(state.user.id);
       },
     );
   }
 
-  // TODO: needs testing
   /// Decides what type of user is this and returns it
   @visibleForTesting
   Relationship getRelationship(User user) {

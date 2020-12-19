@@ -159,7 +159,7 @@ void main() {
       ],
       verify: (_) async {
         verify(mockRepo.unfriend(user.id)).called(1);
-        verify(mockFriendCubit.fetchFriends()).called(1);
+        verify(mockFriendCubit.friendRemoved(seedState.user.id)).called(1);
         verifyNoMoreInteractions(mockRepo);
         verifyNoMoreInteractions(mockFriendCubit);
       },
@@ -377,7 +377,10 @@ void main() {
         verify(mockRepo.answerFriendRequest(seedState.user.id, true)).called(1);
         verify(mockFriendCubit.friendRequestRemoved(seedState.user.id))
             .called(1);
-        verify(mockFriendCubit.fetchFriends()).called(1);
+        verify(mockFriendCubit.friendAdded(Friend(
+          id: seedState.user.id,
+          username: seedState.user.username,
+        ))).called(1);
       },
     );
 
@@ -402,7 +405,6 @@ void main() {
             .called(1);
         verify(mockFriendCubit.friendRequestRemoved(seedState.user.id))
             .called(1);
-        verify(mockFriendCubit.fetchFriends()).called(1);
       },
     );
 
@@ -473,10 +475,7 @@ void main() {
       ],
       verify: (_) async {
         verify(mockRepo.blockUser(seedState.user.id)).called(1);
-        verify(mockFriendCubit.fetchBlockedUsers()).called(1);
-        verify(mockFriendCubit.fetchFriends()).called(1);
-        verify(mockFriendCubit.friendRequestRemoved(seedState.user.id))
-            .called(1);
+        verify(mockFriendCubit.userBlocked(seedState.user)).called(1);
       },
     );
 
@@ -548,7 +547,7 @@ void main() {
       ],
       verify: (_) async {
         verify(mockRepo.unblockUser(seedState.user.id)).called(1);
-        verify(mockFriendCubit.fetchBlockedUsers()).called(1);
+        verify(mockFriendCubit.userUnblocked(seedState.user.id)).called(1);
       },
     );
 

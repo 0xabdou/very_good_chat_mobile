@@ -165,7 +165,7 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
   Future<List<FriendRequest>> getAllFriendRequests() async {
     await Future.delayed(const Duration(milliseconds: 1000));
     await _ensureInitialized;
-    return _friendRequests;
+    return List.of(_friendRequests);
   }
 
   @override
@@ -191,7 +191,7 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
         return 0;
       },
     );
-    return _friends;
+    return List.of(_friends);
   }
 
   @override
@@ -235,6 +235,6 @@ class FriendRemoteDataSource implements IFriendRemoteDataSource {
     await Future.delayed(const Duration(milliseconds: 1000));
     await _ensureInitialized;
 
-    return _blocked;
+    return List.of(_blocked);
   }
 }
